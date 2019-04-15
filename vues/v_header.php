@@ -12,7 +12,7 @@
 	<title>GSB</title>
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="shortcut icon" href="images/favicon.png">
 
 	<!-- CSS -->
 	<!-- Custom CSS -->
@@ -83,9 +83,20 @@
 							{
 								?>
 
-								<li class="nav-item">
-									<a class="nav-link" href="index.php?uc=compteRendu&ac=consulter">Consulter</a>
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Comptes rendus</a>
+									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=nouveau">Nouveau</a>
+										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=consulter">Consulter</a>
+									</div>
 								</li>
+								<?php
+							}
+							else if ($_SESSION['id'][4] == 3)
+							{
+								?>
+
+
 								<?php
 							}
 							?>

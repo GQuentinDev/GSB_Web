@@ -3,7 +3,7 @@
 </div>
 
 <form name="saisieRapport" method="post" action="index.php?uc=compteRendu&ac=<?php echo $case;?>">
-	<div class="row">
+	<div class="row p-3">
 
 	<!-- COL 1 -->
 	<div class="col-lg-6 col-12">
