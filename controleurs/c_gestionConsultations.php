@@ -1,6 +1,6 @@
 <?php
 // Verification du paramètre controleur ac et du statu de l'utilisateur
-if (isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) && isset($_SESSION['id'][4]) && !empty(($_SESSION['id'][4])))
+if (isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) && isset($_SESSION['id']) && !empty(($_SESSION['id'])))
 {
 	$ac = $_REQUEST['ac'];
 }
@@ -9,13 +9,26 @@ else
 	header("Location:index.php");
 }
 
+// Role du collaborateur
+$ROLE = $_SESSION['id'][4];
 
-if ($_SESSION['id'][4] == 1 || $_SESSION['id'][4] == 2)
+/**********************************************************
+* Les Roles :
+* 1 - Visiteur
+* 2 - Délégué
+* 3 - 
+* 
+* Les case
+* - praticien
+* - pharmacopee
+**********************************************************/
+
+switch($ac)
 {
-	switch($ac)
+	// Infos sur un praticien
+	case 'praticien' :
 	{
-		// Infos sur un praticien
-		case 'praticien' :
+		if ($ROLE == 1)
 		{
 			// Retourne la liste des praticiens
 			$lesPraticiens = $pdo->getPraticiens();
@@ -29,11 +42,18 @@ if ($_SESSION['id'][4] == 1 || $_SESSION['id'][4] == 2)
 			}
 			// Affichage des informations
 			include("vues/v_praticien.php");
-			break;
 		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
 
-		// Infos sur un médicament
-		case 'pharmacopee' :
+	// Infos sur un médicament
+	case 'pharmacopee' :
+	{
+		if ($ROLE == 1)
 		{
 			// Retourne la liste des médicaments
 			$lesMedicaments = $pdo->getMedicaments();
@@ -49,18 +69,17 @@ if ($_SESSION['id'][4] == 1 || $_SESSION['id'][4] == 2)
 			}
 			// Affichage des informations
 			include("vues/v_pharmacopee.php");
-			break;
 		}
-
-		default :
+		else
 		{
 			header("Location:index.php");
 		}
+		break;
 	}
-}
 
-else
-{
-	header("Location:index.php");
+	default :
+	{
+		header("Location:index.php");
+	}
 }
 ?>

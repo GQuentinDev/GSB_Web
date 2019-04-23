@@ -9,6 +9,14 @@ else
 	header("Location:index.php");
 }
 
+/**********************************************************
+* Les case
+* - connexion
+* - validerConnexion
+* - monCompte
+* - deconnexion
+**********************************************************/
+
 switch($ac)
 {	
 	// Page de connexion
