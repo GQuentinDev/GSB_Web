@@ -1,5 +1,5 @@
 <div class="col-12">
-	<h1>Vos comptes rendus</h1>
+	<h1>Mes comptes rendus</h1>
 </div>
 
 <!-- Critères de recherche -->

@@ -1,6 +1,6 @@
 <?php
 // Verification du paramètre controleur ac et du statu de l'utilisateur
-if (isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) && isset($_SESSION['id']) && !empty(($_SESSION['id']))
+if (isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) && isset($_SESSION['id']) && !empty(($_SESSION['id'])))
 {
 	$ac = $_REQUEST['ac'];
 }
@@ -44,19 +44,27 @@ switch($ac)
 
 			// Tableau contenant les valeurs préremplies
 			$res = array(
-				'RAP_NUM' => "", 
-				'RAP_DATEVISITE' => "",
-				'PRA_NUM' => "",
-				'PRA_COEFF' => "",
-				'PRA_REMPLACANT' => 0,
-				'PRA_NUM_REMPLACANT' => "",
-				'RAP_DATE' => "",
-				'MOT_CODE' => "",
-				'MOT_AUTRE' => "",
-				'RAP_BILAN' => "",
-				'MED_PRESENTE1' => "",
-				'MED_PRESENTE2' => "",
-				'RAP_DEF' => 0
+				'RAP_NUM'           => "", 
+				'RAP_DATEVISITE'    => "",
+				'PRA_NUM'           => "",
+				'PRA_COEFF'         => "",
+				'PRA_REMPLACANT'    => 0,
+				'PRA_NUM_REMPLACANT'=> "",
+				'RAP_DATE'          => "",
+				'MOT_CODE'          => "",
+				'MOT_AUTRE'         => "",
+				'RAP_BILAN'         => "",
+				'MED_PRESENTE1'     => "",
+				'MED_PRESENTE2'     => "",
+				'RAP_DEF'           => 0,
+				'ECHANTILLONS'      => array(
+					'ECH1' => "",
+					'QTE1' => "",
+					'ECH2' => "",
+					'QTE2' => "",
+					'ECH3' => "",
+					'QTE3' => "",
+				)
 			);
 			// Retourne la liste des médicaments
 			$lesMedicaments = $pdo->getMedicaments();
@@ -82,27 +90,31 @@ switch($ac)
 			// Action du formulaire
 			$case = "enregistrer";
 
-			// Vérification de l'existance du numéro de rapport
+			// Vérification de l'existence du numéro de rapport
 			if (!empty($_REQUEST['RAP_NUM']))
 				$RAP_NUM = $_REQUEST['RAP_NUM'];
 			else
-				$RAP_NUM = "";
-			// Vérification de l'existance de la date de visite
+				$RAP_NUM = null;
+
+			// Vérification de l'existence de la date de visite
 			if (!empty($_REQUEST['RAP_DATEVISITE']))
 				$RAP_DATEVISITE = $_REQUEST['RAP_DATEVISITE'];
 			else
-				$RAP_DATEVISITE = "";
-			// Vérification de l'existance du praticien
+				$RAP_DATEVISITE = null;
+
+			// Vérification de l'existence du praticien
 			if (!empty($_REQUEST['PRA_NUM']))
 				$PRA_NUM = $_REQUEST['PRA_NUM'];
 			else
-				$PRA_NUM = "";
-			// Vérification de l'existance du coefficient de confiance
+				$PRA_NUM = null;
+
+			// Vérification de l'existence du coefficient de confiance
 			if (!empty($_REQUEST['PRA_COEFF']))
 				$PRA_COEFF = $_REQUEST['PRA_COEFF'];
 			else
-				$PRA_COEFF = "";
-			// Vérification de l'existance du remplacant
+				$PRA_COEFF = null;
+
+			// Vérification de l'existence du remplacant
 			if (!empty($_REQUEST['PRA_REMPLACANT'])) 
 			{
 				// Etat de la case remplacant
@@ -113,43 +125,101 @@ switch($ac)
 			{
 				// Etat de la case remplacant
 				$PRA_REMPLACANT = 0;
-				$PRA_NUM_REMPLACANT = "";
+				$PRA_NUM_REMPLACANT = null;
 			}
+
 			// Date système
 			$RAP_DATE = date("Y-m-d");
-			// Vérification de l'existance du motif
+
+			// Vérification de l'existence du motif
 			if (!empty($_REQUEST['RAP_MOTIF']))
 				$MOT_CODE = $_REQUEST['RAP_MOTIF'];
 			else
-				$MOT_CODE = "";
-			// Vérification de l'existance du libéllé motif autre
+				$MOT_CODE = null;
+
+			// Vérification de l'existence du libéllé motif autre
 			if (!empty($_REQUEST['RAP_MOTIFAUTRE']))
 				$MOT_AUTRE = $_REQUEST['RAP_MOTIFAUTRE'];
 			else
-				$MOT_AUTRE = "";
-			// Vérification de l'existance du bilan
+				$MOT_AUTRE = null;
+
+			// Vérification de l'existence du bilan
 			if (!empty($_REQUEST['RAP_BILAN']))
 				$RAP_BILAN = $_REQUEST['RAP_BILAN'];
 			else
-				$RAP_BILAN = "";
-			// Vérification de l'existance d'un produit 1
+				$RAP_BILAN = null;
+
+			// Vérification de l'existence d'un produit 1
 			if (!empty($_REQUEST['PROD1']))
 				$MED_PRESENTE1 = $_REQUEST['PROD1'];
 			else
-				$MED_PRESENTE1 = "";
-			// Vérification de l'existance d'un produit 2
+				$MED_PRESENTE1 = null;
+
+			// Vérification de l'existence d'un produit 2
 			if (!empty($_REQUEST['PROD2']))
 				$MED_PRESENTE2 = $_REQUEST['PROD2'];
 			else
-				$MED_PRESENTE2 = "";
+				$MED_PRESENTE2 = null;
+
 			// Vérification de l'état de la case saisie deffinitive
 			if (!empty($_REQUEST['RAP_DEF']))
 				$RAP_DEF = 1;
 			else
 				$RAP_DEF = 0;
 
+			// Vérification de l'existence d'un echantillon 1
+			if (!empty($_REQUEST['PRA_ECH1']))
+			{
+				$ECH1 = $_REQUEST['PRA_ECH1'];
+				$QTE1 = $_REQUEST['PRA_QTE1'];
+				// Vérification de l'existence d'une quantité d'echantillon 1
+				if (empty($QTE1))
+					$QTE1 = 1;
+
+				// Vérification de l'existence d'un echantillon 2
+				if (!empty($_REQUEST['PRA_ECH2']))
+				{
+					$ECH2 = $_REQUEST['PRA_ECH2'];
+					$QTE2 = $_REQUEST['PRA_QTE2'];
+					// Vérification de l'existence d'une quantité d'echantillon 2
+					if (empty($QTE2))
+						$QTE2 = 1;
+
+					// Vérification de l'existence d'un echantillon 3
+					if (!empty($_REQUEST['PRA_ECH3']))
+					{
+						$ECH3 = $_REQUEST['PRA_ECH3'];
+						$QTE3 = $_REQUEST['PRA_QTE3'];
+						// Vérification de l'existence d'une quantité d'echantillon 3
+						if (empty($QTE3))
+							$QTE3 = 1;
+					}
+					else
+					{
+						$ECH3 = null;
+						$QTE3 = null;
+					}
+				}
+				else
+				{
+					$ECH2 = null;
+					$QTE2 = null;
+					$ECH3 = null;
+					$QTE3 = null;
+				}
+			}
+			else
+			{
+				$ECH1 = null;
+				$QTE1 = null;
+				$ECH2 = null;
+				$QTE2 = null;
+				$ECH3 = null;
+				$QTE3 = null;
+			}
+
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2);
+			$msgErreurs = getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -157,19 +227,27 @@ switch($ac)
 				include ("vues/v_erreurs.php");
 				// Tableau contenant les valeurs préremplies
 				$res = array(
-					'RAP_NUM' => $RAP_NUM, 
-					'RAP_DATEVISITE' => $RAP_DATEVISITE,
-					'PRA_NUM' => $PRA_NUM,
-					'PRA_COEFF' => $PRA_COEFF,
-					'PRA_REMPLACANT' => $PRA_REMPLACANT,
-					'PRA_NUM_REMPLACANT' => $PRA_NUM_REMPLACANT,
-					'RAP_DATE' => $RAP_DATE,
-					'MOT_CODE' => $MOT_CODE,
-					'MOT_AUTRE' => $MOT_AUTRE,
-					'RAP_BILAN' => $RAP_BILAN,
-					'MED_PRESENTE1' => $MED_PRESENTE1,
-					'MED_PRESENTE2' => $MED_PRESENTE2,
-					'RAP_DEF' => $RAP_DEF
+					'RAP_NUM'           => $RAP_NUM, 
+					'RAP_DATEVISITE'    => $RAP_DATEVISITE,
+					'PRA_NUM'           => $PRA_NUM,
+					'PRA_COEFF'         => $PRA_COEFF,
+					'PRA_REMPLACANT'    => $PRA_REMPLACANT,
+					'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
+					'RAP_DATE'          => $RAP_DATE,
+					'MOT_CODE'          => $MOT_CODE,
+					'MOT_AUTRE'         => $MOT_AUTRE,
+					'RAP_BILAN'         => $RAP_BILAN,
+					'MED_PRESENTE1'     => $MED_PRESENTE1,
+					'MED_PRESENTE2'     => $MED_PRESENTE2,
+					'RAP_DEF'           => $RAP_DEF,
+					'ECHANTILLONS'      => array(
+						'ECH1' => $ECH1,
+						'QTE1' => $QTE1,
+						'ECH2' => $ECH2,
+						'QTE2' => $QTE2,
+						'ECH3' => $ECH3,
+						'QTE3' => $QTE3,
+					)
 				);
 				// Retourne la liste des médicaments
 				$lesMedicaments = $pdo->getMedicaments();
@@ -182,33 +260,36 @@ switch($ac)
 			}
 			else
 			{
-				// Vérification de l'existance du libéllé motif
+				// Vérification de l'existence du libéllé motif
 				if (empty($MOT_AUTRE))
 					$MOT_AUTRE = "null";
-				// Vérification de l'existance d'un remplacant
+
+				// Vérification de l'existence d'un remplacant
 				if (empty($PRA_NUM_REMPLACANT))
 					$PRA_NUM_REMPLACANT = "null";
-				// Tableau contenant les valeurs pour l'insertion
-				$rapport = array(
-					'RAP_NUM' => $RAP_NUM, 
-					'RAP_DATEVISITE' => $RAP_DATEVISITE,
-					'PRA_NUM' => $PRA_NUM,
-					'PRA_COEFF' => $PRA_COEFF,
-					'PRA_NUM_REMPLACANT' => $PRA_NUM_REMPLACANT,
-					'RAP_DATE' => $RAP_DATE,
-					'MOT_CODE' => $MOT_CODE,
-					'MOT_AUTRE' => $MOT_AUTRE,
-					'RAP_BILAN' => $RAP_BILAN,
-					'MED_PRESENTE1' => $MED_PRESENTE1,
-					'MED_PRESENTE2' => $MED_PRESENTE2,
-					'RAP_DEF' => $RAP_DEF
-				);
 				
 				// Test d'insertion
-				if ($pdo->noveauRapport($COL_MATRICULE, $rapport['RAP_NUM'], $rapport['PRA_NUM'], $rapport['PRA_NUM_REMPLACANT'], $rapport['RAP_DATE'], $rapport['RAP_BILAN'], $rapport['MOT_CODE'], $rapport['MOT_AUTRE'], $rapport['MED_PRESENTE1'], $rapport['MED_PRESENTE2'], $rapport['RAP_DEF'], $rapport['RAP_DATEVISITE']))
+				if ($pdo->nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
 				{
+					if ($ECH1 != null)
+					{
+						$pdo->offrir($COL_MATRICULE, $RAP_NUM, $ECH1, $QTE1);
+					}
+					if ($ECH2 != null)
+					{
+						$pdo->offrir($COL_MATRICULE, $RAP_NUM, $ECH2, $QTE2);
+					}
+					if ($ECH3 != null)
+					{
+						$pdo->offrir($COL_MATRICULE, $RAP_NUM, $ECH3, $QTE3);
+					}
+
+					/*
+					$pdo->updateCoefConfiance($PRA_NUM, $PRA_COEFF);
+					*/
+
 					// Verification de l'état de la case saisie définitive
-					if ($rapport['RAP_DEF'] == 0)
+					if ($RAP_DEF == 0)
 					{
 						$message = "Enregistrement réussi en tant que saisie non définitive";
 					}
@@ -228,19 +309,27 @@ switch($ac)
 					include ("vues/v_erreurs.php");
 					// Tableau contenant les valeurs préremplies
 					$res = array(
-						'RAP_NUM' => $RAP_NUM, 
-						'RAP_DATEVISITE' => $RAP_DATEVISITE,
-						'PRA_NUM' => $PRA_NUM,
-						'PRA_COEFF' => $PRA_COEFF,
-						'PRA_REMPLACANT' => $PRA_REMPLACANT,
-						'PRA_NUM_REMPLACANT' => $PRA_NUM_REMPLACANT,
-						'RAP_DATE' => $RAP_DATE,
-						'MOT_CODE' => $MOT_CODE,
-						'MOT_AUTRE' => $MOT_AUTRE,
-						'RAP_BILAN' => $RAP_BILAN,
-						'MED_PRESENTE1' => $MED_PRESENTE1,
-						'MED_PRESENTE2' => $MED_PRESENTE2,
-						'RAP_DEF' => $RAP_DEF
+						'RAP_NUM'           => $RAP_NUM, 
+						'RAP_DATEVISITE'    => $RAP_DATEVISITE,
+						'PRA_NUM'           => $PRA_NUM,
+						'PRA_COEFF'         => $PRA_COEFF,
+						'PRA_REMPLACANT'    => $PRA_REMPLACANT,
+						'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
+						'RAP_DATE'          => $RAP_DATE,
+						'MOT_CODE'          => $MOT_CODE,
+						'MOT_AUTRE'         => $MOT_AUTRE,
+						'RAP_BILAN'         => $RAP_BILAN,
+						'MED_PRESENTE1'     => $MED_PRESENTE1,
+						'MED_PRESENTE2'     => $MED_PRESENTE2,
+						'RAP_DEF'           => $RAP_DEF,
+						'ECHANTILLONS'      => array(
+							'ECH1' => $ECH1,
+							'QTE1' => $QTE1,
+							'ECH2' => $ECH2,
+							'QTE2' => $QTE2,
+							'ECH3' => $ECH3,
+							'QTE3' => $QTE3,
+						)
 					);
 					// Retourne la liste des médicaments
 					$lesMedicaments = $pdo->getMedicaments();
@@ -251,22 +340,8 @@ switch($ac)
 					// Afficahge du formulaire de rapport
 					include ("vues/v_saisieRapport.php");
 				}
-				/*
-				$pdo->updateCoefConfiance($PRA_NUM, $PRA_COEFF);
-
-				if (isset($_REQUEST['PRA_ECH1'])) {
-					$MED_DEPOTLEGAL = $_REQUEST['PRA_ECH1'];
-					$OFF_QTE = $_REQUEST['PRA_QTE1'];
-					$pdo->offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE);
-				}
-				if (isset($_REQUEST['PRA_ECH2'])) {
-					$MED_DEPOTLEGAL = $_REQUEST['PRA_ECH2'];
-					$OFF_QTE = $_REQUEST['PRA_QTE1'];
-					$pdo->offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE);
-				}
-				*/
 			}
-			}
+		}
 		else
 		{
 			header("Location:index.php");
@@ -277,7 +352,7 @@ switch($ac)
 	// Recherche et saisies non définitifves
 	case 'consulter' :
 	{	
-		if ($ROLE == 1)
+		if ($ROLE == 1 || $ROLE = 2)
 		{
 			// Retourne la liste des praticiens vu
 			$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
@@ -285,13 +360,18 @@ switch($ac)
 			$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
 			// Affichage recherche et rapport non définitifs
 			include("vues/v_consulterRapport.php");
-		}
-		elseif ($ROLE == 2)
-		{
-			// Retourne les rapports
 			
-			// Affichage des rapports
-			include("vues/v_consulterRapportRegion.php");
+			if ($ROLE == 2)
+			{
+				//retourne la région du collaborateur
+				$saRegion = $pdo->getRegion($COL_MATRICULE);
+				// Retourne les nouveaux rapports
+				$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
+				// Retourne l'historique des rapports de visite
+				$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
+				// Affichage des rapports
+				include("vues/v_consulterRapportRegion.php");
+			}
 		}
 		else
 		{
@@ -303,14 +383,14 @@ switch($ac)
 	// Résultats de recherche d'un compte rendu
 	case 'recherche' :
 	{
-		if ($ROLE == 1)
+		if ($ROLE == 1 || $ROLE = 2)
 		{
-			// Vérification de l'existance d'une date 1
+			// Vérification de l'existence d'une date 1
 			if (isset($_REQUEST['RAP_DATE1']))
 				$RAP_DATE1 = $_REQUEST['RAP_DATE1'];
 			else
 				$RAP_DATE1 = "";
-			// Vérification de l'existance d'une date 2
+			// Vérification de l'existence d'une date 2
 			if (isset($_REQUEST['RAP_DATE2']))
 				$RAP_DATE2 = $_REQUEST['RAP_DATE2'];
 			else
@@ -329,10 +409,22 @@ switch($ac)
 				$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
 				// Affichage recherche et rapports non définitifs
 				include("vues/v_consulterRapport.php");
+
+				if ($ROLE == 2)
+				{
+					//retourne la région du collaborateur
+					$saRegion = $pdo->getRegion($COL_MATRICULE);
+					// Retourne les nouveaux rapports
+					$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
+					// Retourne l'historique des rapports de visite
+					$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
+					// Affichage des rapports
+					include("vues/v_consulterRapportRegion.php");
+				}
 			}
 			else
 			{
-				// Vérification de l'existance d'un praticien
+				// Vérification de l'existence d'un praticien
 				if (isset($_REQUEST['PRA_NUM']) && !empty($_REQUEST['PRA_NUM']))
 					$PRA_NUM = $_REQUEST['PRA_NUM'];
 				else
@@ -358,6 +450,18 @@ switch($ac)
 					$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
 					// Affichage recherche et rapports non définitifs
 					include("vues/v_consulterRapport.php");
+
+					if ($ROLE == 2)
+					{
+						//retourne la région du collaborateur
+						$saRegion = $pdo->getRegion($COL_MATRICULE);
+						// Retourne les nouveaux rapports
+						$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
+						// Retourne l'historique des rapports de visite
+						$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
+						// Affichage des rapports
+						include("vues/v_consulterRapportRegion.php");
+					}
 				}
 			}
 		}
@@ -376,7 +480,14 @@ switch($ac)
 			// Récuperation du numéro de rapport
 			$RAP_NUM = $_REQUEST['RAP_NUM'];
 			// Retourne les détails d'un rapport
-			$res = $pdo->getDetailsRapport($RAP_NUM);
+			$rapport = $pdo->getDetailsRapport($RAP_NUM);
+			// Retourne les echantillons du rapport
+			$lesEchantillons = $pdo->getEchantillons($COL_MATRICULE, $RAP_NUM);
+			if ($ROLE == 2)
+			{
+				//Lorsque le rapport a été consulté
+				$pdo->rapportConsulteDelegue($RAP_NUM);
+			}
 			// Affichage du rapport
 			include("vues/v_detailsRapport.php");
 		}
@@ -437,14 +548,35 @@ switch($ac)
 
 			// Ancien numéro de rapport
 			$_SESSION['RAP_NUM_OLD'] = $_REQUEST['RAP_NUM'];
+
 			// Récuperation du numéro de rapport
 			$RAP_NUM = $_REQUEST['RAP_NUM'];
+
 			// Retourne les détails d'un rapport
 			$res = $pdo->getDetailsRapport($RAP_NUM);
-			// Coefficient de confiance
-			$res['PRA_COEFF'] = "";
 
-			// Vérification de l'existance du remplacant
+			// Coefficient de confiance
+			$res['PRA_COEFF'] = null;
+
+			// Les echantillons
+			$lesEchantillons = $pdo->getEchantillons($COL_MATRICULE, $RAP_NUM);
+			$j = 1;
+			for ($i = 0; $i < 3; $i++)
+			{
+				if ($i < sizeof($lesEchantillons))
+				{
+					$res['ECHANTILLONS']['ECH'.$j] = $lesEchantillons[$i]['MED_DEPOTLEGAL'];
+					$res['ECHANTILLONS']['QTE'.$j] = $lesEchantillons[$i]['OFF_QTE'];
+				}
+				else
+				{
+					$res['ECHANTILLONS']['ECH'.$j] = null;
+					$res['ECHANTILLONS']['QTE'.$j] = null;
+				}
+				$j++;
+			}
+
+			// Vérification de l'existence du remplacant
 			if (!empty($res['PRA_NUM_REMPLACANT'])) 
 			{
 				// Etat de la case remplacant
@@ -481,27 +613,32 @@ switch($ac)
 
 			// Ancien numéro de rapport
 			$RAP_NUM_OLD = $_SESSION['RAP_NUM_OLD'];
-			// Vérification de l'existance du numéro de rapport
+
+			// Vérification de l'existence du numéro de rapport
 			if (!empty($_REQUEST['RAP_NUM']))
 				$RAP_NUM = $_REQUEST['RAP_NUM'];
 			else
-				$RAP_NUM = "";
-			// Vérification de l'existance de la date de visite
+				$RAP_NUM = null;
+
+			// Vérification de l'existence de la date de visite
 			if (!empty($_REQUEST['RAP_DATEVISITE']))
 				$RAP_DATEVISITE = $_REQUEST['RAP_DATEVISITE'];
 			else
-				$RAP_DATEVISITE = "";
-			// Vérification de l'existance du praticien
+				$RAP_DATEVISITE = null;
+
+			// Vérification de l'existence du praticien
 			if (!empty($_REQUEST['PRA_NUM']))
 				$PRA_NUM = $_REQUEST['PRA_NUM'];
 			else
-				$PRA_NUM = "";
-			// Vérification de l'existance du coefficient de confiance
+				$PRA_NUM = null;
+
+			// Vérification de l'existence du coefficient de confiance
 			if (!empty($_REQUEST['PRA_COEFF']))
 				$PRA_COEFF = $_REQUEST['PRA_COEFF'];
 			else
-				$PRA_COEFF = "";
-			// Vérification de l'existance du remplacant
+				$PRA_COEFF = null;
+
+			// Vérification de l'existence du remplacant
 			if (!empty($_REQUEST['PRA_REMPLACANT'])) 
 			{
 				// Etat de la case remplacant
@@ -512,63 +649,129 @@ switch($ac)
 			{
 				// Etat de la case remplacant
 				$PRA_REMPLACANT = 0;
-				$PRA_NUM_REMPLACANT = "";
+				$PRA_NUM_REMPLACANT = null;
 			}
+
 			// Date système
 			$RAP_DATE = date("Y-m-d");
-			// Vérification de l'existance du motif
+
+			// Vérification de l'existence du motif
 			if (!empty($_REQUEST['RAP_MOTIF']))
 				$MOT_CODE = $_REQUEST['RAP_MOTIF'];
 			else
-				$MOT_CODE = "";
-			// Vérification de l'existance du libéllé motif autre
+				$MOT_CODE = null;
+
+			// Vérification de l'existence du libéllé motif autre
 			if (!empty($_REQUEST['RAP_MOTIFAUTRE']))
 				$MOT_AUTRE = $_REQUEST['RAP_MOTIFAUTRE'];
 			else
-				$MOT_AUTRE = "";
-			// Vérification de l'existance du bilan
+				$MOT_AUTRE = null;
+
+			// Vérification de l'existence du bilan
 			if (!empty($_REQUEST['RAP_BILAN']))
 				$RAP_BILAN = $_REQUEST['RAP_BILAN'];
 			else
-				$RAP_BILAN = "";
-			// Vérification de l'existance d'un produit 1
+				$RAP_BILAN = null;
+
+			// Vérification de l'existence d'un produit 1
 			if (!empty($_REQUEST['PROD1']))
 				$MED_PRESENTE1 = $_REQUEST['PROD1'];
 			else
-				$MED_PRESENTE1 = "";
-			// Vérification de l'existance d'un produit 2
+				$MED_PRESENTE1 = null;
+
+			// Vérification de l'existence d'un produit 2
 			if (!empty($_REQUEST['PROD2']))
 				$MED_PRESENTE2 = $_REQUEST['PROD2'];
 			else
-				$MED_PRESENTE2 = "";
+				$MED_PRESENTE2 = null;
+
 			// Vérification de l'état de la case saisie deffinitive
 			if (!empty($_REQUEST['RAP_DEF']))
 				$RAP_DEF = 1;
 			else
 				$RAP_DEF = 0;
 
+			// Vérification de l'existence d'un echantillon 1
+			if (!empty($_REQUEST['PRA_ECH1']))
+			{
+				$ECH1 = $_REQUEST['PRA_ECH1'];
+				$QTE1 = $_REQUEST['PRA_QTE1'];
+				// Vérification de l'existence d'une quantité d'echantillon 1
+				if (empty($QTE1))
+					$QTE1 = 1;
+
+				// Vérification de l'existence d'un echantillon 2
+				if (!empty($_REQUEST['PRA_ECH2']))
+				{
+					$ECH2 = $_REQUEST['PRA_ECH2'];
+					$QTE2 = $_REQUEST['PRA_QTE2'];
+					// Vérification de l'existence d'une quantité d'echantillon 2
+					if (empty($QTE2))
+						$QTE2 = 1;
+
+					// Vérification de l'existence d'un echantillon 3
+					if (!empty($_REQUEST['PRA_ECH3']))
+					{
+						$ECH3 = $_REQUEST['PRA_ECH3'];
+						$QTE3 = $_REQUEST['PRA_QTE3'];
+						// Vérification de l'existence d'une quantité d'echantillon 3
+						if (empty($QTE3))
+							$QTE3 = 1;
+					}
+					else
+					{
+						$ECH3 = null;
+						$QTE3 = null;
+					}
+				}
+				else
+				{
+					$ECH2 = null;
+					$QTE2 = null;
+					$ECH3 = null;
+					$QTE3 = null;
+				}
+			}
+			else
+			{
+				$ECH1 = null;
+				$QTE1 = null;
+				$ECH2 = null;
+				$QTE2 = null;
+				$ECH3 = null;
+				$QTE3 = null;
+			}
+
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2);
+			$msgErreurs = getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
 			if (count($msgErreurs) != 0)
 			{
-				// Affichage des messages d'erreur
+				// Affichage des messages d'erreurs
 				include ("vues/v_erreurs.php");
 				// Tableau contenant les valeurs préremplies
 				$res = array(
-					'RAP_NUM' => $RAP_NUM, 
-					'RAP_DATEVISITE' => $RAP_DATEVISITE,
-					'PRA_NUM' => $PRA_NUM,
-					'PRA_COEFF' => $PRA_COEFF,
-					'PRA_REMPLACANT' => $PRA_REMPLACANT,
-					'PRA_NUM_REMPLACANT' => $PRA_NUM_REMPLACANT,
-					'RAP_DATE' => $RAP_DATE,
-					'MOT_CODE' => $MOT_CODE,
-					'MOT_AUTRE' => $MOT_AUTRE,
-					'RAP_BILAN' => $RAP_BILAN,
-					'MED_PRESENTE1' => $MED_PRESENTE1,
-					'MED_PRESENTE2' => $MED_PRESENTE2,
-					'RAP_DEF' => $RAP_DEF
+					'RAP_NUM'           => $RAP_NUM, 
+					'RAP_DATEVISITE'    => $RAP_DATEVISITE,
+					'PRA_NUM'           => $PRA_NUM,
+					'PRA_COEFF'         => $PRA_COEFF,
+					'PRA_REMPLACANT'    => $PRA_REMPLACANT,
+					'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
+					'RAP_DATE'          => $RAP_DATE,
+					'MOT_CODE'          => $MOT_CODE,
+					'MOT_AUTRE'         => $MOT_AUTRE,
+					'RAP_BILAN'         => $RAP_BILAN,
+					'MED_PRESENTE1'     => $MED_PRESENTE1,
+					'MED_PRESENTE2'     => $MED_PRESENTE2,
+					'RAP_DEF'           => $RAP_DEF,
+					'ECHANTILLONS' => array(
+						'ECH1' => $ECH1,
+						'QTE1' => $QTE1,
+						'ECH2' => $ECH2,
+						'QTE2' => $QTE2,
+						'ECH3' => $ECH3,
+						'QTE3' => $QTE3,
+					)
 				);
 				// Retourne la liste des médicaments
 				$lesMedicaments = $pdo->getMedicaments();
@@ -581,33 +784,33 @@ switch($ac)
 			}
 			else
 			{
-				// Vérification de l'existance du motif autre
+				// Vérification de l'existence du libéllé motif
 				if (empty($MOT_AUTRE))
 					$MOT_AUTRE = "null";
-				// Verification de l'existance d'un remplaçant
+
+				// Vérification de l'existence d'un remplacant
 				if (empty($PRA_NUM_REMPLACANT))
 					$PRA_NUM_REMPLACANT = "null";
-				// Tableau contenant les valeurs pour la mise à jour
-				$rapport = array(
-					'RAP_NUM' => $RAP_NUM, 
-					'RAP_DATEVISITE' => $RAP_DATEVISITE,
-					'PRA_NUM' => $PRA_NUM,
-					'PRA_COEFF' => $PRA_COEFF,
-					'PRA_NUM_REMPLACANT' => $PRA_NUM_REMPLACANT,
-					'RAP_DATE' => $RAP_DATE,
-					'MOT_CODE' => $MOT_CODE,
-					'MOT_AUTRE' => $MOT_AUTRE,
-					'RAP_BILAN' => $RAP_BILAN,
-					'MED_PRESENTE1' => $MED_PRESENTE1,
-					'MED_PRESENTE2' => $MED_PRESENTE2,
-					'RAP_DEF' => $RAP_DEF
-				);
 
 				// Mise à jour du rapport
-				if ($pdo->updateRapport($RAP_NUM_OLD, $rapport['RAP_NUM'], $rapport['PRA_NUM'], $rapport['PRA_NUM_REMPLACANT'], $rapport['RAP_DATE'], $rapport['RAP_BILAN'], $rapport['MOT_CODE'], $rapport['MOT_AUTRE'], $rapport['MED_PRESENTE1'], $rapport['MED_PRESENTE2'], $rapport['RAP_DEF'], $rapport['RAP_DATEVISITE']))
+				if ($pdo->updateRapport($RAP_NUM_OLD, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
 				{
+					$pdo->deleteEchantillons($COL_MATRICULE, $RAP_NUM_OLD);
+					if ($ECH1 != null)
+					{
+						$pdo->offrir($COL_MATRICULE, $RAP_NUM_OLD, $ECH1, $QTE1);
+					}
+					if ($ECH2 != null)
+					{
+						$pdo->offrir($COL_MATRICULE, $RAP_NUM_OLD, $ECH2, $QTE2);
+					}
+					if ($ECH3 != null)
+					{
+						$pdo->offrir($COL_MATRICULE, $RAP_NUM_OLD, $ECH3, $QTE3);
+					}
+
 					// Vérification de l'état de la case saisie définitive
-					if ($rapport['RAP_DEF'] == 0)
+					if ($RAP_DEF == 0)
 					{
 						$message = "Enregistrement réussi en tant que saisie non définitive";
 					}
@@ -620,13 +823,45 @@ switch($ac)
 					// Affichage indication où trouver ses enregistrements
 					include ("vues/v_infoEnregistrement.php");
 					// Ancien numéro de rapport
-					$_SESSION['RAP_NUM_OLD'] = '';
+					$_SESSION['RAP_NUM_OLD'] = null;
 				}
 				else
 				{
 					// Affichage du message d'erreur
 					$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
 					include ("vues/v_erreurs.php");
+					// Tableau contenant les valeurs préremplies
+					$res = array(
+						'RAP_NUM'           => $RAP_NUM, 
+						'RAP_DATEVISITE'    => $RAP_DATEVISITE,
+						'PRA_NUM'           => $PRA_NUM,
+						'PRA_COEFF'         => $PRA_COEFF,
+						'PRA_REMPLACANT'    => $PRA_REMPLACANT,
+						'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
+						'RAP_DATE'          => $RAP_DATE,
+						'MOT_CODE'          => $MOT_CODE,
+						'MOT_AUTRE'         => $MOT_AUTRE,
+						'RAP_BILAN'         => $RAP_BILAN,
+						'MED_PRESENTE1'     => $MED_PRESENTE1,
+						'MED_PRESENTE2'     => $MED_PRESENTE2,
+						'RAP_DEF'           => $RAP_DEF,
+						'ECHANTILLONS'      => array(
+							'ECH1' => $ECH1,
+							'QTE1' => $QTE1,
+							'ECH2' => $ECH2,
+							'QTE2' => $QTE2,
+							'ECH3' => $ECH3,
+							'QTE3' => $QTE3,
+						)
+					);
+					// Retourne la liste des médicaments
+					$lesMedicaments = $pdo->getMedicaments();
+					// Retourne la liste des praticiens
+					$lesPraticiens = $pdo->getPraticiens();
+					// Retourne la liste des motifs
+					$lesMotifs = $pdo->getMotifs();
+					// Afficahge du formulaire de rapport
+					include ("vues/v_saisieRapport.php");
 				}
 			}
 		}

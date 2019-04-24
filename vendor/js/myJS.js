@@ -11,7 +11,7 @@ function selectionne(pValeur, pSelection, pObjet) {
 }
 
 
-function ajoutLigne(pNumero) { 
+/*function ajoutLigne(pNumero) { 
 	//masque le bouton en cours
 	document.getElementById("but"+pNumero).setAttribute("hidden","true");
 	//incrémente le numéro de ligne	
@@ -54,16 +54,18 @@ function ajoutLigne(pNumero) {
 
 	var laDiv2 = document.getElementById("lignes2");
 
-	//div ajouter
-	var formgroupAJ = document.createElement("div");
-	formgroupAJ.setAttribute("class", "form-group");
-	laDiv2.appendChild(formgroupAJ);
+	if (pNumero < 3) {
+		//div ajouter
+		var formgroupAJ = document.createElement("div");
+		formgroupAJ.setAttribute("class", "form-group");
+		laDiv2.appendChild(formgroupAJ);
 
-	var bouton = document.createElement("input");
-	bouton.setAttribute("onClick", "ajoutLigne("+pNumero+");");
-	bouton.setAttribute("type", "button");
-	bouton.setAttribute("value", "+");
-	bouton.setAttribute("class", "form-control");	
-	bouton.setAttribute("id", "but"+pNumero);
-	formgroupAJ.appendChild(bouton);
-}
+		var bouton = document.createElement("input");
+		bouton.setAttribute("onClick", "ajoutLigne("+pNumero+");");
+		bouton.setAttribute("type", "button");
+		bouton.setAttribute("value", "+");
+		bouton.setAttribute("class", "form-control");	
+		bouton.setAttribute("id", "but"+pNumero);
+		formgroupAJ.appendChild(bouton);
+	}
+}*/

@@ -63,7 +63,7 @@
 		<div class="form-group">
 			<div class="custom-control custom-checkbox mb-3">
 				<input type="checkbox" class="custom-control-input" onClick="selectionne(true,this.checked,'PRA_REMPLACANT');" id="customCheck" <?php 
-				if (!empty($res['PRA_NUM_REMPLACANT']))
+				if ($res['PRA_NUM_REMPLACANT'] == 1)
 				{
 					?>
 
@@ -168,7 +168,7 @@
 				<div class="form-group">
 					<label >Produit 1 :</label>
 					<select name="PROD1" class="form-control">
-						<option value="">Choisissez produit</option>
+						<option value="">Choisissez un produit</option>
 						<?php
 						foreach ($lesMedicaments as $unMedicament)
 						{
@@ -226,17 +226,25 @@
 		<div class="form-group">
 			<div class="row" id="lignes">
 
-				<!-- Produit -->
+				<!-- Produit 1 -->
 				<div class="col-9">
 					<div class="form-group">
 						<label>Produit :</label>
 						<select name="PRA_ECH1" class="form-control">
-							<option>Choisissez un produit</option>
+							<option value="">Choisissez un produit</option>
 							<?php
 							foreach ($lesMedicaments as $unMedicament) {
 								?>
 
-								<option value="<?php echo $unMedicament['MED_DEPOTLEGAL']; ?>"><?php echo $unMedicament['MED_NOMCOMMERCIAL']; ?></option>
+								<option value="<?php echo $unMedicament['MED_DEPOTLEGAL']; ?>" <?php
+								if ($unMedicament['MED_DEPOTLEGAL'] == $res['ECHANTILLONS']['ECH1'])
+								{
+									?>
+
+									selected
+									<?php
+								}
+								?> > <?php echo $unMedicament['MED_NOMCOMMERCIAL']; ?></option>
 								<?php
 							}
 							?>
@@ -245,20 +253,82 @@
 					</div>
 				</div>
 
-				<!-- Quantité -->
+				<!-- Quantité 1 -->
 				<div class="col-3">
 					<div class="form-group">
 						<label>Quantité :</label>
-						<input type="number" min="1" max="10" name="PRA_QTE1" size="2" class="form-control" />
+						<input type="number" min="1" max="10" name="PRA_QTE1" size="2" class="form-control" value="<?php echo $res['ECHANTILLONS']['QTE1']; ?>" />
+					</div>
+				</div>
+
+				<!-- Produit 2 -->
+				<div class="col-9">
+					<div class="form-group">
+						<select name="PRA_ECH2" class="form-control">
+							<option value="">Choisissez un produit</option>
+							<?php
+							foreach ($lesMedicaments as $unMedicament) {
+								?>
+
+								<option value="<?php echo $unMedicament['MED_DEPOTLEGAL']; ?>" <?php
+								if ($unMedicament['MED_DEPOTLEGAL'] == $res['ECHANTILLONS']['ECH2'])
+								{
+									?>
+
+									selected
+									<?php
+								}
+								?> > <?php echo $unMedicament['MED_NOMCOMMERCIAL']; ?></option>
+								<?php
+							}
+							?>
+
+						</select>
+					</div>
+				</div>
+
+				<!-- Quantité 2 -->
+				<div class="col-3">
+					<div class="form-group">
+						<input type="number" min="1" max="10" name="PRA_QTE2" size="2" class="form-control" value="<?php echo $res['ECHANTILLONS']['QTE2']; ?>" />
+					</div>
+				</div>
+
+				<!-- Produit 3 -->
+				<div class="col-9">
+					<div class="form-group">
+						<select name="PRA_ECH3" class="form-control">
+							<option value="">Choisissez un produit</option>
+							<?php
+							foreach ($lesMedicaments as $unMedicament) {
+								?>
+
+								<option value="<?php echo $unMedicament['MED_DEPOTLEGAL']; ?>" <?php
+								if ($unMedicament['MED_DEPOTLEGAL'] == $res['ECHANTILLONS']['ECH3'])
+								{
+									?>
+
+									selected
+									<?php
+								}
+								?> > <?php echo $unMedicament['MED_NOMCOMMERCIAL']; ?></option>
+								<?php
+							}
+							?>
+
+						</select>
+					</div>
+				</div>
+
+				<!-- Quantité 3 -->
+				<div class="col-3">
+					<div class="form-group">
+						<input type="number" min="1" max="10" name="PRA_QTE3" size="2" class="form-control" value="<?php echo $res['ECHANTILLONS']['QTE3']; ?>" />
 					</div>
 				</div>
 
 			</div>
 
-			<!-- Ajouter un produit -->
-			<div class="form-group" id="lignes2">
-				<input type="button" id="but1" value="+" onclick="ajoutLigne(1);" class="form-control" />
-			</div>
 		</div>
 
 	</div>

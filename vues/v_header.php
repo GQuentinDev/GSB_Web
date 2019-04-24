@@ -50,49 +50,55 @@
 					<ul class="navbar-nav ml-auto">
 
 						<?php
-						if (isset($_SESSION['id'][4]) && !empty($_SESSION['id'][4]))
+						if (isset($_SESSION['id']) && !empty($_SESSION['id']))
 						{
+							// Role du collaborateur
+							$ROLE = $_SESSION['id'][4];
+
+							/**********************************************************
+							* Les Roles :
+							* 1 - Visiteur
+							* 2 - Délégué
+							* 3 - 
+							**********************************************************/
 							?>
 
 							<li class="nav-item">
 								<a class="nav-link" href="index.php">Aide</a>
 							</li>
+
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCompteRendu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Comptes rendus</a>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownCompteRendu">
+									<a class="dropdown-item" href="index.php?uc=compteRendu&ac=nouveau">Nouveau</a>
+									<a class="dropdown-item" href="index.php?uc=compteRendu&ac=consulter">Consulter</a>
+								</div>
+							</li>
+
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownConsulter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Consulter</a>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownConsulter">
+									<a class="dropdown-item" href="index.php?uc=consultations&ac=praticien">Praticiens</a>
+									<a class="dropdown-item" href="index.php?uc=consultations&ac=pharmacopee">Pharmacopée</a>
+								</div>
+							</li>
+
 							<?php	
-							if (isset($_SESSION['id'][4]) && $_SESSION['id'][4] == 1)
+							if ($ROLE == 1)
 							{
 								?>
 
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Comptes rendus</a>
-									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=nouveau">Nouveau</a>
-										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=consulter">Consulter</a>
-									</div>
-								</li>
-
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Consulter</a>
-									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-										<a class="dropdown-item" href="index.php?uc=consultations&ac=praticien">Praticiens</a>
-										<a class="dropdown-item" href="index.php?uc=consultations&ac=pharmacopee">Pharmacopée</a>
-									</div>
-								</li>
+								
 								<?php
 							}
-							else if ($_SESSION['id'][4] == 2)
+							else if ($ROLE == 2)
 							{
 								?>
 
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Comptes rendus</a>
-									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=nouveau">Nouveau</a>
-										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=consulter">Consulter</a>
-									</div>
-								</li>
+								
 								<?php
 							}
-							else if ($_SESSION['id'][4] == 3)
+							else if ($ROLE == 3)
 							{
 								?>
 
@@ -101,9 +107,9 @@
 							}
 							?>
 
-							<li class="nav-item">
+							<!--<li class="nav-item">
 								<a class="nav-link" href="index.php?uc=compte&ac=monCompte">Mon compte</a>
-							</li>
+							</li>-->
 
 							<li class="nav-item">
 								<a class="nav-link" href="index.php?uc=compte&ac=deconnexion">Déconnexion</a>

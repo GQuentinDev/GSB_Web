@@ -12,11 +12,11 @@ function getErreursConnexion($login, $mdp)
 	$lesErreurs = array();
 	if (empty($login))
 	{
-		$lesErreurs[] = "Vous devez indiquer votre login.";
+		$lesErreurs[] = "Vous devez indiquer votre login";
 	}
 	if (empty($mdp))
 	{
-		$lesErreurs[] = "Vous devez indiquer un mot de passe.";
+		$lesErreurs[] = "Vous devez indiquer un mot de passe";
 	}
 	return $lesErreurs;
 }
@@ -34,10 +34,9 @@ function getErreursConnexion($login, $mdp)
 * @param string $MOT_CODE chaîne
 * @param string $MOT_AUTRE chaîne
 * @param int $MED_PRESENTE1
-* @param int $MED_PRESENTE2
 * @return array $lesErreurs un tableau de chaînes d'erreurs
 */
-function getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2)
+function getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
 {
 	$lesErreurs = array();
 	if (empty($RAP_NUM))
@@ -75,10 +74,6 @@ function getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF,
 	if (empty($MED_PRESENTE1))
 	{
 		$lesErreurs[] = "Vous devez sélectionner le produit 1";
-	}
-	if (empty($MED_PRESENTE2))
-	{
-		$lesErreurs[] = "Vous devez sélectionner le produit 2";
 	}
 	return $lesErreurs;
 }

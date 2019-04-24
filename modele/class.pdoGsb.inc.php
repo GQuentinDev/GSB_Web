@@ -168,7 +168,7 @@ class PdoGsb
 		ON p.SPE_CODE = s.SPE_CODE 
 		WHERE PRA_NUM = '$PRA_NUM'";
 		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetch();
+		$res = $res->fetchAll();
 		return $res;
 	}
 
@@ -300,6 +300,88 @@ class PdoGsb
 	}
 
 	/**
+	* Fonction qui retourne la region d'un collaborateur
+	* 
+	* @param String $COL_MATRICULE
+	* @return array $res un tableau associatif contenant le résultat de la requète
+	*/
+	public function getRegion($COL_MATRICULE)
+	{
+		$req = "SELECT REG_NOM 
+		FROM region r 
+		INNER JOIN travailler t 
+		ON r.REG_CODE = t.REG_CODE 
+		WHERE VIS_MATRICULE = '$COL_MATRICULE'";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetch();
+		return $res;
+	}
+
+	/**
+	* Fonction qui retourne l'hitorique des rapports de la région
+	* 
+	* @param String $REG_NOM
+	* @return array $res un tableau associatif contenant le résultat de la requète
+	*/
+	public function getHistoriqueParRegion($REG_NOM)
+	{
+		$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
+		FROM rapport_visite rv 
+		INNER JOIN praticien p 
+		ON rv.PRA_NUM = p.PRA_NUM 
+		INNER JOIN collaborateur c 
+		ON c.COL_MATRICULE = rv.COL_MATRICULE 
+		INNER JOIN travailler t 
+		ON t.VIS_MATRICULE = c.COL_MATRICULE 
+		INNER JOIN region r 
+		ON r.REG_CODE = t.REG_CODE 
+		WHERE REG_NOM ='$REG_NOM' AND RAP_DEF = 1 AND RAP_CONSULTE = 1";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/**
+	* Fonction qui met à jour le champ de consultation par un délégué
+	* 
+	* @param String $NUM_RAP
+	* @return array $res un tableau associatif contenant le résultat de la requète
+	*/
+	public function rapportConsulteDelegue($NUM_RAP)
+	{
+		$req = "UPDATE rapport_visite
+		SET RAP_CONSULTE = 1
+		WHERE RAP_NUM ='$NUM_RAP'";
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute();
+		return $res;
+	}
+
+	/**
+	* Fonction qui retourne les nouveaux rapports de la région
+	* 
+	* @param String $REG_NOM
+	* @return array $res un tableau associatif contenant le résultat de la requète
+	*/
+	public function getNouveauxRapportsRegion($REG_NOM)
+	{
+		$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
+		FROM rapport_visite rv 
+		INNER JOIN praticien p 
+		ON rv.PRA_NUM = p.PRA_NUM 
+		INNER JOIN collaborateur c
+		ON c.COL_MATRICULE = rv.COL_MATRICULE
+		INNER JOIN travailler t
+		ON t.VIS_MATRICULE = c.COL_MATRICULE
+		INNER JOIN region r 
+		ON r.REG_CODE = t.REG_CODE
+		WHERE  REG_NOM ='$REG_NOM' AND RAP_DEF = 1 AND RAP_CONSULTE = 0";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/**
 	* Fonction qui retourne les rapports d'un collaborateur sur une periode (pour un praticien /facultatif/)
 	* 
 	* @param String $COL_MATRICULE
@@ -372,16 +454,32 @@ class PdoGsb
 	* @param date $RAP_DATEVISITE
 	* @return boolean $res contenant le résultat de la requète
 	*/
-	public function noveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE) {
-		if ($MOT_AUTRE != "null")
+	public function nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE) {
+		if ($MOT_AUTRE == null)
 		{
-			$req = "INSERT INTO rapport_visite VALUES 
-			('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', '$MOT_AUTRE', '$MED_PRESENTE1', '$MED_PRESENTE2', $RAP_DEF, '$RAP_DATEVISITE')";
+			if ($MED_PRESENTE2 == null)
+			{
+				$req = "INSERT INTO rapport_visite VALUES 
+				('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', null, '$MED_PRESENTE1', null, $RAP_DEF, '$RAP_DATEVISITE', 0)";
+			}
+			else
+			{
+				$req = "INSERT INTO rapport_visite VALUES 
+				('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', null, '$MED_PRESENTE1', '$MED_PRESENTE2', $RAP_DEF, '$RAP_DATEVISITE', 0)";
+			}
 		}
 		else
 		{
-			$req = "INSERT INTO rapport_visite VALUES 
-			('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', $MOT_AUTRE, '$MED_PRESENTE1', '$MED_PRESENTE2', $RAP_DEF, '$RAP_DATEVISITE')";
+			if ($MED_PRESENTE2 == null)
+			{
+				$req = "INSERT INTO rapport_visite VALUES 
+				('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', '$MOT_AUTRE', '$MED_PRESENTE1', null, $RAP_DEF, '$RAP_DATEVISITE', 0)";
+			}
+			else
+			{
+				$req = "INSERT INTO rapport_visite VALUES 
+				('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', '$MOT_AUTRE', '$MED_PRESENTE1', '$MED_PRESENTE2', $RAP_DEF, '$RAP_DATEVISITE', 0)";
+			}
 		}
 		$res = PdoGsb::$monPdo->prepare($req);
 		$res = $res->execute();
@@ -400,6 +498,39 @@ class PdoGsb
 	public function offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE) {
 		$req = "INSERT INTO offrir VALUES 
 		('$COL_MATRICULE', $RAP_NUM, '$MED_DEPOTLEGAL', $OFF_QTE)";
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute();
+		return $res;
+	}
+
+	/**
+	 * Fonction qui retourne tout les echantillons d'un rapport
+	 * 
+	 * @param String
+	 * @param int
+	 * @return boolean $res contenant le résultat de la requète
+	 */
+	public function getEchantillons($COL_MATRICULE, $RAP_NUM) {
+		$req = "SELECT MED_DEPOTLEGAL, OFF_QTE 
+		FROM offrir 
+		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+
+	/**
+	 * Fonction qui supprime tout les echantillons d'un rapport
+	 * 
+	 * @param String $COL_MATRICULE
+	 * @param int RAP_NUM
+	 * @return boolean $res contenant le résultat de la requète
+	 */
+	public function deleteEchantillons($COL_MATRICULE, $RAP_NUM) {
+		$req = "DELETE 
+		FROM offrir
+		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
 		echo $req;
 		$res = PdoGsb::$monPdo->prepare($req);
 		$res = $res->execute();
@@ -440,38 +571,78 @@ class PdoGsb
 	* @return boolean $res contenant le résultat de la requète
 	*/
 	public function updateRapport($RAP_NUM_OLD, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE) {
-		if ($MOT_AUTRE != "null")
+		if ($MOT_AUTRE == null)
 		{
-			$req = "UPDATE rapport_visite
-			SET RAP_NUM = $RAP_NUM, 
-			PRA_NUM = $PRA_NUM, 
-			PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
-			RAP_DATE = '$RAP_DATE', 
-			RAP_BILAN = '$RAP_BILAN', 
-			MOT_CODE = '$MOT_CODE', 
-			MOT_AUTRE = '$MOT_AUTRE', 
-			MED_PRESENTE1 = '$MED_PRESENTE1', 
-			MED_PRESENTE2 = '$MED_PRESENTE2', 
-			RAP_DEF = $RAP_DEF, 
-			RAP_DATEVISITE = '$RAP_DATEVISITE' 
-			WHERE RAP_NUM = $RAP_NUM_OLD";
+			if ($MED_PRESENTE2 == null)
+			{
+				$req = "UPDATE rapport_visite
+				SET RAP_NUM = $RAP_NUM, 
+				PRA_NUM = $PRA_NUM, 
+				PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
+				RAP_DATE = '$RAP_DATE', 
+				RAP_BILAN = '$RAP_BILAN', 
+				MOT_CODE = '$MOT_CODE', 
+				MOT_AUTRE = null, 
+				MED_PRESENTE1 = '$MED_PRESENTE1', 
+				MED_PRESENTE2 = null, 
+				RAP_DEF = $RAP_DEF, 
+				RAP_DATEVISITE = '$RAP_DATEVISITE' 
+				WHERE RAP_NUM = $RAP_NUM_OLD";
+			}
+			else
+			{
+				$req = "UPDATE rapport_visite
+				SET RAP_NUM = $RAP_NUM, 
+				PRA_NUM = $PRA_NUM, 
+				PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
+				RAP_DATE = '$RAP_DATE', 
+				RAP_BILAN = '$RAP_BILAN', 
+				MOT_CODE = '$MOT_CODE', 
+				MOT_AUTRE = null, 
+				MED_PRESENTE1 = '$MED_PRESENTE1', 
+				MED_PRESENTE2 = '$MED_PRESENTE2', 
+				RAP_DEF = $RAP_DEF, 
+				RAP_DATEVISITE = '$RAP_DATEVISITE' 
+				WHERE RAP_NUM = $RAP_NUM_OLD";
+			}
+			
 		}
 		else
 		{
-			$req = "UPDATE rapport_visite
-			SET RAP_NUM = $RAP_NUM, 
-			PRA_NUM = $PRA_NUM, 
-			PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
-			RAP_DATE = '$RAP_DATE', 
-			RAP_BILAN = '$RAP_BILAN', 
-			MOT_CODE = '$MOT_CODE', 
-			MOT_AUTRE = $MOT_AUTRE, 
-			MED_PRESENTE1 = '$MED_PRESENTE1', 
-			MED_PRESENTE2 = '$MED_PRESENTE2', 
-			RAP_DEF = $RAP_DEF, 
-			RAP_DATEVISITE = '$RAP_DATEVISITE' 
-			WHERE RAP_NUM = $RAP_NUM_OLD";
+			if ($MED_PRESENTE2 == null)
+			{
+				$req = "UPDATE rapport_visite
+				SET RAP_NUM = $RAP_NUM, 
+				PRA_NUM = $PRA_NUM, 
+				PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
+				RAP_DATE = '$RAP_DATE', 
+				RAP_BILAN = '$RAP_BILAN', 
+				MOT_CODE = '$MOT_CODE', 
+				MOT_AUTRE = '$MOT_AUTRE', 
+				MED_PRESENTE1 = '$MED_PRESENTE1', 
+				MED_PRESENTE2 = null, 
+				RAP_DEF = $RAP_DEF, 
+				RAP_DATEVISITE = '$RAP_DATEVISITE' 
+				WHERE RAP_NUM = $RAP_NUM_OLD";
+			}
+			else
+			{
+				$req = "UPDATE rapport_visite
+				SET RAP_NUM = $RAP_NUM, 
+				PRA_NUM = $PRA_NUM, 
+				PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
+				RAP_DATE = '$RAP_DATE', 
+				RAP_BILAN = '$RAP_BILAN', 
+				MOT_CODE = '$MOT_CODE', 
+				MOT_AUTRE = '$MOT_AUTRE', 
+				MED_PRESENTE1 = '$MED_PRESENTE1', 
+				MED_PRESENTE2 = '$MED_PRESENTE2', 
+				RAP_DEF = $RAP_DEF, 
+				RAP_DATEVISITE = '$RAP_DATEVISITE' 
+				WHERE RAP_NUM = $RAP_NUM_OLD";
+			}
 		}
+		echo $req;
 		$res = PdoGsb::$monPdo->prepare($req);
 		$res = $res->execute();
 		return $res;

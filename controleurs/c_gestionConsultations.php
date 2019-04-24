@@ -28,7 +28,7 @@ switch($ac)
 	// Infos sur un praticien
 	case 'praticien' :
 	{
-		if ($ROLE == 1)
+		if ($ROLE == 1 || $ROLE = 2)
 		{
 			// Retourne la liste des praticiens
 			$lesPraticiens = $pdo->getPraticiens();
@@ -53,7 +53,7 @@ switch($ac)
 	// Infos sur un médicament
 	case 'pharmacopee' :
 	{
-		if ($ROLE == 1)
+		if ($ROLE == 1 || $ROLE = 2)
 		{
 			// Retourne la liste des médicaments
 			$lesMedicaments = $pdo->getMedicaments();
