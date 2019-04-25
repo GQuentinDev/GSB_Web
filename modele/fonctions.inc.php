@@ -24,7 +24,6 @@ function getErreursConnexion($login, $mdp)
 /**
 * Retourne un tableau d'erreurs de saisie pour une saisie de rapport
 *
-* @param int $RAP_NUM
 * @param date $RAP_DATEVISITE
 * @param int $PRA_NUM
 * @param int $PRA_COEFF
@@ -36,13 +35,9 @@ function getErreursConnexion($login, $mdp)
 * @param int $MED_PRESENTE1
 * @return array $lesErreurs un tableau de chaînes d'erreurs
 */
-function getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
+function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
 {
 	$lesErreurs = array();
-	if (empty($RAP_NUM))
-	{
-		$lesErreurs[] = "Vous devez indiquer le numero de compte rendu";
-	}
 	if (empty($RAP_DATEVISITE))
 	{
 		$lesErreurs[] = "Vous devez indiquer la date visite";

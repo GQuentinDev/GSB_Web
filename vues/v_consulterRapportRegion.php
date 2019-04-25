@@ -27,7 +27,7 @@
 			foreach ($nouveauxRapportsRegion as $unNouveauRapportRegionVisite)
 			{
 				//$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unNouveauRapportRegionVisite['RAP_NUM'];
-				$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unNouveauRapportRegionVisite['RAP_NUM']."&RAP_DATE1=&RAP_DATE2=&PRA_NUM=";
+				$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unNouveauRapportRegionVisite['RAP_NUM']."&REDIRECT=R&RAP_DATE1=&RAP_DATE2=&PRA_NUM=";
 				?>
 
 				<tr>
@@ -96,7 +96,7 @@
 			foreach ($rapportsRegion as $unRapportRegion)
 			{
 				//$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapportRegion['RAP_NUM'];
-				$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapportRegion['RAP_NUM']."&RAP_DATE1=&RAP_DATE2=&PRA_NUM=";
+				$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapportRegion['RAP_NUM']."&REDIRECT=R&RAP_DATE1=&RAP_DATE2=&PRA_NUM=";
 				?>
 
 				<tr>

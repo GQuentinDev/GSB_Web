@@ -1,0 +1,5 @@
+# Specify filepatterns you want git to ignore.
+/vendor/bootstrap
+/vendor/jquery
+/vendor/js/smooth_scroll.js
+/old

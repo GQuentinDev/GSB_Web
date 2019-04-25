@@ -1,5 +1,5 @@
 <div class="col-12">
-	<h1>Compte rendu</h1>
+	<h1>Compte rendu n°<?php echo $res['RAP_NUM']; ?></h1>
 </div>
 
 <form name="saisieRapport" method="post" action="index.php?uc=compteRendu&ac=<?php echo $case;?>">
@@ -9,54 +9,62 @@
 	<div class="col-lg-6 col-12">
 		<div class="row">
 
-			<!-- Numéro de rapport -->
+			<!-- Date de la saisie -->
 			<div class="col-6">
 				<div class="form-group">
-					<label>Numéro :</label>
-					<input type="number" size="10" name="RAP_NUM" class="form-control" value="<?php echo $res['RAP_NUM']; ?>" />
+					<label class="titre">Date de saisie</label>
+					<div class="form-control"><?php echo date("Y-m-d"); ?></div>
 				</div>
 			</div>
 
 			<!-- Date de la visite -->
 			<div class="col-6">
 				<div class="form-group">
-					<label>Date de la visite :</label>
+					<label>Date de la visite</label>
 					<input type="date" name="RAP_DATEVISITE" class="form-control" value="<?php echo $res['RAP_DATEVISITE']; ?>" />
 				</div>
 			</div>
 
 		</div>
 
-		<!-- Praticien -->
-		<div class="form-group">
-			<label>Praticien :</label>
-			<select name="PRA_NUM" class="form-control" >
-				<option value="">Choisissez un praticien</option>
-				<?php
-				foreach ($lesPraticiens as $unPraticien)
-				{
-					?>
+		<div class="row">
 
-					<option value="<?php echo $unPraticien['PRA_NUM']; ?>" <?php
-					if ($unPraticien['PRA_NUM'] == $res['PRA_NUM'])
-					{
+			<!-- Praticien -->
+			<div class="col-lg-6 col-12">
+				<div class="form-group">
+					<label>Praticien</label>
+					<select name="PRA_NUM" class="form-control" >
+						<option value="">Choisissez un praticien</option>
+						<?php
+						foreach ($lesPraticiens as $unPraticien)
+						{
+							?>
+
+							<option value="<?php echo $unPraticien['PRA_NUM']; ?>" <?php
+							if ($unPraticien['PRA_NUM'] == $res['PRA_NUM'])
+							{
+								?>
+
+								selected
+								<?php
+							}
+							?> > <?php echo $unPraticien['PRA_NOM']." - ".$unPraticien['PRA_PRENOM']; ?> </option>
+							<?php
+						}
 						?>
 
-						selected
-						<?php
-					}
-					?> > <?php echo $unPraticien['PRA_NOM']; ?> </option>
-					<?php
-				}
-				?>
+					</select>
+				</div>
+			</div>
 
-			</select>
-		</div>
+			<!-- Coefficient de confiance -->
+			<div class="col-lg-6 col-12">
+				<div class="form-group">
+					<label>Coefficient de confiance</label>
+					<input type="number" min="0" size="6" name="PRA_COEFF" class="form-control" value="<?php echo $res['PRA_COEFF']; ?>" />
+				</div>
+			</div>
 
-		<!-- Coefficient de confiance -->
-		<div class="form-group">
-			<label>Coefficient de confiance :</label>
-			<input type="number" min="0" size="6" name="PRA_COEFF" class="form-control" value="<?php echo $res['PRA_COEFF']; ?>" />
 		</div>
 
 		<!-- Remplacant -->
@@ -99,7 +107,7 @@
 						selected
 						<?php
 					}
-					?> > <?php echo $unPraticien['PRA_NOM']; ?> </option>
+					?> > <?php echo $unPraticien['PRA_NOM']." - ".$unPraticien['PRA_PRENOM']; ?> </option>
 					<?php
 				}
 				?>
@@ -108,7 +116,7 @@
 		</div>
 
 		<!-- Motif -->
-		<label>Motif :</label>
+		<label>Motif</label>
 		<div class="row">
 
 			<!-- Liste -->
@@ -166,7 +174,7 @@
 			<!-- Produit 1 -->
 			<div class="col-6">
 				<div class="form-group">
-					<label >Produit 1 :</label>
+					<label >Produit 1</label>
 					<select name="PROD1" class="form-control">
 						<option value="">Choisissez un produit</option>
 						<?php
@@ -194,7 +202,7 @@
 			<!-- Produit 2 -->
 			<div class="col-6">
 				<div class="form-group">
-					<label >Produit 2 :</label>
+					<label >Produit 2</label>
 					<select name="PROD2" class="form-control">
 						<option value="">Choisissez un produit</option>
 						<?php
@@ -229,7 +237,7 @@
 				<!-- Produit 1 -->
 				<div class="col-9">
 					<div class="form-group">
-						<label>Produit :</label>
+						<label>Produit</label>
 						<select name="PRA_ECH1" class="form-control">
 							<option value="">Choisissez un produit</option>
 							<?php
@@ -256,7 +264,7 @@
 				<!-- Quantité 1 -->
 				<div class="col-3">
 					<div class="form-group">
-						<label>Quantité :</label>
+						<label>Quantité</label>
 						<input type="number" min="1" max="10" name="PRA_QTE1" size="2" class="form-control" value="<?php echo $res['ECHANTILLONS']['QTE1']; ?>" />
 					</div>
 				</div>
@@ -338,7 +346,7 @@
 
 		<!-- Bilan -->
 		<div class="form-group">
-			<label>Bilan :</label>
+			<label>Bilan</label>
 			<textarea rows="5" cols="50" name="RAP_BILAN" class="form-control" ><?php echo $res['RAP_BILAN']; ?></textarea>
 		</div>
 
@@ -359,7 +367,11 @@
 		</div>
 		
 		<!-- Enregistrer / Annuler -->
-		<input type="button" value="Annuler" class="btn" onclick="window.location.href='index.php?uc=compteRendu&ac=nouveau';" />
+		<input type="button" value="Annuler" class="btn" onclick="window.location.href='index.php?uc=compteRendu&ac=<?php 
+		if ($case == "update")
+			echo  "consulter";
+		else
+			echo  "nouveau"; ?>';" />
 		<input type="submit" value="Enregistrer" class="btn btn-primary" />
 
 	</div>

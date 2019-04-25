@@ -17,7 +17,7 @@
 		<?php
 		foreach ($mesRapports as $unRapport)
 		{
-			$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapport['RAP_NUM']."&RAP_DATE1=".$_REQUEST['RAP_DATE1']."&RAP_DATE2=".$_REQUEST['RAP_DATE2']."&PRA_NUM=".$_REQUEST['PRA_NUM'];
+			$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapport['RAP_NUM']."&REDIRECT=P&RAP_DATE1=".$_REQUEST['RAP_DATE1']."&RAP_DATE2=".$_REQUEST['RAP_DATE2']."&PRA_NUM=".$_REQUEST['PRA_NUM'];
 			?>
 
 			<tr>

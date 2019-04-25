@@ -43,9 +43,17 @@ switch($ac)
 			// Action du formulaire
 			$case = "enregistrer";
 
+			// Numéro du rapport
+			$LAST_RAP_NUM = $pdo->getNumRapport($COL_MATRICULE);
+			if (empty($LAST_RAP_NUM))
+				$LAST_RAP_NUM = 0;
+			else
+				$LAST_RAP_NUM = $LAST_RAP_NUM[0];
+			$RAP_NUM = $LAST_RAP_NUM + 1;
+
 			// Tableau contenant les valeurs préremplies
 			$res = array(
-				'RAP_NUM'           => null, 
+				'RAP_NUM'           => $RAP_NUM, 
 				'RAP_DATEVISITE'    => null,
 				'PRA_NUM'           => null,
 				'PRA_COEFF'         => null,
@@ -91,11 +99,13 @@ switch($ac)
 			// Action du formulaire
 			$case = "enregistrer";
 
-			// Vérification de l'existence du numéro de rapport
-			if (!empty($_REQUEST['RAP_NUM']))
-				$RAP_NUM = $_REQUEST['RAP_NUM'];
+			// Numéro du rapport
+			$LAST_RAP_NUM = $pdo->getNumRapport($COL_MATRICULE);
+			if (empty($LAST_RAP_NUM))
+				$LAST_RAP_NUM = 0;
 			else
-				$RAP_NUM = null;
+				$LAST_RAP_NUM = $LAST_RAP_NUM[0];
+			$RAP_NUM = $LAST_RAP_NUM + 1;
 
 			// Vérification de l'existence de la date de visite
 			if (!empty($_REQUEST['RAP_DATEVISITE']))
@@ -220,7 +230,7 @@ switch($ac)
 			}
 
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
+			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -364,6 +374,12 @@ switch($ac)
 			// Retourne les détails d'un rapport
 			$res = $pdo->getDetailsRapport($RAP_NUM);
 
+			if (empty($res) || $res['RAP_DEF'] == 1)
+			{
+				unset($_SESSION['RAP_NUM_OLD']);
+				header("Location:index.php");
+			}
+
 			// Coefficient de confiance
 			$res['PRA_COEFF'] = null;
 
@@ -421,13 +437,7 @@ switch($ac)
 			$case = "update";
 
 			// Ancien numéro de rapport
-			$RAP_NUM_OLD = $_SESSION['RAP_NUM_OLD'];
-
-			// Vérification de l'existence du numéro de rapport
-			if (!empty($_REQUEST['RAP_NUM']))
-				$RAP_NUM = $_REQUEST['RAP_NUM'];
-			else
-				$RAP_NUM = null;
+			$RAP_NUM_OLD = $RAP_NUM = $_SESSION['RAP_NUM_OLD'];
 
 			// Vérification de l'existence de la date de visite
 			if (!empty($_REQUEST['RAP_DATEVISITE']))
@@ -552,7 +562,7 @@ switch($ac)
 			}
 
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_NUM, $RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
+			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -594,7 +604,7 @@ switch($ac)
 			else
 			{
 				// Mise à jour du rapport
-				if ($pdo->updateRapport($RAP_NUM_OLD, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
+				if ($pdo->updateRapport($RAP_NUM_OLD, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
 				{
 					$pdo->deleteEchantillons($COL_MATRICULE, $RAP_NUM_OLD);
 					if ($ECH1 != null)
@@ -624,7 +634,7 @@ switch($ac)
 					// Affichage indication où trouver ses enregistrements
 					include ("vues/v_infoEnregistrement.php");
 					// Ancien numéro de rapport
-					$_SESSION['RAP_NUM_OLD'] = null;
+					unset($_SESSION['RAP_NUM_OLD']);
 				}
 				else
 				{
@@ -788,6 +798,8 @@ switch($ac)
 		{
 			// Récuperation du numéro de rapport
 			$RAP_NUM = $_REQUEST['RAP_NUM'];
+			// Texte et page de la redirection
+			$REDIRECT = $_REQUEST['REDIRECT'];
 			// Retourne les détails d'un rapport
 			$rapport = $pdo->getDetailsRapport($RAP_NUM);
 			// Retourne les echantillons du rapport
@@ -808,11 +820,11 @@ switch($ac)
 	}
 
 	// Détail sur le médicament d'un compte rendu
-	case 'mediacament' :
+	case 'medicament' :
 	{
 		if ($ROLE == 1 || $ROLE = 2)
 		{
-			// Récuperation du mediacament
+			// Récuperation du medicament
 			$MED_DEPOTLEGAL = $_REQUEST['medicament'];
 			// Retourne les info d'un médicament
 			$res = $pdo->getInfosMedicament($MED_DEPOTLEGAL);

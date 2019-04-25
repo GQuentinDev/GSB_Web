@@ -2,10 +2,29 @@
 	<h1>Compte rendu n°<?php echo $rapport['RAP_NUM']; ?></h1>
 
 	<div class="mb-3">
-		<a href="index.php?uc=compteRendu&ac=recherche&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">Retour à la liste des comptes rendus</a>
+		<?php
+		$base_url = "index.php?uc=compteRendu&ac=";
+		$end_url = "&RAP_NUM=".$rapport['RAP_NUM']."&REDIRECT=".$_REQUEST['REDIRECT']."&RAP_DATE1=".$_REQUEST['RAP_DATE1']."&RAP_DATE2=".$_REQUEST['RAP_DATE2']."&PRA_NUM=".$_REQUEST['PRA_NUM'];
+		if ($_REQUEST['REDIRECT'] == "P")
+		{
+			?>
+
+			<a href="<?php echo $base_url.'recherche'.$end_url; ?>">Retour à la liste des comptes rendus</a>
+
+			<?php
+		}
+		elseif ($_REQUEST['REDIRECT'] == "R")
+		{
+			?>
+
+			<a href="<?php echo $base_url.'consulterRegion'; ?>">Retour</a>
+
+			<?php
+		}
+		?>
+
 	</div>
 
-	<h2>Détail</h2>
 </div>
 
 <!-- COL 1 -->
@@ -17,7 +36,7 @@
 			<div class="row">
 				<div class="col-6">
 					<div class="form-group">
-						<label class="titre">Date de saisie :</label>
+						<label class="titre">Date de saisie</label>
 						<div class="form-control"><?php echo $rapport['RAP_DATE']; ?></div>
 					</div>
 				</div>
@@ -25,31 +44,17 @@
 				<!-- Date de la visite -->
 				<div class="col-6">
 					<div class="form-group">
-						<label class="titre">Date de la visite :</label>
+						<label class="titre">Date de la visite</label>
 						<div class="form-control"><?php echo $rapport['RAP_DATEVISITE']; ?></div>
 					</div>
 				</div>
 
-				<!-- Motif -->
-				<div class="col-6">
-					<div class="form-group">
-						<label class="titre">Motif :</label>
-						<div class="form-control">
-							<?php
-							if ($rapport['MOT_CODE'] == "AUT")
-								echo $rapport['MOT_AUTRE']; 
-							else
-								echo $rapport['MOT_LIB'];
-							?>
-						</div>
-					</div>
-				</div>
 
 				<!-- Praticien -->
 				<div class="col-6">
 					<div class="form-group">
-						<label class="titre">Praticien :</label>
-						<a href="index.php?uc=compteRendu&ac=praticien&praticien=<?php echo $rapport['PRA_NUM']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>&PRA_TYPE=P">
+						<label class="titre">Praticien</label>
+						<a href="<?php echo $base_url.'praticien&praticien='.$rapport['PRA_NUM'].'&PRA_TYPE=P'.$end_url; ?>">
 							<div class="form-control"><?php echo $rapport['PRA_NOM']; ?></div>
 						</a>
 					</div>
@@ -63,15 +68,38 @@
 					<!-- Remplacant -->
 					<div class="col-6">
 						<div class="form-group">
-							<label class="titre">Remplaçant :</label>
-							<a href="index.php?uc=compteRendu&ac=praticien&praticien=<?php echo $rapport['PRA_NUM_REMPLACANT']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>&PRA_TYPE=R">
+							<label class="titre">Remplaçant</label>
+							<a href="<?php echo $base_url.'praticien&praticien='.$rapport['PRA_NUM'].'&PRA_TYPE=R'.$end_url; ?>">
 								<div class="form-control"><?php echo $rapport['PRA_NOM_REMPLACANT']; ?></div>
 							</a>
 						</div>
 					</div>
 					<?php
 				}
+				else
+				{
+					?>
+
+					<div class="col-6"></div>
+
+					<?php
+				}
 				?>
+
+				<!-- Motif -->
+				<div class="col-6">
+					<div class="form-group">
+						<label class="titre">Motif</label>
+						<div class="form-control">
+							<?php
+							if ($rapport['MOT_CODE'] == "AUT")
+								echo $rapport['MOT_AUTRE']; 
+							else
+								echo $rapport['MOT_LIB'];
+							?>
+						</div>
+					</div>
+				</div>
 
 			</div>
 		</div>
@@ -85,8 +113,8 @@
 				<!-- Produit 1 -->
 				<div class="col-6">
 					<div class="form-group">
-						<label class="titre">Produit 1 :</label>
-						<a href="index.php?uc=compteRendu&ac=mediacament&medicament=<?php echo $rapport['MED_PRESENTE1']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">
+						<label class="titre">Produit 1</label>
+						<a href="<?php echo $base_url.'medicament&medicament='.$rapport['MED_PRESENTE1']."&MED_TYPE=M".$end_url; ?>">
 							<div class="form-control"><?php echo $rapport['MED_PRESENTE1']; ?></div>
 						</a>
 					</div>
@@ -100,8 +128,8 @@
 					<!-- Produit 2 -->
 					<div class="col-6">
 						<div class="form-group">
-							<label class="titre">Produit 2 :</label>
-							<a href="index.php?uc=compteRendu&ac=mediacament&medicament=<?php echo $rapport['MED_PRESENTE2']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">
+							<label class="titre">Produit 2</label>
+							<a href="<?php echo $base_url.'medicament&medicament='.$rapport['MED_PRESENTE2']."&MED_TYPE=M".$end_url; ?>">
 								<div class="form-control"><?php echo $rapport['MED_PRESENTE2']; ?></div>
 							</a>
 						</div>
@@ -120,6 +148,7 @@
 					<?php
 					if (!empty($lesEchantillons))
 					{
+						$i = 0;
 						foreach ($lesEchantillons as $echantillon)
 						{
 							?>
@@ -127,8 +156,12 @@
 							<!-- Produit -->
 							<div class="col-9">
 								<div class="form-group">
-									<label>Produit :</label>
-									<a href="index.php?uc=compteRendu&ac=mediacament&medicament=<?php echo $echantillon['MED_DEPOTLEGAL']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">
+									<?php
+									if ($i == 0)
+										echo "<label>Produit</label>";
+									?>
+
+									<a href="<?php echo $base_url.'medicament&medicament='.$echantillon['MED_DEPOTLEGAL']."&MED_TYPE=E".$end_url; ?>">
 										<div class="form-control"><?php echo $echantillon['MED_DEPOTLEGAL']; ?></div>
 									</a>
 								</div>
@@ -137,21 +170,23 @@
 							<!-- Quantité -->
 							<div class="col-3">
 								<div class="form-group">
-									<label>Quantité :</label>
+									<?php
+									if ($i == 0)
+										echo "<label>Quantité</label>";
+									?>
+
 									<div class="form-control"><?php echo $echantillon['OFF_QTE']; ?></div>
 								</div>
 							</div>
 
 							<?php
+							$i++;
 						}
 					}
 					else
 					{
-						?>
-
-						
-
-						<?php
+						$message = "Il n'y a aucun échantillon";
+						include ("vues/v_info.php");
 					}
 					?>
 
@@ -162,7 +197,7 @@
 
 		<div class="col-12">
 			<div class="form-group">
-				<label class="titre">Bilan :</label>
+				<label class="titre">Bilan</label>
 				<div class="form-control xlarg"><?php echo $rapport['RAP_BILAN']; ?></div>
 			</div>
 		</div>
