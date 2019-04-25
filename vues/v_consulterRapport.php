@@ -72,61 +72,71 @@
 	</div>
 </div>
 
+
 <!-- Saisies non définitives -->
 <div class="col-lg-6 col-sm-6 col-12 p-3">
-	<h2>Saisies non définitives</h2>
-
-	<table class="table table-striped table-hover">
-		<tr>
-			<th>Numéro</th>
-			<th>Date du rapport</th>
-			<th>Date de la visite</th>
-			<th>Praticien</th>
-		</tr>
-		<?php
-		if (empty($mesRapports))
-		{
-			$message = "Vous n'avez aucun rapport à finir de saisir";
-			include ("vues/v_info.php");
-		}
-		foreach ($mesRapports as $unRapport)
-		{
-			$rapportURL = "index.php?uc=compteRendu&ac=modifier&RAP_NUM=".$unRapport['RAP_NUM'];
-			?>
-
-			<tr>
-				<td>
-					<a href="<?php echo $rapportURL; ?>">
-						<div>
-							<?php echo $unRapport['RAP_NUM']; ?>
-						</div>
-					</a>
-				</td>
-				<td>
-					<a href="<?php echo $rapportURL; ?>">
-						<div>
-							<?php echo $unRapport['RAP_DATE']; ?>
-						</div>
-					</a>
-				</td>
-				<td>
-					<a href="<?php echo $rapportURL; ?>">
-						<div>
-							<?php echo $unRapport['RAP_DATEVISITE']; ?>
-						</div>
-					</a>
-				</td>
-				<td>
-					<a href="<?php echo $rapportURL; ?>">
-						<div>
-							<?php echo $unRapport['PRA_NUM'].' - '.$unRapport['PRA_NOM']; ?>
-						</div>
-					</a>
-				</td>
-			</tr>
-			<?php 
-		} 
+	<?php
+	if (empty($mesRapports))
+	{
+		$message = "Vous n'avez aucun rapport à finir de saisir";
+		include ("vues/v_info.php");
+	}
+	else
+	{
 		?>
 
-	</table>
+		<h2>Saisies non définitives</h2>
+
+		<table class="table table-striped table-hover">
+			<tr>
+				<th>Numéro</th>
+				<th>Date du rapport</th>
+				<th>Date de la visite</th>
+				<th>Praticien</th>
+			</tr>
+			<?php
+			foreach ($mesRapports as $unRapport)
+			{
+				$rapportURL = "index.php?uc=compteRendu&ac=modifier&RAP_NUM=".$unRapport['RAP_NUM'];
+				?>
+
+				<tr>
+					<td>
+						<a href="<?php echo $rapportURL; ?>">
+							<div>
+								<?php echo $unRapport['RAP_NUM']; ?>
+							</div>
+						</a>
+					</td>
+					<td>
+						<a href="<?php echo $rapportURL; ?>">
+							<div>
+								<?php echo $unRapport['RAP_DATE']; ?>
+							</div>
+						</a>
+					</td>
+					<td>
+						<a href="<?php echo $rapportURL; ?>">
+							<div>
+								<?php echo $unRapport['RAP_DATEVISITE']; ?>
+							</div>
+						</a>
+					</td>
+					<td>
+						<a href="<?php echo $rapportURL; ?>">
+							<div>
+								<?php echo $unRapport['PRA_NUM'].' - '.$unRapport['PRA_NOM']; ?>
+							</div>
+						</a>
+					</td>
+				</tr>
+				<?php 
+			} 
+			?>
+
+		</table>
+		<?php
+	}
+	?>
+	
 </div>

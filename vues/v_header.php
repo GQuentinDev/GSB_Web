@@ -72,6 +72,17 @@
 								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownCompteRendu">
 									<a class="dropdown-item" href="index.php?uc=compteRendu&ac=nouveau">Nouveau</a>
 									<a class="dropdown-item" href="index.php?uc=compteRendu&ac=consulter">Consulter</a>
+									<?php
+									if ($ROLE == 2)
+									{
+										?>
+
+										<a class="dropdown-item" href="index.php?uc=compteRendu&ac=consulterRegion">Region</a>
+
+										<?php
+									}
+									?>
+
 								</div>
 							</li>
 

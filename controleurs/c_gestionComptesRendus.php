@@ -23,13 +23,14 @@ $ROLE = $_SESSION['id'][4];
 * Les case
 * - nouveau
 * - enregistrer
+* - modifier
+* - update
 * - consulter
 * - recherche
+* - consulterRegion
 * - detailRapport
 * - medicament
 * - praticien
-* - modifier
-* - update
 **********************************************************/
 
 switch($ac)
@@ -44,26 +45,26 @@ switch($ac)
 
 			// Tableau contenant les valeurs préremplies
 			$res = array(
-				'RAP_NUM'           => "", 
-				'RAP_DATEVISITE'    => "",
-				'PRA_NUM'           => "",
-				'PRA_COEFF'         => "",
+				'RAP_NUM'           => null, 
+				'RAP_DATEVISITE'    => null,
+				'PRA_NUM'           => null,
+				'PRA_COEFF'         => null,
 				'PRA_REMPLACANT'    => 0,
-				'PRA_NUM_REMPLACANT'=> "",
-				'RAP_DATE'          => "",
-				'MOT_CODE'          => "",
-				'MOT_AUTRE'         => "",
-				'RAP_BILAN'         => "",
-				'MED_PRESENTE1'     => "",
-				'MED_PRESENTE2'     => "",
+				'PRA_NUM_REMPLACANT'=> null,
+				'RAP_DATE'          => null,
+				'MOT_CODE'          => null,
+				'MOT_AUTRE'         => null,
+				'RAP_BILAN'         => null,
+				'MED_PRESENTE1'     => null,
+				'MED_PRESENTE2'     => null,
 				'RAP_DEF'           => 0,
 				'ECHANTILLONS'      => array(
-					'ECH1' => "",
-					'QTE1' => "",
-					'ECH2' => "",
-					'QTE2' => "",
-					'ECH3' => "",
-					'QTE3' => "",
+					'ECH1' => null,
+					'QTE1' => null,
+					'ECH2' => null,
+					'QTE2' => null,
+					'ECH3' => null,
+					'QTE3' => null,
 				)
 			);
 			// Retourne la liste des médicaments
@@ -262,11 +263,11 @@ switch($ac)
 			{
 				// Vérification de l'existence du libéllé motif
 				if (empty($MOT_AUTRE))
-					$MOT_AUTRE = "null";
+					$MOT_AUTRE = null;
 
 				// Vérification de l'existence d'un remplacant
 				if (empty($PRA_NUM_REMPLACANT))
-					$PRA_NUM_REMPLACANT = "null";
+					$PRA_NUM_REMPLACANT = null;
 				
 				// Test d'insertion
 				if ($pdo->nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
@@ -349,195 +350,6 @@ switch($ac)
 		break;
 	}
 
-	// Recherche et saisies non définitifves
-	case 'consulter' :
-	{	
-		if ($ROLE == 1 || $ROLE = 2)
-		{
-			// Retourne la liste des praticiens vu
-			$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
-			// Retourne la liste des rapports non validés
-			$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
-			// Affichage recherche et rapport non définitifs
-			include("vues/v_consulterRapport.php");
-			
-			if ($ROLE == 2)
-			{
-				//retourne la région du collaborateur
-				$saRegion = $pdo->getRegion($COL_MATRICULE);
-				// Retourne les nouveaux rapports
-				$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
-				// Retourne l'historique des rapports de visite
-				$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
-				// Affichage des rapports
-				include("vues/v_consulterRapportRegion.php");
-			}
-		}
-		else
-		{
-			header("Location:index.php");
-		}
-		break;
-	}
-
-	// Résultats de recherche d'un compte rendu
-	case 'recherche' :
-	{
-		if ($ROLE == 1 || $ROLE = 2)
-		{
-			// Vérification de l'existence d'une date 1
-			if (isset($_REQUEST['RAP_DATE1']))
-				$RAP_DATE1 = $_REQUEST['RAP_DATE1'];
-			else
-				$RAP_DATE1 = "";
-			// Vérification de l'existence d'une date 2
-			if (isset($_REQUEST['RAP_DATE2']))
-				$RAP_DATE2 = $_REQUEST['RAP_DATE2'];
-			else
-				$RAP_DATE2 = "";
-
-			// Vérification des données saisies
-			$msgErreurs = getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2);
-
-			if (count($msgErreurs) != 0)
-			{
-				// Afficahge des messages d'erreurs
-				include ("vues/v_erreurs.php");
-				// Retourne la liste des praticiens vu
-				$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
-				// Retourne la liste des rapports non validés
-				$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
-				// Affichage recherche et rapports non définitifs
-				include("vues/v_consulterRapport.php");
-
-				if ($ROLE == 2)
-				{
-					//retourne la région du collaborateur
-					$saRegion = $pdo->getRegion($COL_MATRICULE);
-					// Retourne les nouveaux rapports
-					$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
-					// Retourne l'historique des rapports de visite
-					$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
-					// Affichage des rapports
-					include("vues/v_consulterRapportRegion.php");
-				}
-			}
-			else
-			{
-				// Vérification de l'existence d'un praticien
-				if (isset($_REQUEST['PRA_NUM']) && !empty($_REQUEST['PRA_NUM']))
-					$PRA_NUM = $_REQUEST['PRA_NUM'];
-				else
-					$PRA_NUM = "null";
-
-				// Retourne la liste des rapports entre 2 dates pour un praticien
-				$mesRapports = $pdo->getRapports($COL_MATRICULE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
-
-				// Vérification du tableau
-				if (!empty($mesRapports))
-				{
-					// Affichage des rapports
-					include("vues/v_rapports.php");
-				}
-				else
-				{
-					// Affichage d'un message d'information
-					$message = "Il n'y a aucun compte rendu";
-					include ("vues/v_info.php");
-					// Retourne la liste des praticiens vu
-					$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
-					// Retourne la liste des rapports non validés
-					$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
-					// Affichage recherche et rapports non définitifs
-					include("vues/v_consulterRapport.php");
-
-					if ($ROLE == 2)
-					{
-						//retourne la région du collaborateur
-						$saRegion = $pdo->getRegion($COL_MATRICULE);
-						// Retourne les nouveaux rapports
-						$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
-						// Retourne l'historique des rapports de visite
-						$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
-						// Affichage des rapports
-						include("vues/v_consulterRapportRegion.php");
-					}
-				}
-			}
-		}
-		else
-		{
-			header("Location:index.php");
-		}
-		break;
-	}
-
-	// Détail du compte rendu
-	case 'detailRapport' :
-	{
-		if ($ROLE == 1 || $ROLE = 2)
-		{
-			// Récuperation du numéro de rapport
-			$RAP_NUM = $_REQUEST['RAP_NUM'];
-			// Retourne les détails d'un rapport
-			$rapport = $pdo->getDetailsRapport($RAP_NUM);
-			// Retourne les echantillons du rapport
-			$lesEchantillons = $pdo->getEchantillons($COL_MATRICULE, $RAP_NUM);
-			if ($ROLE == 2)
-			{
-				//Lorsque le rapport a été consulté
-				$pdo->rapportConsulteDelegue($RAP_NUM);
-			}
-			// Affichage du rapport
-			include("vues/v_detailsRapport.php");
-		}
-		else
-		{
-			header("Location:index.php");
-		}
-		break;
-	}
-
-	// Détail sur le médicament d'un compte rendu
-	case 'mediacament' :
-	{
-		if ($ROLE == 1 || $ROLE = 2)
-		{
-			// Récuperation du mediacament
-			$MED_DEPOTLEGAL = $_REQUEST['medicament'];
-			// Retourne les info d'un médicament
-			$res = $pdo->getInfosMedicament($MED_DEPOTLEGAL);
-			// Retourne les composant d'un médicament
-			$lesComposants = $pdo->getCompositionMedicament($MED_DEPOTLEGAL);
-			// Affichage des info d'un médicament
-			include("vues/v_infosMedicament.php");
-		}
-		else
-		{
-			header("Location:index.php");
-		}
-		break;
-	}
-
-	// Détail sur le praticien d'un compte rendu
-	case 'praticien' :
-	{
-		if ($ROLE == 1 || $ROLE = 2)
-		{
-			// Récupération du praticien
-			$PRA_NUM = $_REQUEST['praticien'];
-			// Retourne les infos d'un praticien
-			$res = $pdo->getInfosPraticien($PRA_NUM);
-			// Affichage des info d'un praticien
-			include("vues/v_infosPraticien.php");
-		}
-		else
-		{
-			header("Location:index.php");
-		}
-		break;
-	}
-
 	// Modification d'un compte rendu
 	case 'modifier' :
 	{
@@ -547,10 +359,7 @@ switch($ac)
 			$case = "update";
 
 			// Ancien numéro de rapport
-			$_SESSION['RAP_NUM_OLD'] = $_REQUEST['RAP_NUM'];
-
-			// Récuperation du numéro de rapport
-			$RAP_NUM = $_REQUEST['RAP_NUM'];
+			$_SESSION['RAP_NUM_OLD'] = $RAP_NUM = $_REQUEST['RAP_NUM'];
 
 			// Retourne les détails d'un rapport
 			$res = $pdo->getDetailsRapport($RAP_NUM);
@@ -784,14 +593,6 @@ switch($ac)
 			}
 			else
 			{
-				// Vérification de l'existence du libéllé motif
-				if (empty($MOT_AUTRE))
-					$MOT_AUTRE = "null";
-
-				// Vérification de l'existence d'un remplacant
-				if (empty($PRA_NUM_REMPLACANT))
-					$PRA_NUM_REMPLACANT = "null";
-
 				// Mise à jour du rapport
 				if ($pdo->updateRapport($RAP_NUM_OLD, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
 				{
@@ -864,6 +665,180 @@ switch($ac)
 					include ("vues/v_saisieRapport.php");
 				}
 			}
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Recherche et saisies non définitifves
+	case 'consulter' :
+	{	
+		if ($ROLE == 1 || $ROLE = 2)
+		{
+			// Retourne la liste des praticiens vu
+			$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
+			// Retourne la liste des rapports non validés
+			$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
+			// Affichage recherche et rapport non définitifs
+			include("vues/v_consulterRapport.php");
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Résultats de recherche d'un compte rendu
+	case 'recherche' :
+	{
+		if ($ROLE == 1 || $ROLE = 2)
+		{
+			// Vérification de l'existence d'une date 1
+			if (isset($_REQUEST['RAP_DATE1']))
+				$RAP_DATE1 = $_REQUEST['RAP_DATE1'];
+			else
+				$RAP_DATE1 = "";
+			// Vérification de l'existence d'une date 2
+			if (isset($_REQUEST['RAP_DATE2']))
+				$RAP_DATE2 = $_REQUEST['RAP_DATE2'];
+			else
+				$RAP_DATE2 = "";
+
+			// Vérification des données saisies
+			$msgErreurs = getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2);
+
+			if (count($msgErreurs) != 0)
+			{
+				// Afficahge des messages d'erreurs
+				include ("vues/v_erreurs.php");
+				// Retourne la liste des praticiens vu
+				$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
+				// Retourne la liste des rapports non validés
+				$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
+				// Affichage recherche et rapports non définitifs
+				include("vues/v_consulterRapport.php");
+			}
+			else
+			{
+				// Vérification de l'existence d'un praticien
+				if (isset($_REQUEST['PRA_NUM']) && !empty($_REQUEST['PRA_NUM']))
+					$PRA_NUM = $_REQUEST['PRA_NUM'];
+				else
+					$PRA_NUM = null;
+
+				// Retourne la liste des rapports entre 2 dates pour un praticien
+				$mesRapports = $pdo->getRapports($COL_MATRICULE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
+
+				// Vérification du tableau
+				if (!empty($mesRapports))
+				{
+					// Affichage des rapports
+					include("vues/v_rapports.php");
+				}
+				else
+				{
+					// Affichage d'un message d'information
+					$message = "Il n'y a aucun compte rendu";
+					include ("vues/v_info.php");
+					// Retourne la liste des praticiens vu
+					$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
+					// Retourne la liste des rapports non validés
+					$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
+					// Affichage recherche et rapports non définitifs
+					include("vues/v_consulterRapport.php");
+				}
+			}
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Recherche et saisies non définitifves
+	case 'consulterRegion' :
+	{	
+		if ($ROLE = 2)
+		{
+			//retourne la région du collaborateur
+			$saRegion = $pdo->getRegion($COL_MATRICULE);
+			// Retourne les nouveaux rapports
+			$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
+			// Retourne l'historique des rapports de visite
+			$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
+			// Affichage des rapports
+			include("vues/v_consulterRapportRegion.php");
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Détail du compte rendu
+	case 'detailRapport' :
+	{
+		if ($ROLE == 1 || $ROLE = 2)
+		{
+			// Récuperation du numéro de rapport
+			$RAP_NUM = $_REQUEST['RAP_NUM'];
+			// Retourne les détails d'un rapport
+			$rapport = $pdo->getDetailsRapport($RAP_NUM);
+			// Retourne les echantillons du rapport
+			$lesEchantillons = $pdo->getEchantillons($COL_MATRICULE, $RAP_NUM);
+			if ($ROLE == 2)
+			{
+				//Lorsque le rapport a été consulté
+				$pdo->rapportConsulteDelegue($RAP_NUM);
+			}
+			// Affichage du rapport
+			include("vues/v_detailsRapport.php");
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Détail sur le médicament d'un compte rendu
+	case 'mediacament' :
+	{
+		if ($ROLE == 1 || $ROLE = 2)
+		{
+			// Récuperation du mediacament
+			$MED_DEPOTLEGAL = $_REQUEST['medicament'];
+			// Retourne les info d'un médicament
+			$res = $pdo->getInfosMedicament($MED_DEPOTLEGAL);
+			// Retourne les composant d'un médicament
+			$lesComposants = $pdo->getCompositionMedicament($MED_DEPOTLEGAL);
+			// Affichage des info d'un médicament
+			include("vues/v_infosMedicament.php");
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Détail sur le praticien d'un compte rendu
+	case 'praticien' :
+	{
+		if ($ROLE == 1 || $ROLE = 2)
+		{
+			// Récupération du praticien
+			$PRA_NUM = $_REQUEST['praticien'];
+			// Retourne les infos d'un praticien
+			$res = $pdo->getInfosPraticien($PRA_NUM);
+			// Affichage des info d'un praticien
+			include("vues/v_infosPraticien.php");
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 <div class="col-12">
-	<h1>Vos comptes rendus du <?php echo $RAP_DATE1; ?> au <?php echo $RAP_DATE2; ?></h1>
+	<h1>Comptes rendus du <?php echo $RAP_DATE1; ?> au <?php echo $RAP_DATE2; ?></h1>
 
 	<div class="mb-3">
 		<a href="index.php?uc=compteRendu&ac=consulter&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">Retour aux critères de recherche</a>

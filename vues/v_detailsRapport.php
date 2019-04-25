@@ -92,15 +92,24 @@
 					</div>
 				</div>
 
-				<!-- Produit 2 -->
-				<div class="col-6">
-					<div class="form-group">
-						<label class="titre">Produit 2 :</label>
-						<a href="index.php?uc=compteRendu&ac=mediacament&medicament=<?php echo $rapport['MED_PRESENTE2']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">
-							<div class="form-control"><?php echo $rapport['MED_PRESENTE2']; ?></div>
-						</a>
+				<?php
+				if (!empty($rapport['MED_PRESENTE2']))
+				{
+					?>
+
+					<!-- Produit 2 -->
+					<div class="col-6">
+						<div class="form-group">
+							<label class="titre">Produit 2 :</label>
+							<a href="index.php?uc=compteRendu&ac=mediacament&medicament=<?php echo $rapport['MED_PRESENTE2']; ?>&RAP_NUM=<?php echo $rapport['RAP_NUM']; ?>&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">
+								<div class="form-control"><?php echo $rapport['MED_PRESENTE2']; ?></div>
+							</a>
+						</div>
 					</div>
-				</div>
+
+					<?php
+				}
+				?>
 
 			</div>
 
@@ -135,6 +144,14 @@
 
 							<?php
 						}
+					}
+					else
+					{
+						?>
+
+						
+
+						<?php
 					}
 					?>
 

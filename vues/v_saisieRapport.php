@@ -63,7 +63,7 @@
 		<div class="form-group">
 			<div class="custom-control custom-checkbox mb-3">
 				<input type="checkbox" class="custom-control-input" onClick="selectionne(true,this.checked,'PRA_REMPLACANT');" id="customCheck" <?php 
-				if ($res['PRA_NUM_REMPLACANT'] == 1)
+				if ($res['PRA_REMPLACANT'] == 1)
 				{
 					?>
 
