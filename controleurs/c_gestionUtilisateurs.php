@@ -89,6 +89,9 @@ switch($ac)
 					$_SESSION['id'][3] = $info['STA_LIB'];
 					// Stockage du code de statu du collaborateur
 					$_SESSION['id'][4] = $info['STA_CODE'];
+					// Stockage du code de région du collaborateur
+					$regionCode = $pdo->getRegion($_SESSION['id'][0]);
+					$_SESSION['id'][5] = $regionCode[0];
 					header('Refresh: 0; URL=index.php');
 				}
 				else

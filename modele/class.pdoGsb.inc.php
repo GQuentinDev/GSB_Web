@@ -96,7 +96,7 @@ class PdoGsb
 	}
 
 	/******************************************************
-	* Collaborateur
+	* Informations utilisateur
 	******************************************************/
 
 	/**
@@ -116,9 +116,27 @@ class PdoGsb
 		$res = $res->fetch();
 		return $res;
 	}
+
+	/**
+	 * Fonction qui retourne la region d'un collaborateur
+	 * 
+	 * @param String $COL_MATRICULE
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getRegion($COL_MATRICULE)
+	{
+		$req = "SELECT r.REG_CODE 
+		FROM region r 
+		INNER JOIN travailler t 
+		ON r.REG_CODE = t.REG_CODE 
+		WHERE VIS_MATRICULE = '$COL_MATRICULE'";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetch();
+		return $res;
+	}
 	
 	/******************************************************
-	* Praticiens
+	* Consulter > Praticiens && Comptes rendus
 	******************************************************/
 
 	/**
@@ -135,6 +153,10 @@ class PdoGsb
 		$res = $res->fetchAll();
 		return $res;
 	}
+
+	/******************************************************
+	* Consulter > Praticiens
+	******************************************************/
 
 	/**
 	 * Fonction qui retourne les infos d'un praticien
@@ -172,27 +194,8 @@ class PdoGsb
 		return $res;
 	}
 
-	/**
-	 * Fonction qui retourne les praticiens ayant un rapport définitif ecrit par un collaborateur
-	 *  
-	 * @param String $COL_MATRICULE
-	 * @return array $res un tableau associatif contenant le résultat de la requète
-	 */
-	public function getPraticiensVu($COL_MATRICULE)
-	{
-		$req = "SELECT DISTINCT PRA_NOM, rv.PRA_NUM 
-		FROM rapport_visite rv 
-		INNER JOIN praticien p 
-		ON rv.PRA_NUM = p.PRA_NUM 
-		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_DEF = 1 
-		ORDER BY PRA_NOM";
-		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetchAll();
-		return $res;
-	}
-
 	/******************************************************
-	* Medicaments
+	* Consulter > Medicaments && Comptes rendus
 	******************************************************/
 
 	/**
@@ -209,6 +212,10 @@ class PdoGsb
 		$res = $res->fetchAll();
 		return $res;
 	}
+
+	/******************************************************
+	* Consulter > Medicaments
+	******************************************************/
 
 	/**
 	 * Fonction qui retourne les infos d'un medicament
@@ -263,33 +270,8 @@ class PdoGsb
 	}
 
 	/******************************************************
-	* Rapport
+	* Comptes rendus > Consulter
 	******************************************************/
-
-	public function getNumRapport($COL_MATRICULE)
-	{
-		$req = "SELECT max(RAP_NUM) 
-		FROM rapport_visite 
-		WHERE COL_MATRICULE = '$COL_MATRICULE'";
-		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetch();
-		return $res;
-	}
-
-	/**
-	 * Fonction qui retourne les motifs de rapport
-	 *  
-	 * @return array $res un tableau associatif contenant le résultat de la requète
-	 */
-	public function getMotifs()
-	{
-		$req = "SELECT * 
-		FROM motif 
-		ORDER BY MOT_LIB";
-		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetchAll();
-		return $res;
-	}
 
 	/**
 	 * Fonction qui retourne les rapports non validés d'un collaborateur
@@ -309,83 +291,24 @@ class PdoGsb
 		return $res;
 	}
 
+	/******************************************************
+	* Comptes Rendu > Consulter > Recherche
+	******************************************************/
+
 	/**
-	 * Fonction qui retourne la region d'un collaborateur
-	 * 
+	 * Fonction qui retourne les praticiens ayant un rapport définitif ecrit par un collaborateur
+	 *  
 	 * @param String $COL_MATRICULE
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
-	public function getRegion($COL_MATRICULE)
+	public function getPraticiensVu($COL_MATRICULE)
 	{
-		$req = "SELECT REG_NOM 
-		FROM region r 
-		INNER JOIN travailler t 
-		ON r.REG_CODE = t.REG_CODE 
-		WHERE VIS_MATRICULE = '$COL_MATRICULE'";
-		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetch();
-		return $res;
-	}
-
-	/**
-	 * Fonction qui retourne l'hitorique des rapports de la région
-	 * 
-	 * @param String $REG_NOM
-	 * @return array $res un tableau associatif contenant le résultat de la requète
-	 */
-	public function getHistoriqueParRegion($REG_NOM)
-	{
-		$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
+		$req = "SELECT DISTINCT PRA_NOM, rv.PRA_NUM 
 		FROM rapport_visite rv 
 		INNER JOIN praticien p 
 		ON rv.PRA_NUM = p.PRA_NUM 
-		INNER JOIN collaborateur c 
-		ON c.COL_MATRICULE = rv.COL_MATRICULE 
-		INNER JOIN travailler t 
-		ON t.VIS_MATRICULE = c.COL_MATRICULE 
-		INNER JOIN region r 
-		ON r.REG_CODE = t.REG_CODE 
-		WHERE REG_NOM ='$REG_NOM' AND RAP_DEF = 1 AND RAP_CONSULTE = 1";
-		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetchAll();
-		return $res;
-	}
-
-	/**
-	 * Fonction qui met à jour le champ de consultation par un délégué
-	 * 
-	 * @param String $NUM_RAP
-	 * @return array $res un tableau associatif contenant le résultat de la requète
-	 */
-	public function rapportConsulteDelegue($NUM_RAP)
-	{
-		$req = "UPDATE rapport_visite
-		SET RAP_CONSULTE = 1
-		WHERE RAP_NUM ='$NUM_RAP'";
-		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
-		return $res;
-	}
-
-	/**
-	 * Fonction qui retourne les nouveaux rapports de la région
-	 * 
-	 * @param String $REG_NOM
-	 * @return array $res un tableau associatif contenant le résultat de la requète
-	 */
-	public function getNouveauxRapportsRegion($REG_NOM)
-	{
-		$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
-		FROM rapport_visite rv 
-		INNER JOIN praticien p 
-		ON rv.PRA_NUM = p.PRA_NUM 
-		INNER JOIN collaborateur c
-		ON c.COL_MATRICULE = rv.COL_MATRICULE
-		INNER JOIN travailler t
-		ON t.VIS_MATRICULE = c.COL_MATRICULE
-		INNER JOIN region r 
-		ON r.REG_CODE = t.REG_CODE
-		WHERE  REG_NOM ='$REG_NOM' AND RAP_DEF = 1 AND RAP_CONSULTE = 0";
+		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_DEF = 1 
+		ORDER BY PRA_NOM";
 		$res = PdoGsb::$monPdo->query($req);
 		$res = $res->fetchAll();
 		return $res;
@@ -425,23 +348,151 @@ class PdoGsb
 		return $res;
 	}
 
+	/******************************************************
+	* Comptes rendus > Région
+	******************************************************/
+
 	/**
-	 * Fonction qui retourne le détail d'un rapport
+	 * Fonction qui retourne les nouveaux rapports de la région
 	 * 
-	 * @param int $RAP_NUM
+	 * @param String $REG_NOM
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
-	public function getDetailsRapport($RAP_NUM)
+	public function getNouveauxRapportsRegion($REG_CODE)
 	{
-		$req = "SELECT rv.*, MOT_LIB, p.PRA_NOM, p2.PRA_NOM AS 'PRA_NOM_REMPLACANT' 
+		$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
 		FROM rapport_visite rv 
 		INNER JOIN praticien p 
 		ON rv.PRA_NUM = p.PRA_NUM 
-		LEFT JOIN praticien p2 
-		ON rv.PRA_NUM_REMPLACANT = p2.PRA_NUM 
-		INNER JOIN motif m 
-		ON rv.MOT_CODE = m.MOT_CODE 
-		WHERE rv.RAP_NUM = $RAP_NUM";
+		INNER JOIN collaborateur c
+		ON c.COL_MATRICULE = rv.COL_MATRICULE
+		INNER JOIN travailler t
+		ON t.VIS_MATRICULE = c.COL_MATRICULE
+		INNER JOIN region r 
+		ON r.REG_CODE = t.REG_CODE
+		WHERE  r.REG_CODE ='$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 0";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/**
+	 * Fonction qui met à jour le champ de consultation par un délégué
+	 * 
+	 * @param String $NUM_RAP
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function rapportConsulteDelegue($NUM_RAP)
+	{
+		$req = "UPDATE rapport_visite
+		SET RAP_CONSULTE = 1
+		WHERE RAP_NUM ='$NUM_RAP'";
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute();
+		return $res;
+	}
+
+	/******************************************************
+	* Comptes Rendu > Region > Recherche
+	******************************************************/
+
+	/**
+	 * Retourne les praticiens appartenant à la région ayant des rapports définitifs consultés par un délégué
+	 * @param String $REG_CODE
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getPraticiensRapDefRegion($REG_CODE)
+	{
+		$req = "SELECT DISTINCT p.PRA_NUM, PRA_NOM, PRA_PRENOM 
+		FROM praticien p 
+		INNER JOIN rapport_visite rv 
+		ON rv.PRA_NUM = p.PRA_NUM 
+		INNER JOIN collaborateur c 
+		ON c.COL_MATRICULE = rv.COL_MATRICULE 
+		INNER JOIN travailler t 
+		ON t.VIS_MATRICULE = c.COL_MATRICULE 
+		INNER JOIN region r 
+		ON r.REG_CODE = t.REG_CODE 
+		WHERE r.REG_CODE = '$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 
+		ORDER BY PRA_NOM";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/**
+	 * Retourne les rapports définitifs d'une région entre deux dates (pour un praticien) ayant été consulté par un délégué
+	 * @param String $REG_CODE
+	 * @param date $RAP_DATE1
+	 * @param date $RAP_DATE2
+	 * @param String $PRA_NUM
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getRapportsDefRegion($REG_CODE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM)
+	{
+		if (!empty($PRA_NUM))
+		{
+			$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
+			FROM rapport_visite rv 
+			INNER JOIN praticien p 
+			ON rv.PRA_NUM = p.PRA_NUM 
+			INNER JOIN collaborateur c 
+			ON c.COL_MATRICULE = rv.COL_MATRICULE 
+			INNER JOIN travailler t 
+			ON t.VIS_MATRICULE = c.COL_MATRICULE 
+			INNER JOIN region r 
+			ON r.REG_CODE = t.REG_CODE 
+			WHERE r.REG_CODE = '$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND p.PRA_NUM = '$PRA_NUM' 
+			ORDER BY RAP_DATEVISITE DESC";
+		}
+		else
+		{
+			$req = "SELECT RAP_NUM, RAP_DATE, RAP_DATEVISITE, rv.PRA_NUM, PRA_NOM 
+			FROM rapport_visite rv 
+			INNER JOIN praticien p 
+			ON rv.PRA_NUM = p.PRA_NUM 
+			INNER JOIN collaborateur c 
+			ON c.COL_MATRICULE = rv.COL_MATRICULE 
+			INNER JOIN travailler t 
+			ON t.VIS_MATRICULE = c.COL_MATRICULE 
+			INNER JOIN region r 
+			ON r.REG_CODE = t.REG_CODE 
+			WHERE r.REG_CODE ='$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' 
+			ORDER BY RAP_DATEVISITE DESC";
+		}
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/******************************************************
+	* Comptes Rendu
+	******************************************************/
+
+	/**
+	 * Fonction qui retourne les motifs de rapport
+	 *  
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getMotifs()
+	{
+		$req = "SELECT * 
+		FROM motif 
+		ORDER BY MOT_LIB";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/******************************************************
+	* Comptes Rendu > Nouveau
+	******************************************************/
+
+	public function getNumRapport($COL_MATRICULE)
+	{
+		$req = "SELECT max(RAP_NUM) 
+		FROM rapport_visite 
+		WHERE COL_MATRICULE = '$COL_MATRICULE'";
 		$res = PdoGsb::$monPdo->query($req);
 		$res = $res->fetch();
 		return $res;
@@ -487,6 +538,69 @@ class PdoGsb
 		$res = $res->execute();
 		return $res;
 	}
+
+	/**
+	 * Fonction qui insère un produit offert
+	 * 
+	 * @param String $COL_MATRICULE
+	 * @param int $RAP_NUM
+	 * @param String $MED_DEPOTLEGAL
+	 * @param int $OFF_QTE
+	 * @return boolean $res contenant le résultat de la requète
+	 */
+	public function offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE) {
+		$req = "INSERT INTO offrir VALUES 
+		('$COL_MATRICULE', $RAP_NUM, '$MED_DEPOTLEGAL', $OFF_QTE)";
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute();
+		return $res;
+	}
+
+	/******************************************************
+	* Comptes Rendu > Modifier && Consulter > * >Recherche > Détail
+	******************************************************/
+
+	/**
+	 * Fonction qui retourne le détail d'un rapport
+	 * 
+	 * @param int $RAP_NUM
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getDetailsRapport($RAP_NUM)
+	{
+		$req = "SELECT rv.*, MOT_LIB, p.PRA_NOM, p2.PRA_NOM AS 'PRA_NOM_REMPLACANT' 
+		FROM rapport_visite rv 
+		INNER JOIN praticien p 
+		ON rv.PRA_NUM = p.PRA_NUM 
+		LEFT JOIN praticien p2 
+		ON rv.PRA_NUM_REMPLACANT = p2.PRA_NUM 
+		INNER JOIN motif m 
+		ON rv.MOT_CODE = m.MOT_CODE 
+		WHERE rv.RAP_NUM = $RAP_NUM";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetch();
+		return $res;
+	}
+
+	/**
+	 * Fonction qui retourne tout les echantillons d'un rapport
+	 * 
+	 * @param String
+	 * @param int
+	 * @return boolean $res contenant le résultat de la requète
+	 */
+	public function getEchantillons($COL_MATRICULE, $RAP_NUM) {
+		$req = "SELECT MED_DEPOTLEGAL, OFF_QTE 
+		FROM offrir 
+		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetchAll();
+		return $res;
+	}
+
+	/******************************************************
+	* Comptes Rendu > Modifier
+	******************************************************/
 
 	/**
 	 * Fonction qui met a jour un rapport
@@ -538,40 +652,6 @@ class PdoGsb
 		$res = $res->execute();
 		return $res;
 	}
-
-	/**
-	 * Fonction qui insère un produit offert
-	 * 
-	 * @param String $COL_MATRICULE
-	 * @param int $RAP_NUM
-	 * @param String $MED_DEPOTLEGAL
-	 * @param int $OFF_QTE
-	 * @return boolean $res contenant le résultat de la requète
-	 */
-	public function offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE) {
-		$req = "INSERT INTO offrir VALUES 
-		('$COL_MATRICULE', $RAP_NUM, '$MED_DEPOTLEGAL', $OFF_QTE)";
-		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
-		return $res;
-	}
-
-	/**
-	 * Fonction qui retourne tout les echantillons d'un rapport
-	 * 
-	 * @param String
-	 * @param int
-	 * @return boolean $res contenant le résultat de la requète
-	 */
-	public function getEchantillons($COL_MATRICULE, $RAP_NUM) {
-		$req = "SELECT MED_DEPOTLEGAL, OFF_QTE 
-		FROM offrir 
-		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
-		$res = PdoGsb::$monPdo->query($req);
-		$res = $res->fetchAll();
-		return $res;
-	}
-
 
 	/**
 	 * Fonction qui supprime tout les echantillons d'un rapport

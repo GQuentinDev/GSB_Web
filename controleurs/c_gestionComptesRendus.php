@@ -13,6 +13,8 @@ else
 $COL_MATRICULE = $_SESSION['id'][0];
 // Role du collaborateur
 $ROLE = $_SESSION['id'][4];
+// Région du collaborateur
+$REG_CODE = $_SESSION['id'][5];
 
 /**********************************************************
 * Les Roles :
@@ -28,6 +30,7 @@ $ROLE = $_SESSION['id'][4];
 * - consulter
 * - recherche
 * - consulterRegion
+* - rechercheRegion
 * - detailRapport
 * - medicament
 * - praticien
@@ -702,7 +705,7 @@ switch($ac)
 		break;
 	}
 
-	// Résultats de recherche d'un compte rendu
+	// Résultats de recherche de compte rendu
 	case 'recherche' :
 	{
 		if ($ROLE == 1 || $ROLE = 2)
@@ -741,11 +744,13 @@ switch($ac)
 					$PRA_NUM = null;
 
 				// Retourne la liste des rapports entre 2 dates pour un praticien
-				$mesRapports = $pdo->getRapports($COL_MATRICULE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
+				$lesRapports = $pdo->getRapports($COL_MATRICULE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
 
 				// Vérification du tableau
-				if (!empty($mesRapports))
+				if (!empty($lesRapports))
 				{
+					// Paramètre de redirection
+					$REDIRECT = "P";
 					// Affichage des rapports
 					include("vues/v_rapports.php");
 				}
@@ -775,14 +780,82 @@ switch($ac)
 	{	
 		if ($ROLE = 2)
 		{
-			//retourne la région du collaborateur
-			$saRegion = $pdo->getRegion($COL_MATRICULE);
 			// Retourne les nouveaux rapports
-			$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($saRegion[0]);
-			// Retourne l'historique des rapports de visite
-			$rapportsRegion = $pdo->getHistoriqueParRegion($saRegion[0]);
+			$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($REG_CODE);
+			// Retourne la liste des praticiens ayant un rapport définitif dans la region
+			$lesPraticiens = $pdo->getPraticiensRapDefRegion($REG_CODE);
 			// Affichage des rapports
 			include("vues/v_consulterRapportRegion.php");
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Résultats de recherche de compte rendu
+	case 'rechercheRegion' :
+	{
+		if ($ROLE = 2)
+		{
+			// Vérification de l'existence d'une date 1
+			if (isset($_REQUEST['RAP_DATE1']))
+				$RAP_DATE1 = $_REQUEST['RAP_DATE1'];
+			else
+				$RAP_DATE1 = "";
+			// Vérification de l'existence d'une date 2
+			if (isset($_REQUEST['RAP_DATE2']))
+				$RAP_DATE2 = $_REQUEST['RAP_DATE2'];
+			else
+				$RAP_DATE2 = "";
+
+			// Vérification des données saisies
+			$msgErreurs = getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2);
+
+			if (count($msgErreurs) != 0)
+			{
+				// Afficahge des messages d'erreurs
+				include ("vues/v_erreurs.php");
+				// Retourne les nouveaux rapports
+				$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($REG_CODE);
+				// Retourne la liste des praticiens ayant un rapport définitif dans la region
+				$lesPraticiens = $pdo->getPraticiensRapDefRegion($REG_CODE);
+				// Affichage des rapports
+				include("vues/v_consulterRapportRegion.php");
+			}
+			else
+			{
+				// Vérification de l'existence d'un praticien
+				if (isset($_REQUEST['PRA_NUM']) && !empty($_REQUEST['PRA_NUM']))
+					$PRA_NUM = $_REQUEST['PRA_NUM'];
+				else
+					$PRA_NUM = null;
+
+				// Retourne la liste des rapports définitif de la région entre 2 dates pour un praticien
+				$lesRapports = $pdo->getRapportsDefRegion($REG_CODE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
+
+				// Vérification du tableau
+				if (!empty($lesRapports))
+				{
+					// Paramètre de redirection
+					$REDIRECT = "R";
+					// Affichage des rapports
+					include("vues/v_rapports.php");
+				}
+				else
+				{
+					// Affichage d'un message d'information
+					$message = "Il n'y a aucun compte rendu";
+					include ("vues/v_info.php");
+					// Retourne les nouveaux rapports
+					$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($REG_CODE);
+					// Retourne la liste des praticiens ayant un rapport définitif dans la region
+					$lesPraticiens = $pdo->getPraticiensRapDefRegion($REG_CODE);
+					// Affichage des rapports
+					include("vues/v_consulterRapportRegion.php");
+				}
+			}
 		}
 		else
 		{

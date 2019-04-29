@@ -94,30 +94,6 @@
 								</div>
 							</li>
 
-							<?php	
-							if ($ROLE == 1)
-							{
-								?>
-
-								
-								<?php
-							}
-							else if ($ROLE == 2)
-							{
-								?>
-
-								
-								<?php
-							}
-							else if ($ROLE == 3)
-							{
-								?>
-
-
-								<?php
-							}
-							?>
-
 							<!--<li class="nav-item">
 								<a class="nav-link" href="index.php?uc=compte&ac=monCompte">Mon compte</a>
 							</li>-->
@@ -129,12 +105,11 @@
 						}
 						else
 						{
-							/*?>
+							?>
 
-							<li class="nav-item">
-								<a class="nav-link" href="index.php?uc=compte&ac=connexion">Connexion</a>
-							</li>
-							<?php*/
+							
+							
+							<?php
 						}
 						?>
 

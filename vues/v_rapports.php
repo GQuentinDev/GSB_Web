@@ -2,7 +2,27 @@
 	<h1>Comptes rendus du <?php echo $RAP_DATE1; ?> au <?php echo $RAP_DATE2; ?></h1>
 
 	<div class="mb-3">
-		<a href="index.php?uc=compteRendu&ac=consulter&RAP_DATE1=<?php echo $_REQUEST['RAP_DATE1']; ?>&RAP_DATE2=<?php echo $_REQUEST['RAP_DATE2']; ?>&PRA_NUM=<?php echo $_REQUEST['PRA_NUM']; ?>">Retour aux critères de recherche</a>
+		<?php
+		$base_url = "index.php?uc=compteRendu&ac=";
+		$end_url = "&REDIRECT=".$REDIRECT."&RAP_DATE1=".$_REQUEST['RAP_DATE1']."&RAP_DATE2=".$_REQUEST['RAP_DATE2']."&PRA_NUM=".$_REQUEST['PRA_NUM'];
+		if ($REDIRECT == "P")
+		{
+			?>
+
+			<a href="<?php echo $base_url.'consulter'.$end_url; ?>">Retour aux critères de recherche</a>
+
+			<?php
+		}
+		elseif ($REDIRECT == "R")
+		{
+			?>
+
+			<a href="<?php echo $base_url.'consulterRegion'.$end_url; ?>">Retour aux critères de recherche</a>
+
+			<?php
+		}
+		?>
+
 	</div>
 </div>
 
@@ -15,9 +35,9 @@
 			<th>Praticien</th>
 		</tr>
 		<?php
-		foreach ($mesRapports as $unRapport)
+		foreach ($lesRapports as $unRapport)
 		{
-			$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapport['RAP_NUM']."&REDIRECT=P&RAP_DATE1=".$_REQUEST['RAP_DATE1']."&RAP_DATE2=".$_REQUEST['RAP_DATE2']."&PRA_NUM=".$_REQUEST['PRA_NUM'];
+			$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unRapport['RAP_NUM']."&REDIRECT=".$REDIRECT."&RAP_DATE1=".$_REQUEST['RAP_DATE1']."&RAP_DATE2=".$_REQUEST['RAP_DATE2']."&PRA_NUM=".$_REQUEST['PRA_NUM'];
 			?>
 
 			<tr>

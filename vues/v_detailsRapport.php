@@ -17,7 +17,7 @@
 		{
 			?>
 
-			<a href="<?php echo $base_url.'consulterRegion'; ?>">Retour</a>
+			<a href="<?php echo $base_url.'rechercheRegion'.$end_url; ?>">Retour à la liste des comptes rendus</a>
 
 			<?php
 		}

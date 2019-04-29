@@ -174,7 +174,7 @@
 			<!-- Produit 1 -->
 			<div class="col-6">
 				<div class="form-group">
-					<label >Produit 1</label>
+					<label>Produit 1</label>
 					<select name="PROD1" class="form-control">
 						<option value="">Choisissez un produit</option>
 						<?php
@@ -202,7 +202,7 @@
 			<!-- Produit 2 -->
 			<div class="col-6">
 				<div class="form-group">
-					<label >Produit 2</label>
+					<label>Produit 2</label>
 					<select name="PROD2" class="form-control">
 						<option value="">Choisissez un produit</option>
 						<?php
