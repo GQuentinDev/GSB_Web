@@ -60,7 +60,6 @@ class PdoGsb
 
 	/**
 	 * Fonction statique qui crée l'unique instance de la classe
-	 *
 	 * Appel : $instancePdoGsb = PdoGsb::getPdoGsb();
 	 * @return PdoGsb $monPdoGsb l'unique objet de la classe PdoGsb
 	 */
@@ -79,7 +78,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne si le login existe et son mot de passe hashé pour un collaborateur
-	 * 
 	 * @param String $login
 	 * @return array $nb un tableau associatif contenant le résultat de la requète
 	 */
@@ -101,7 +99,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne le nom le prénom et le role d'un collaborateur
-	 * 
 	 * @param String $COL_MATRICULE
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -119,7 +116,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne la region d'un collaborateur
-	 * 
 	 * @param String $COL_MATRICULE
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -129,7 +125,7 @@ class PdoGsb
 		FROM region r 
 		INNER JOIN travailler t 
 		ON r.REG_CODE = t.REG_CODE 
-		WHERE VIS_MATRICULE = '$COL_MATRICULE'";
+		WHERE COL_MATRICULE = '$COL_MATRICULE'";
 		$res = PdoGsb::$monPdo->query($req);
 		$res = $res->fetch();
 		return $res;
@@ -141,7 +137,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne tout les praticiens id et nom
-	 *  
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
 	public function getPraticiens()
@@ -160,7 +155,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les infos d'un praticien
-	 * 
 	 * @param int $PRA_NUM
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -178,7 +172,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les spécialités d'un praticien
-	 * 
 	 * @param int $PRA_NUM
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -200,7 +193,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne tout les médicaments id et nom
-	 *  
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
 	public function getMedicaments()
@@ -219,7 +211,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les infos d'un medicament
-	 * 
 	 * @param String $MED_DEPOTLEGAL
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -237,7 +228,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les composants d'un medicament
-	 * 
 	 * @param String $MED_DEPOTLEGAL
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -255,7 +245,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les medicaments interagissant avec un medicament
-	 * 
 	 * @param String $MED_DEPOTLEGAL
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -297,7 +286,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les praticiens ayant un rapport définitif ecrit par un collaborateur
-	 *  
 	 * @param String $COL_MATRICULE
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -316,7 +304,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les rapports d'un collaborateur sur une periode (pour un praticien /facultatif/)
-	 * 
 	 * @param String $COL_MATRICULE
 	 * @param date $RAP_DATE1
 	 * @param date $RAP_DATE2
@@ -354,7 +341,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les nouveaux rapports de la région
-	 * 
 	 * @param String $REG_NOM
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -367,7 +353,7 @@ class PdoGsb
 		INNER JOIN collaborateur c
 		ON c.COL_MATRICULE = rv.COL_MATRICULE
 		INNER JOIN travailler t
-		ON t.VIS_MATRICULE = c.COL_MATRICULE
+		ON t.COL_MATRICULE = c.COL_MATRICULE
 		INNER JOIN region r 
 		ON r.REG_CODE = t.REG_CODE
 		WHERE  r.REG_CODE ='$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 0";
@@ -378,7 +364,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui met à jour le champ de consultation par un délégué
-	 * 
 	 * @param String $NUM_RAP
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -410,7 +395,7 @@ class PdoGsb
 		INNER JOIN collaborateur c 
 		ON c.COL_MATRICULE = rv.COL_MATRICULE 
 		INNER JOIN travailler t 
-		ON t.VIS_MATRICULE = c.COL_MATRICULE 
+		ON t.COL_MATRICULE = c.COL_MATRICULE 
 		INNER JOIN region r 
 		ON r.REG_CODE = t.REG_CODE 
 		WHERE r.REG_CODE = '$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 
@@ -439,7 +424,7 @@ class PdoGsb
 			INNER JOIN collaborateur c 
 			ON c.COL_MATRICULE = rv.COL_MATRICULE 
 			INNER JOIN travailler t 
-			ON t.VIS_MATRICULE = c.COL_MATRICULE 
+			ON t.COL_MATRICULE = c.COL_MATRICULE 
 			INNER JOIN region r 
 			ON r.REG_CODE = t.REG_CODE 
 			WHERE r.REG_CODE = '$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND p.PRA_NUM = '$PRA_NUM' 
@@ -454,7 +439,7 @@ class PdoGsb
 			INNER JOIN collaborateur c 
 			ON c.COL_MATRICULE = rv.COL_MATRICULE 
 			INNER JOIN travailler t 
-			ON t.VIS_MATRICULE = c.COL_MATRICULE 
+			ON t.COL_MATRICULE = c.COL_MATRICULE 
 			INNER JOIN region r 
 			ON r.REG_CODE = t.REG_CODE 
 			WHERE r.REG_CODE ='$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' 
@@ -471,7 +456,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne les motifs de rapport
-	 *  
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
 	public function getMotifs()
@@ -488,6 +472,11 @@ class PdoGsb
 	* Comptes Rendu > Nouveau
 	******************************************************/
 
+	/**
+	 * Retourne le dernier numéro de rapport du collaborateur
+	 * @param String $COL_MATRICULE
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
 	public function getNumRapport($COL_MATRICULE)
 	{
 		$req = "SELECT max(RAP_NUM) 
@@ -500,7 +489,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui insère un rapport
-	 * 
 	 * @param varchar $COL_MATRICULE
 	 * @param int $RAP_NUM
 	 * @param int $PRA_NUM
@@ -515,7 +503,8 @@ class PdoGsb
 	 * @param date $RAP_DATEVISITE
 	 * @return boolean $res contenant le résultat de la requète
 	 */
-	public function nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE) {
+	public function nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE)
+	{
 
 		if (!empty($MOT_AUTRE))
 			$MOT_AUTRE = "'".$MOT_AUTRE."'";
@@ -541,14 +530,14 @@ class PdoGsb
 
 	/**
 	 * Fonction qui insère un produit offert
-	 * 
 	 * @param String $COL_MATRICULE
 	 * @param int $RAP_NUM
 	 * @param String $MED_DEPOTLEGAL
 	 * @param int $OFF_QTE
 	 * @return boolean $res contenant le résultat de la requète
 	 */
-	public function offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE) {
+	public function offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE)
+	{
 		$req = "INSERT INTO offrir VALUES 
 		('$COL_MATRICULE', $RAP_NUM, '$MED_DEPOTLEGAL', $OFF_QTE)";
 		$res = PdoGsb::$monPdo->prepare($req);
@@ -562,7 +551,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne le détail d'un rapport
-	 * 
 	 * @param int $RAP_NUM
 	 * @return array $res un tableau associatif contenant le résultat de la requète
 	 */
@@ -584,12 +572,12 @@ class PdoGsb
 
 	/**
 	 * Fonction qui retourne tout les echantillons d'un rapport
-	 * 
 	 * @param String
 	 * @param int
 	 * @return boolean $res contenant le résultat de la requète
 	 */
-	public function getEchantillons($COL_MATRICULE, $RAP_NUM) {
+	public function getEchantillons($COL_MATRICULE, $RAP_NUM)
+	{
 		$req = "SELECT MED_DEPOTLEGAL, OFF_QTE 
 		FROM offrir 
 		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
@@ -604,7 +592,6 @@ class PdoGsb
 
 	/**
 	 * Fonction qui met a jour un rapport
-	 * 
 	 * @param int $RAP_NUM_OLD
 	 * @param int $RAP_NUM
 	 * @param int $PRA_NUM
@@ -619,8 +606,8 @@ class PdoGsb
 	 * @param date $RAP_DATEVISITE
 	 * @return boolean $res contenant le résultat de la requète
 	 */
-	public function updateRapport($RAP_NUM_OLD, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE) {
-
+	public function updateRapport($RAP_NUM_OLD, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE)
+	{
 		if (!empty($MOT_AUTRE))
 			$MOT_AUTRE = "'".$MOT_AUTRE."'";
 		else
@@ -655,12 +642,12 @@ class PdoGsb
 
 	/**
 	 * Fonction qui supprime tout les echantillons d'un rapport
-	 * 
 	 * @param String $COL_MATRICULE
 	 * @param int RAP_NUM
 	 * @return boolean $res contenant le résultat de la requète
 	 */
-	public function deleteEchantillons($COL_MATRICULE, $RAP_NUM) {
+	public function deleteEchantillons($COL_MATRICULE, $RAP_NUM)
+	{
 		$req = "DELETE 
 		FROM offrir
 		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
@@ -671,17 +658,34 @@ class PdoGsb
 
 	/**
 	 * Fonction qui met a jour le coefficien de confiance d'un praticien
-	 * 
 	 * @param int $PRA_NUM
 	 * @param int $PRA_COEFCONFIANCE
 	 * @return boolean $res contenant le résultat de la requète
 	 */
-	public function updateCoefConfiance($PRA_NUM, $PRA_COEFCONFIANCE) {
+	public function updateCoefConfiance($PRA_NUM, $PRA_COEFCONFIANCE)
+	{
 		$req = "UPDATE praticien 
 		SET PRA_COEFCONFIANCE = $PRA_COEFCONFIANCE 
 		WHERE PRA_NUM = $PRA_NUM";
 		$res = PdoGsb::$monPdo->prepare($req);
 		$res = $res->execute();
+		return $res;
+	}
+
+	/**
+	 * Supprime un rapport
+	 * @param String $COL_MATRICULE
+	 * @param int $RAP_NUM
+	 * @return boolean $res contenant le résultat de la requète
+	 */
+	public function deleteRapport($COL_MATRICULE, $RAP_NUM)
+	{
+		$req = "DELETE 
+		FROM rapport_visite 
+		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
+		echo($req);
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute();			
 		return $res;
 	}
 }

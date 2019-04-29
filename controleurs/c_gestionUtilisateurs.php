@@ -29,7 +29,7 @@ switch($ac)
 		}
 		else
 		{
-			$login = "";
+			$login = null;
 			// Affichage du formulaire de connexion
 			include("vues/v_connexion.php");
 		}
@@ -50,12 +50,12 @@ switch($ac)
 			if (isset($_REQUEST['login']))
 				$login = $_REQUEST['login'];
 			else
-				$login = "";
+				$login = null;
 			// Vérification de l'existance d'un mot de passe
 			if (isset($_REQUEST['mdp']))
 				$mdp = $_REQUEST['mdp'];
 			else
-				$mdp = "";
+				$mdp = null;
 
 			// Vérification des erreurs de saisie
 			$msgErreurs = getErreursConnexion($login, $mdp);
@@ -110,6 +110,14 @@ switch($ac)
 	// Données et paramètres du compte
 	case 'monCompte' :
 	{	
+		//$res = $pdo->getFullInfo($_SESSION['id'][0]); A créer
+		$res = array(
+			'COL_NOM'     => null,
+			'COL_PRENOM'  => null,
+			'COL_ADRESSE' => null,
+			'COL_CP'      => null,
+			'COL_VILLE'   => null,
+		);
 		// Affichage des information du compte
 		include ("vues/v_compte.php");
 		break;
@@ -118,6 +126,8 @@ switch($ac)
 	// Mise a jour des données et paramètres du compte
 	case 'update' :
 	{
+		// mise à jour des données en session et dans la bdd
+		
 		// Affichage des information du compte
 		include ("vues/v_compte.php");
 		break;

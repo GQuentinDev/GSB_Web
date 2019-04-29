@@ -26,7 +26,6 @@ function getErreursConnexion($login, $mdp)
 *
 * @param date $RAP_DATEVISITE
 * @param int $PRA_NUM
-* @param int $PRA_COEFF
 * @param boolean $PRA_REMPLACANT
 * @param int $PRA_NUM_REMPLACANT
 * @param string $RAP_BILAN chaîne
@@ -35,7 +34,7 @@ function getErreursConnexion($login, $mdp)
 * @param int $MED_PRESENTE1
 * @return array $lesErreurs un tableau de chaînes d'erreurs
 */
-function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
+function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
 {
 	$lesErreurs = array();
 	if (empty($RAP_DATEVISITE))
@@ -45,10 +44,6 @@ function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMP
 	if (empty($PRA_NUM))
 	{
 		$lesErreurs[] = "Vous devez sélectionner le praticien";
-	}
-	if (empty($PRA_COEFF))
-	{
-		$lesErreurs[] = "Vous devez indiquer le coefficient de confiance";
 	}
 	if ($PRA_REMPLACANT == true && empty($PRA_NUM_REMPLACANT))
 	{
@@ -127,15 +122,4 @@ function getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2)
 	return $lesErreurs;	
 }
 
-/**
-* Transforme une date au format français jj/mm/aaaa vers le format anglais aaaa-mm-jj
-*
-* @param $date au format  jj/mm/aaaa
-* @return string la date au format anglais aaaa-mm-jj
-*/
-function convertirDateFrancaisVersAnglais($date)
-{
-	@list($jour,$mois,$annee) = explode('/',$date);
-	return date("Y-m-d", mktime(0, 0, 0, $mois, $jour, $annee));
-}
 ?>

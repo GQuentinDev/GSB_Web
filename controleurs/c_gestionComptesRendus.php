@@ -20,13 +20,14 @@ $REG_CODE = $_SESSION['id'][5];
 * Les Roles :
 * 1 - Visiteur
 * 2 - Délégué
-* 3 - 
+* 3 - Responsable
 * 
 * Les case
 * - nouveau
 * - enregistrer
 * - modifier
 * - update
+* - supprimer
 * - consulter
 * - recherche
 * - consulterRegion
@@ -233,7 +234,7 @@ switch($ac)
 			}
 
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
+			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -565,7 +566,7 @@ switch($ac)
 			}
 
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_COEFF, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
+			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -678,6 +679,24 @@ switch($ac)
 					include ("vues/v_saisieRapport.php");
 				}
 			}
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// Suppression d'un rapport
+	case 'supprimer' :
+	{
+		if ($ROLE == 1 || $ROLE = 2)
+		{
+			$RAP_NUM = $_REQUEST['RAP_NUM'];
+			$pdo->deleteEchantillons($COL_MATRICULE, $RAP_NUM);
+			$pdo->deleteRapport($COL_MATRICULE, $RAP_NUM);
+			// Redirection à la consultation
+			header("Location:index.php?uc=compteRendu&ac=consulter");
 		}
 		else
 		{

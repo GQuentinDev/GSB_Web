@@ -7,13 +7,13 @@ html, body {
 }
 
 body {
-  padding-top: 70.8px;
+  padding-top   : 70.8px;
   padding-bottom: 46px;
 }
 
 .navbar-toggler {
-  opacity: 0.5;
-  transition: all 0.3s ease-in-out; 
+  opacity           : 0.5;
+  transition        : all 0.3s ease-in-out; 
   -webkit-transition: all 0.3s ease-in-out;
 }
 
@@ -30,14 +30,14 @@ body {
 }
 
 .footer {
-  color: white;
+  color     : white;
   text-align: center;
 }
 
 .background {
-  background-color: rgba(200, 200, 200, 0.2);
-  border-radius: 8px;
-  transition: all 0.3s ease-in-out; 
+  background-color  : rgba(200, 200, 200, 0.2);
+  border-radius     : 8px;
+  transition        : all 0.3s ease-in-out; 
   -webkit-transition: all 0.3s ease-in-out;
 }
 

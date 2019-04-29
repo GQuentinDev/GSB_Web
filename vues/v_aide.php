@@ -17,7 +17,8 @@
 			<h3><a href="index.php?uc=compteRendu&ac=consulter">Consulter</a></h3>
 			<p>
 				- Historique des comptes rendus<br>
-				- Reprise de saisie d'un compte rendu
+				- Reprise de saisie d'un compte rendu non définitif<br>
+				- Suppression d'un compte rendu non définitif
 			</p>
 		</div>
 
@@ -39,22 +40,26 @@
 		?>
 
 		<div class="col-12">
-			<h4>Remarques</h4>
+			<h4>Astuces</h4>
 			<div class="row">
 
 				<div class="col-lg-4 col-12">
 					<p>
-						Possibilité d'avoir plus de détails sur un rapport en cliquant sur le en question champ pris en compte :<br>
-						- Praticien<br>
-						- Remplaçant<br>
-						- Medicament<br>
-						- Echantillon
+						Vous avez possibilité d'avoir plus de détails sur les éléments d'un rapport en cliquant dessus.<br>
+						<i>Nota Bene:</i> Seul les champs suivants disposent de cette fonction : Praticien, Remplaçant, Medicament et Echantillon.
 					</p>
 				</div>
 
 				<div class="col-lg-4 col-12">
 					<p>
-						Le coefficient de confiance du praticien n'est pas fonctionnel
+						Pour supprimer un échantillon d'un rapport non définitif, il suffit de séléctionner la valeur "Choississez ...".<br>
+						Idem pour les médicaments présentés.
+					</p>
+				</div>
+
+				<div class="col-lg-4 col-12">
+					<p>
+						Pour supprimer un praticien d'une recherche, il suffit de séléctionner la valeur "Choississez ...".
 					</p>
 				</div>
 

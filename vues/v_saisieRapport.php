@@ -25,10 +25,6 @@
 				</div>
 			</div>
 
-		</div>
-
-		<div class="row">
-
 			<!-- Praticien -->
 			<div class="col-lg-6 col-12">
 				<div class="form-group">
@@ -58,61 +54,63 @@
 			</div>
 
 			<!-- Coefficient de confiance -->
-			<div class="col-lg-6 col-12">
+			<!--<div class="col-lg-6 col-12">
 				<div class="form-group">
 					<label>Coefficient de confiance</label>
 					<input type="number" min="0" size="6" name="PRA_COEFF" class="form-control" value="<?php echo $res['PRA_COEFF']; ?>" />
 				</div>
-			</div>
+			</div>-->
 
-		</div>
+			<!-- Remplacant -->
+			<div class="col-12">
+				<div class="form-group">
+					<div class="custom-control custom-checkbox mb-3">
+						<input type="checkbox" class="custom-control-input" onClick="selectionne(true,this.checked,'PRA_REMPLACANT');" id="customCheck" <?php 
+						if ($res['PRA_REMPLACANT'] == 1)
+						{
+							?>
 
-		<!-- Remplacant -->
-		<div class="form-group">
-			<div class="custom-control custom-checkbox mb-3">
-				<input type="checkbox" class="custom-control-input" onClick="selectionne(true,this.checked,'PRA_REMPLACANT');" id="customCheck" <?php 
-				if ($res['PRA_REMPLACANT'] == 1)
-				{
-					?>
-
-					checked
-					<?php
-				}
-				?>
-
-				/>
-				<label class="custom-control-label" for="customCheck">Remplacant</label>
-			</div>
-
-			<select name="PRA_REMPLACANT" class="form-control" <?php 
-				if ($res['PRA_REMPLACANT'] == 0)
-				{
-					?>
-
-					disabled
-					<?php
-				}
-				?> >
-				<option value="">Choisissez un remplacant</option>
-				<?php
-				foreach ($lesPraticiens as $unPraticien)
-				{
-					?>
-
-					<option value="<?php echo $unPraticien['PRA_NUM']; ?>" <?php 
-					if ($unPraticien['PRA_NUM'] == $res['PRA_NUM_REMPLACANT'])
-					{
+							checked
+							<?php
+						}
 						?>
 
-						selected
-						<?php
-					}
-					?> > <?php echo $unPraticien['PRA_NOM']." - ".$unPraticien['PRA_PRENOM']; ?> </option>
-					<?php
-				}
-				?>
+						/>
+						<label class="custom-control-label" for="customCheck">Remplacant</label>
+					</div>
 
-			</select>
+					<select name="PRA_REMPLACANT" class="form-control" <?php 
+						if ($res['PRA_REMPLACANT'] == 0)
+						{
+							?>
+
+							disabled
+							<?php
+						}
+						?> >
+						<option value="">Choisissez un remplacant</option>
+						<?php
+						foreach ($lesPraticiens as $unPraticien)
+						{
+							?>
+
+							<option value="<?php echo $unPraticien['PRA_NUM']; ?>" <?php 
+							if ($unPraticien['PRA_NUM'] == $res['PRA_NUM_REMPLACANT'])
+							{
+								?>
+
+								selected
+								<?php
+							}
+							?> > <?php echo $unPraticien['PRA_NOM']." - ".$unPraticien['PRA_PRENOM']; ?> </option>
+							<?php
+						}
+						?>
+
+					</select>
+				</div>
+			</div>
+
 		</div>
 
 		<!-- Motif -->
@@ -232,7 +230,7 @@
 
 		<h3>Echantillons</h3>
 		<div class="form-group">
-			<div class="row" id="lignes">
+			<div class="row">
 
 				<!-- Produit 1 -->
 				<div class="col-9">
@@ -367,11 +365,18 @@
 		</div>
 		
 		<!-- Enregistrer / Annuler -->
-		<input type="button" value="Annuler" class="btn" onclick="window.location.href='index.php?uc=compteRendu&ac=<?php 
+		<input type="button" value="Annuler" class="btn" onclick="redirect('compteRendu', '<?php if ($case == "update") echo  "consulter"; else echo  "nouveau"; ?>', '');" />
+		<?php
 		if ($case == "update")
-			echo  "consulter";
-		else
-			echo  "nouveau"; ?>';" />
+		{
+			?>
+
+			<input type="button" value="Supprimer" class="btn btn-danger" onclick="if (confirmation('Voulez vous vraiment supprimer ce rapport ?')) redirect('compteRendu', 'supprimer', '&RAP_NUM=<?php echo $_REQUEST['RAP_NUM']; ?>');" />
+
+			<?php
+		}
+		?>
+
 		<input type="submit" value="Enregistrer" class="btn btn-primary" />
 
 	</div>

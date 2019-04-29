@@ -16,7 +16,7 @@ $ROLE = $_SESSION['id'][4];
 * Les Roles :
 * 1 - Visiteur
 * 2 - Délégué
-* 3 - 
+* 3 - Responsable
 * 
 * Les case
 * - praticien
