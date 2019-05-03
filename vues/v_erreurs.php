@@ -5,7 +5,7 @@
 			<?php
 			foreach($msgErreurs as $erreur)
 			{
-				echo '<div class="col-xl-6 col-md-6 col-12">'.$erreur.'</div>';
+				echo '<div class="col-lg-6 col-md-6 col-12">'.$erreur.'</div>';
 			}
 			?>
 

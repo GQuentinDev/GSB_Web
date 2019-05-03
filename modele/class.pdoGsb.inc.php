@@ -85,10 +85,10 @@ class PdoGsb
 	{
 		$req = "SELECT COUNT(*) AS 'nb', COL_MDP AS 'mdp', COL_MATRICULE AS 'id' 
 		FROM collaborateur 
-		WHERE COL_LOGIN = :login 
+		WHERE COL_LOGIN = ? 
 		GROUP BY COL_MATRICULE";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res->execute(array('login' => $login));
+		$res->execute(array($login));
 		$nb = $res->fetch();
 		return $nb;
 	}
@@ -121,13 +121,52 @@ class PdoGsb
 	 */
 	public function getRegion($COL_MATRICULE)
 	{
-		$req = "SELECT r.REG_CODE 
+		$req = "SELECT REG_NOM  
 		FROM region r 
 		INNER JOIN travailler t 
 		ON r.REG_CODE = t.REG_CODE 
 		WHERE COL_MATRICULE = '$COL_MATRICULE'";
 		$res = PdoGsb::$monPdo->query($req);
 		$res = $res->fetch();
+		return $res;
+	}
+
+	/**
+	 * Fonction qui retourne les coordonnées d'un collaborateur
+	 * @param String $COL_MATRICULE
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getCoordonnees($COL_MATRICULE)
+	{
+		$req = "SELECT COL_NOM, COL_PRENOM, COL_ADRESSE, COL_CP, COL_VILLE
+		FROM collaborateur
+		WHERE COL_MATRICULE = '$COL_MATRICULE'";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetch();
+		return $res;
+	}
+
+	/**
+	 * Fonction qui met à jour les coordonnées d'un collaborateur
+	 * @param String $COL_MATRICULE
+	 * @param String $NOM
+	 * @param String $PRENOM
+	 * @param String $ADRESSE
+	 * @param String $CP
+	 * @param String $VILLE
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function updateCoordonnees($COL_MATRICULE, $NOM, $PRENOM, $ADRESSE, $CP, $VILLE)
+	{
+		$req = "UPDATE collaborateur 
+		SET COL_NOM = ?, 
+		COL_PRENOM = ?, 
+		COL_ADRESSE = ?, 
+		COL_CP = ?, 
+		COL_VILLE = ? 
+		WHERE COL_MATRICULE = ?";
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute(array($NOM, $PRENOM, $ADRESSE, $CP, $VILLE, $COL_MATRICULE));
 		return $res;
 	}
 	
@@ -371,9 +410,9 @@ class PdoGsb
 	{
 		$req = "UPDATE rapport_visite
 		SET RAP_CONSULTE = 1
-		WHERE RAP_NUM ='$NUM_RAP'";
+		WHERE RAP_NUM = ?";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
+		$res = $res->execute(array($NUM_RAP));
 		return $res;
 	}
 
@@ -506,25 +545,19 @@ class PdoGsb
 	public function nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE)
 	{
 
-		if (!empty($MOT_AUTRE))
-			$MOT_AUTRE = "'".$MOT_AUTRE."'";
-		else
-			$MOT_AUTRE = 'null';
+		if (empty($MOT_AUTRE))
+			$MOT_AUTRE = null;
 
-		if (!empty($MED_PRESENTE2))
-			$MED_PRESENTE2 = "'".$MED_PRESENTE2."'";
-		else
-			$MED_PRESENTE2 = 'null';
+		if (empty($MED_PRESENTE2))
+			$MED_PRESENTE2 = null;
 
-		if (!empty($PRA_NUM_REMPLACANT))
-			$PRA_NUM_REMPLACANT = "'".$PRA_NUM_REMPLACANT."'";
-		else
-			$PRA_NUM_REMPLACANT = 'null';
+		if (empty($PRA_NUM_REMPLACANT))
+			$PRA_NUM_REMPLACANT = null;
 
 		$req = "INSERT INTO rapport_visite VALUES 
-		('$COL_MATRICULE', $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, '$RAP_DATE', '$RAP_BILAN', '$MOT_CODE', $MOT_AUTRE, '$MED_PRESENTE1', $MED_PRESENTE2, $RAP_DEF, '$RAP_DATEVISITE', 0)";
+		(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
+		$res = $res->execute(array($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE));
 		return $res;
 	}
 
@@ -539,9 +572,9 @@ class PdoGsb
 	public function offrir($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE)
 	{
 		$req = "INSERT INTO offrir VALUES 
-		('$COL_MATRICULE', $RAP_NUM, '$MED_DEPOTLEGAL', $OFF_QTE)";
+		(?, ?, ?, ?)";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
+		$res = $res->execute(array($COL_MATRICULE, $RAP_NUM, $MED_DEPOTLEGAL, $OFF_QTE));
 		return $res;
 	}
 
@@ -608,35 +641,29 @@ class PdoGsb
 	 */
 	public function updateRapport($RAP_NUM_OLD, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE)
 	{
-		if (!empty($MOT_AUTRE))
-			$MOT_AUTRE = "'".$MOT_AUTRE."'";
-		else
-			$MOT_AUTRE = 'null';
+		if (empty($MOT_AUTRE))
+			$MOT_AUTRE = null;
 
-		if (!empty($MED_PRESENTE2))
-			$MED_PRESENTE2 = "'".$MED_PRESENTE2."'";
-		else
-			$MED_PRESENTE2 = 'null';
+		if (empty($MED_PRESENTE2))
+			$MED_PRESENTE2 = null;
 
-		if (!empty($PRA_NUM_REMPLACANT))
-			$PRA_NUM_REMPLACANT = "'".$PRA_NUM_REMPLACANT."'";
-		else
-			$PRA_NUM_REMPLACANT = 'null';
+		if (empty($PRA_NUM_REMPLACANT))
+			$PRA_NUM_REMPLACANT = null;
 
 		$req = "UPDATE rapport_visite SET 
-		PRA_NUM = $PRA_NUM, 
-		PRA_NUM_REMPLACANT = $PRA_NUM_REMPLACANT, 
-		RAP_DATE = '$RAP_DATE', 
-		RAP_BILAN = '$RAP_BILAN', 
-		MOT_CODE = '$MOT_CODE', 
-		MOT_AUTRE = $MOT_AUTRE, 
-		MED_PRESENTE1 = '$MED_PRESENTE1', 
-		MED_PRESENTE2 = $MED_PRESENTE2, 
-		RAP_DEF = $RAP_DEF, 
-		RAP_DATEVISITE = '$RAP_DATEVISITE' 
+		PRA_NUM = ?, 
+		PRA_NUM_REMPLACANT = ?, 
+		RAP_DATE = ?, 
+		RAP_BILAN = ?, 
+		MOT_CODE = ?, 
+		MOT_AUTRE = ?, 
+		MED_PRESENTE1 = ?, 
+		MED_PRESENTE2 = ?, 
+		RAP_DEF = ?, 
+		RAP_DATEVISITE = ? 
 		WHERE RAP_NUM = $RAP_NUM_OLD";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
+		$res = $res->execute(array($PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE));
 		return $res;
 	}
 
@@ -650,9 +677,9 @@ class PdoGsb
 	{
 		$req = "DELETE 
 		FROM offrir
-		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
+		WHERE COL_MATRICULE = ? AND RAP_NUM = ?";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
+		$res = $res->execute(array($COL_MATRICULE, $RAP_NUM));
 		return $res;
 	}
 
@@ -665,10 +692,10 @@ class PdoGsb
 	public function updateCoefConfiance($PRA_NUM, $PRA_COEFCONFIANCE)
 	{
 		$req = "UPDATE praticien 
-		SET PRA_COEFCONFIANCE = $PRA_COEFCONFIANCE 
-		WHERE PRA_NUM = $PRA_NUM";
+		SET PRA_COEFCONFIANCE = ? 
+		WHERE PRA_NUM = ?";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();
+		$res = $res->execute(array($PRA_NUM, $PRA_COEFCONFIANCE));
 		return $res;
 	}
 
@@ -682,10 +709,9 @@ class PdoGsb
 	{
 		$req = "DELETE 
 		FROM rapport_visite 
-		WHERE COL_MATRICULE = '$COL_MATRICULE' AND RAP_NUM = $RAP_NUM";
-		echo($req);
+		WHERE COL_MATRICULE = ? AND RAP_NUM = ?";
 		$res = PdoGsb::$monPdo->prepare($req);
-		$res = $res->execute();			
+		$res = $res->execute(array($COL_MATRICULE, $RAP_NUM));			
 		return $res;
 	}
 }

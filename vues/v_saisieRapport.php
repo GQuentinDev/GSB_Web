@@ -371,7 +371,7 @@
 		{
 			?>
 
-			<input type="button" value="Supprimer" class="btn btn-danger" onclick="if (confirmation('Voulez vous vraiment supprimer ce rapport ?')) redirect('compteRendu', 'supprimer', '&RAP_NUM=<?php echo $_REQUEST['RAP_NUM']; ?>');" />
+			<input type="button" value="Supprimer" class="btn btn-danger" onclick="if (confirmation('Voulez vous vraiment supprimer ce rapport ?')) redirect('compteRendu', 'supprimer', '&RAP_NUM=<?php echo $_SESSION['RAP_NUM_OLD']; ?>');" />
 
 			<?php
 		}

@@ -94,9 +94,9 @@
 								</div>
 							</li>
 
-							<!--<li class="nav-item">
+							<li class="nav-item">
 								<a class="nav-link" href="index.php?uc=compte&ac=monCompte">Mon compte</a>
-							</li>-->
+							</li>
 
 							<li class="nav-item">
 								<a class="nav-link" href="index.php?uc=compte&ac=deconnexion">Déconnexion</a>

@@ -2,131 +2,145 @@
 	<h1>Mon compte</h1>
 </div>
 
-<div class="col-md-6 col-12">
-	<form name="" method="" action="">
-		<h2>Mes coordonnées</h2>
-		<div class="row">
-
-			<!-- Nom -->
-			<div class="col-md-6 col-12">
-				<div class="form-group">
-					<label class="titre">Nom</label>
-					<input type="" name="" class="form-control" value="<?php echo $res['COL_NOM']; ?>" disabled />
-				</div>
-			</div>
-
-			<!-- Prenom -->
-			<div class="col-md-6 col-12">
-				<div class="form-group">
-					<label class="titre">Prénom</label>
-					<input type="" name="" class="form-control" value="<?php echo $res['COL_PRENOM']; ?>" disabled />
-				</div>
-			</div>
-
-			<!-- Adresse -->
-			<div class="col-12">
-				<div class="form-group">
-					<label class="titre">Adresse</label>
-					<input type="" name="" class="form-control" value="<?php echo $res['COL_ADRESSE']; ?>" disabled />
-				</div>
-			</div>
-
-			<!-- Code Postal -->
-			<div class="col-4">
-				<div class="form-group">
-					<label class="titre">Code postal</label>
-					<input type="" name="" class="form-control" value="<?php echo $res['COL_CP']; ?>" disabled />
-				</div>
-			</div>
-
-			<!-- Ville -->
-			<div class="col-8">
-				<div class="form-group">
-					<label class="titre">Ville</label>
-					<input type="" name="" class="form-control" value="<?php echo $res['COL_VILLE']; ?>" disabled />
-				</div>
-			</div>
-
-			<!-- Modifier -->
-			<div class="col-12">
-				<input type="button" value="Modifier" class="btn btn-info" onclick=";" />
-				<input type="button" value="Annuler" class="btn" onclick="redirect('compte','monCompte', '');" style="display: none;" />
-				<input type="button" value="Valider" class="btn btn-primary" onclick="redirect('compte','update', '');" style="display: none;" />
-			</div>
-
-		</div>
-	</form>
-
-	<form name="" method="" action="">
-		<h2 class="mt-3">Modifier le mot de passe</h2>
-		<div class="row">
-
-			<div class="col-12">
-				<p>
-					<b>Informations</b><br>
-					Le mot de passe doit contenir :<br>
-					- Au moins 8 caractères<br>
-					- Au moins une majuscule<br>
-					- Au moins un caractère spéciale
-				</p>
-			</div>
-
-			<div class="col-md-8 col-12">
-				<div class="row">
-
-					<!-- Ancien mot de passe -->
-					<div class="col-12">
-						<div class="form-group">
-							<label class="titre">Ancien mot de passe</label>
-							<input type="" name="" class="form-control" value="<?php echo $res['COL_NOM']; ?>" />
-						</div>
-					</div>
-
-					<!-- Nouveau mot de passe -->
-					<div class="col-12">
-						<div class="form-group">
-							<label class="titre">Nouveau mot de passe</label>
-							<input type="" name="" class="form-control" value="<?php echo $res['COL_NOM']; ?>" />
-						</div>
-					</div>
-
-					<!-- Nouveau mot de passe (confirmation) -->
-					<div class="col-12">
-						<div class="form-group">
-							<label class="titre">Nouveau mot de passe <i>(confirmation)</i></label>
-							<input type="" name="" class="form-control" value="<?php echo $res['COL_PRENOM']; ?>" />
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- Modifier -->
-			<div class="col-12">
-				<input type="button" value="Modifier" class="btn btn-primary" onclick=";" />
-			</div>
-
-		</div>
-	</form>
-</div>
-
-<div class="col-md-6 col-12">
-	<h2>Information</h2>
+<div class="col-12">
 	<div class="row">
 
-		<!-- Secteur -->
 		<div class="col-md-6 col-12">
-			<div class="form-group">
-				<label class="titre">Secteur</label>
-				<div class="form-control"><?php echo null; ?></div>
+			<form name="coordonnees" method="post" action="index.php?uc=compte&ac=updateCoordonnees">
+				<h2>Mes coordonnées</h2>
+				<div class="row">
+
+					<!-- Nom -->
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label class="titre">Nom</label>
+							<input id="modif1" type="text" name="NOM" class="form-control" value="<?php echo $res['COL_NOM']; ?>" disabled />
+						</div>
+					</div>
+
+					<!-- Prenom -->
+					<div class="col-md-6 col-12">
+						<div class="form-group">
+							<label class="titre">Prénom</label>
+							<input id="modif2" type="text" name="PRENOM" class="form-control" value="<?php echo $res['COL_PRENOM']; ?>" disabled />
+						</div>
+					</div>
+
+					<!-- Adresse -->
+					<div class="col-12">
+						<div class="form-group">
+							<label class="titre">Adresse</label>
+							<input id="modif3" type="text" name="ADRESSE" class="form-control" value="<?php echo $res['COL_ADRESSE']; ?>" disabled />
+						</div>
+					</div>
+
+					<!-- Code Postal -->
+					<div class="col-4">
+						<div class="form-group">
+							<label class="titre">Code postal</label>
+							<input id="modif4" type="text" maxlength="5" name="CP" class="form-control" value="<?php echo $res['COL_CP']; ?>" disabled />
+						</div>
+					</div>
+
+					<!-- Ville -->
+					<div class="col-8">
+						<div class="form-group">
+							<label class="titre">Ville</label>
+							<input id="modif5" type="text" name="VILLE" class="form-control" value="<?php echo $res['COL_VILLE']; ?>" disabled />
+						</div>
+					</div>
+
+					<!-- Modifier -->
+					<div class="col-12 mb-3">
+						<input id="modif_info1" type="button" value="Modifier" class="btn btn-info showHide" onclick="modifier();" />
+						<input id="modif_info2" type="button" value="Annuler" class="btn hideShow" onclick="redirect('compte','monCompte', '');" style="display: none;" />
+						<input id="modif_info3" type="submit" value="Valider" class="btn btn-primary hideShow" style="display: none;" />
+					</div>
+
+				</div>
+			</form>
+		</div>
+
+		<div class="col-md-6 col-12">
+			<form name="password" method="post" action="index.php?uc=compte&ac=updatePassword">
+				<h2>Modifier mon mot de passe</h2>
+				<div class="row">
+
+					<div class="col-md-5 col-12">
+						<p>
+							<b>Informations</b><br>
+							Le mot de passe doit contenir :<br>
+							- Au moins 8 caractères<br>
+							- Au moins une majuscule<br>
+							- Au moins un caractère spéciale
+						</p>
+					</div>
+
+					<div class="col-md-7 col-12">
+
+							<!-- Ancien mot de passe -->
+							<div class="form-group">
+								<label class="titre">Ancien mot de passe</label>
+								<input type="password" name="OLD_PASS" class="form-control" />
+							</div>
+
+							<!-- Nouveau mot de passe -->
+							<div class="form-group">
+								<label class="titre">Nouveau mot de passe</label>
+								<input type="password" name="NEW_PASS" class="form-control" />
+							</div>
+
+							<!-- Nouveau mot de passe (confirmation) -->
+							<div class="form-group">
+								<label class="titre">Nouveau mot de passe <i>(confirmation)</i></label>
+								<input type="password" name="NEW_PASS_CONFIRM" class="form-control" />
+							</div>
+
+							<!-- Modifier -->
+							<input type="submit" value="Modifier" class="btn btn-primary mb-3" />
+					</div>
+
+				</div>
+			</form>
+		</div>
+
+	</div>
+</div>
+
+<div class="col-12">
+	<h2>Information</h2>
+	<div class="row">
+		
+		<div class="col-lg-6 col-md-6 col-12">
+			<h3></h3>
+			<div class="row">
+
+				<!-- Région -->
+				<div class="col-lg-6 col-md-6 col-12">
+					<div class="form-group">
+						<label class="titre">Région</label>
+						<div class="form-control"><?php echo $region; ?></div>
+					</div>
+				</div>
+
+				<!-- Secteur -->
+				<div class="col-lg-6 col-md-6 col-12">
+					<!--<div class="form-group">
+						<label class="titre">Secteur</label>
+						<div class="form-control"><?php echo $secteur; ?></div>
+					</div>-->
+				</div>
+
 			</div>
 		</div>
 
-		<!-- Région -->
-		<div class="col-md-6 col-12">
-			<div class="form-group">
-				<label class="titre">Région</label>
-				<div class="form-control"><?php echo null; ?></div>
+		<div class="col-lg-6 col-md-6 col-12">
+			<h3></h3>
+			<div class="row">
+
+				<!--  -->
+				
+
 			</div>
 		</div>
 

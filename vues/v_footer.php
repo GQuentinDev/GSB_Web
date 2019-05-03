@@ -26,6 +26,15 @@
 		<!-- Custom JavaScript -->
 		<script src="vendor/js/smooth_scroll.js" type="text/javascript"></script>
 		<script src="vendor/js/myJS.js" type="text/javascript"></script>
+		<?php
+		if (!empty($modif) && $modif == true)
+		{
+			?>
+
+			<script>modifier();</script>
+			<?php
+		}
+		?>
 
 </body>
 

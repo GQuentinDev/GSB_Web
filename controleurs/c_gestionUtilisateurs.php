@@ -9,11 +9,18 @@ else
 	header("Location:index.php");
 }
 
+if (isset($_SESSION['id']) && !empty($_SESSION['id']))
+	$CONNECTE = true;
+else
+	$CONNECTE = false;
+
 /**********************************************************
 * Les case
 * - connexion
 * - validerConnexion
 * - monCompte
+* - updateCoordonnees
+* - updatePassword
 * - deconnexion
 **********************************************************/
 
@@ -23,7 +30,7 @@ switch($ac)
 	case 'connexion' :
 	{
 		// Vérification de l'état de connexion
-		if (isset($_SESSION['id'][0]) && !empty($_SESSION['id'][0]))
+		if ($CONNECTE)
 		{
 			header('Location:index.php');
 		}
@@ -40,7 +47,7 @@ switch($ac)
 	case 'validerConnexion' :
 	{
 		// Vérification de l'état de connexion
-		if (isset($_SESSION['id'][0]) && !empty($_SESSION['id'][0]))
+		if ($CONNECTE)
 		{
 			header('Refresh: 0; URL=index.php');
 		}
@@ -51,6 +58,7 @@ switch($ac)
 				$login = $_REQUEST['login'];
 			else
 				$login = null;
+
 			// Vérification de l'existance d'un mot de passe
 			if (isset($_REQUEST['mdp']))
 				$mdp = $_REQUEST['mdp'];
@@ -92,7 +100,7 @@ switch($ac)
 					// Stockage du code de région du collaborateur
 					$regionCode = $pdo->getRegion($_SESSION['id'][0]);
 					$_SESSION['id'][5] = $regionCode[0];
-					header('Refresh: 0; URL=index.php');
+					header("Location:index.php");
 				}
 				else
 				{
@@ -109,38 +117,187 @@ switch($ac)
 
 	// Données et paramètres du compte
 	case 'monCompte' :
-	{	
-		//$res = $pdo->getFullInfo($_SESSION['id'][0]); A créer
-		$res = array(
-			'COL_NOM'     => null,
-			'COL_PRENOM'  => null,
-			'COL_ADRESSE' => null,
-			'COL_CP'      => null,
-			'COL_VILLE'   => null,
-		);
-		// Affichage des information du compte
-		include ("vues/v_compte.php");
+	{
+		if ($CONNECTE)
+		{
+			// Retourne les coordonnées d'un collaborateur
+			$res = $pdo->getCoordonnees($_SESSION['id'][0]);
+			// Retourne la région d'un collaborateur
+			$region = $pdo->getRegion($_SESSION['id'][0]);
+			$region = $region[0];
+			// Affichage des information du compte
+			include ("vues/v_compte.php");
+		}
+		else
+		{
+			header("Location:index.php");
+		}
 		break;
 	}
 
-	// Mise a jour des données et paramètres du compte
-	case 'update' :
+	// Mise a jour des coordonnées
+	case 'updateCoordonnees' :
 	{
-		// mise à jour des données en session et dans la bdd
-		
-		// Affichage des information du compte
-		include ("vues/v_compte.php");
+		if ($CONNECTE)
+		{
+			// Vérification de l'existence d'un nom
+			if (!empty($_REQUEST['NOM']))
+				$NOM = $_REQUEST['NOM'];
+			else
+				$NOM = null;
+
+			// Vérification de l'existence d'un prenom
+			if (!empty($_REQUEST['PRENOM']))
+				$PRENOM = $_REQUEST['PRENOM'];
+			else
+				$PRENOM = null;
+
+			// Vérification de l'existence d'une adresse
+			if (!empty($_REQUEST['ADRESSE']))
+				$ADRESSE = $_REQUEST['ADRESSE'];
+			else
+				$ADRESSE = null;
+
+			// Vérification de l'existence d'un code postal
+			if (!empty($_REQUEST['CP']))
+				$CP = $_REQUEST['CP'];
+			else
+				$CP = null;
+
+			// Vérification de l'existence d'une ville
+			if (!empty($_REQUEST['VILLE']))
+				$VILLE = $_REQUEST['VILLE'];
+			else
+				$VILLE = null;
+
+			$res = array(
+				'COL_NOM' => $NOM,
+				'COL_PRENOM' => $PRENOM,
+				'COL_ADRESSE' => $ADRESSE,
+				'COL_CP' => $CP,
+				'COL_VILLE' => $VILLE
+			);
+
+			// Retourne la région d'un collaborateur
+			$region = $pdo->getRegion($_SESSION['id'][0]);
+			$region = $region[0];
+
+			// Vérification des données saisies
+			$msgErreurs = getErreurSaisieCoordonnees($NOM, $PRENOM, $ADRESSE, $CP, $VILLE);
+
+			if (count($msgErreurs) != 0)
+			{
+				// Affichage des messages d'erreurs
+				include ("vues/v_erreurs.php");
+				// Activation des champs de saisie
+				$modif = true;
+				// Affichage des information du compte
+				include ("vues/v_compte.php");
+			}
+			else
+			{
+				// mise à jour des données en session et dans la bdd
+				if ($pdo->updateCoordonnees($_SESSION['id'][0], $NOM, $PRENOM, $ADRESSE, $CP, $VILLE))
+				{	
+					// Affichage message succès
+					$message = "Vos cordonnées on bien été mises à jour";
+					include ("vues/v_message.php");
+				}
+				else
+				{
+					// Affichage du message d'erreur
+					$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
+					include ("vues/v_erreurs.php");
+					// Activation des champs de saisie
+					$modif = true;
+					// Affichage des information du compte
+					include ("vues/v_compte.php");
+				}
+			}
+		}
+		else
+		{
+			header("Location:index.php");
+		}
+		break;
+	}
+
+	// mise à jour du mot de passe
+	case 'updatePassword' :
+	{
+		if ($CONNECTE)
+		{
+			// Vérification de l'existence d'un 
+			if (!empty($_REQUEST['OLD_PASS']))
+				$OLD_PASS = $_REQUEST['OLD_PASS'];
+			else
+				$OLD_PASS = null;
+
+			// Vérification de l'existence d'un 
+			if (!empty($_REQUEST['NEW_PASS']))
+				$NEW_PASS = $_REQUEST['NEW_PASS'];
+			else
+				$NEW_PASS = null;
+
+			// Vérification de l'existence d'une 
+			if (!empty($_REQUEST['NEW_PASS_CONFIRM']))
+				$NEW_PASS_CONFIRM = $_REQUEST['NEW_PASS_CONFIRM'];
+			else
+				$NEW_PASS_CONFIRM = null;
+
+			// Retourne les coordonnées d'un collaborateur
+			$res = $pdo->getCoordonnees($_SESSION['id'][0]);
+			// Retourne la région d'un collaborateur
+			$region = $pdo->getRegion($_SESSION['id'][0]);
+			$region = $region[0];
+
+			// Vérification des données saisies
+			$msgErreurs = getErreurSaisiePassword($OLD_PASS, $NEW_PASS, $NEW_PASS_CONFIRM);
+
+			if (count($msgErreurs) != 0)
+			{
+				// Affichage des messages d'erreurs
+				include ("vues/v_erreurs.php");
+				// Affichage des information du compte
+				include ("vues/v_compte.php");
+			}
+			else
+			{
+				// mise à jour des données en session et dans la bdd
+				if ($pdo->updatePassword($_SESSION['id'][0], $NEW_PASS))
+				{	
+					// Affichage message succès
+					$message = "Vos cordonnées on bien été mises à jour";
+					include ("vues/v_message.php");
+					// Affichage des information du compte
+					include ("vues/v_compte.php");
+				}
+				else
+				{
+					// Affichage du message d'erreur
+					$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
+					include ("vues/v_erreurs.php");
+					// Affichage des information du compte
+					include ("vues/v_compte.php");
+				}
+			}
+		}
+		else
+		{
+			header("Location:index.php");
+		}
 		break;
 	}
 
 	// Déconnexion
 	case 'deconnexion' :
 	{
-		if (isset($_COOKIE[session_name()])) {
+		if (isset($_COOKIE[session_name()]))
+		{
 			setcookie(session_name(), '', time() - 3600, '/');
 		}
 		session_destroy();
-		header('Refresh: 0; URL=index.php');
+		header("Location:index.php");
 		break;
 	}
 

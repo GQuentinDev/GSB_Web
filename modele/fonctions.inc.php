@@ -1,12 +1,11 @@
 <?php
 
 /**
-* Retourne un tableau d'erreurs de saisie pour une connexion
-*
-* @param string $login chaîne
-* @param string $mdp chaîne
-* @return array $lesErreurs un tableau de chaînes d'erreurs
-*/
+ * Retourne un tableau d'erreurs de saisie pour une connexion
+ * @param String $login chaîne
+ * @param String $mdp chaîne
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
 function getErreursConnexion($login, $mdp)
 {
 	$lesErreurs = array();
@@ -22,18 +21,17 @@ function getErreursConnexion($login, $mdp)
 }
 
 /**
-* Retourne un tableau d'erreurs de saisie pour une saisie de rapport
-*
-* @param date $RAP_DATEVISITE
-* @param int $PRA_NUM
-* @param boolean $PRA_REMPLACANT
-* @param int $PRA_NUM_REMPLACANT
-* @param string $RAP_BILAN chaîne
-* @param string $MOT_CODE chaîne
-* @param string $MOT_AUTRE chaîne
-* @param int $MED_PRESENTE1
-* @return array $lesErreurs un tableau de chaînes d'erreurs
-*/
+ * Retourne un tableau d'erreurs de saisie pour une saisie de rapport
+ * @param date $RAP_DATEVISITE
+ * @param int $PRA_NUM
+ * @param boolean $PRA_REMPLACANT
+ * @param int $PRA_NUM_REMPLACANT
+ * @param String $RAP_BILAN chaîne
+ * @param String $MOT_CODE chaîne
+ * @param String $MOT_AUTRE chaîne
+ * @param int $MED_PRESENTE1
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
 function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
 {
 	$lesErreurs = array();
@@ -69,11 +67,10 @@ function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA
 }
 
 /**
-* Retourne un tableau d'erreurs de saisie pour une quantité
-*
-* @param int $OFF_QTE
-* @return array $lesErreurs un tableau de chaînes d'erreurs
-*/
+ * Retourne un tableau d'erreurs de saisie pour une quantité
+ * @param int $OFF_QTE
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
 function getErreurSaisieQuantite($OFF_QTE)
 {
 	$lesErreurs = array();
@@ -85,12 +82,11 @@ function getErreurSaisieQuantite($OFF_QTE)
 }
 
 /**
-* Retourne un tableau d'erreurs de saisie pour une selection
-*
-* @param string $champ
-* @param string $mot
-* @return array $lesErreurs un tableau de chaînes d'erreurs
-*/
+ * Retourne un tableau d'erreurs de saisie pour une selection
+ * @param String $champ
+ * @param String $mot
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
 function getErreurSelection($champ, $mot)
 {
 	$lesErreurs = array();
@@ -102,12 +98,11 @@ function getErreurSelection($champ, $mot)
 }
 
 /**
-* Retourne un tableau d'erreurs de saisie pour une periode
-*
-* @param date $RAP_DATE1
-* @param date $RAP_DATE2
-* @return array $lesErreurs un tableau de chaînes d'erreurs
-*/
+ * Retourne un tableau d'erreurs de saisie pour une periode
+ * @param date $RAP_DATE1
+ * @param date $RAP_DATE2
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
 function getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2)
 {
 	$lesErreurs = array();
@@ -120,6 +115,66 @@ function getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2)
 		$lesErreurs[] = "L'untervalle doit être correcte";	
 	}
 	return $lesErreurs;	
+}
+
+/**
+ * Retourne un tableau d'erreurs de saisie pour les coordonnées
+ * @param String $NOM
+ * @param String $PRENOM
+ * @param String $ADRESSE
+ * @param String $CP
+ * @param String $VILLE
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
+function getErreurSaisieCoordonnees($NOM, $PRENOM, $ADRESSE, $CP, $VILLE)
+{
+	$lesErreurs = array();
+	if (empty($NOM))
+	{
+		$lesErreurs[] = "Vous devez saisir votre nom";
+	}
+	if (empty($PRENOM))
+	{
+		$lesErreurs[] = "Vous devez saisir votre prénom";
+	}
+	if (empty($ADRESSE))
+	{
+		$lesErreurs[] = "Vous devez saisir votre adresse";
+	}
+	if (empty($CP))
+	{
+		$lesErreurs[] = "Vous devez saisir votre code postal";
+	}
+	if (empty($VILLE))
+	{
+		$lesErreurs[] = "Vous devez saisir votre ville";
+	}
+	return $lesErreurs;
+}
+
+/**
+ * Retourne un tableau d'erreur de saisie pour un mot de passe
+ * @param String $OLD_PASS
+ * @param String $NEW_PASS
+ * @param String $NEW_PASS_CONFIRM
+ * @return array $lesErreurs un tableau de chaînes d'erreurs
+ */
+function getErreurSaisiePassword($OLD_PASS, $NEW_PASS, $NEW_PASS_CONFIRM)
+{
+	$lesErreurs = array();
+	if (empty($OLD_PASS))
+	{
+		$lesErreurs[] = "Vous devez saisir votre mot de passe";
+	}
+	if (empty($NEW_PASS))
+	{
+		$lesErreurs[] = "Vous devez saisir votre un nouveau mot de passe";
+	}
+	if (empty($NEW_PASS_CONFIRM))
+	{
+		$lesErreurs[] = "Vous devez confirmer le nouveau mot de passe";
+	}
+	return $lesErreurs;
 }
 
 ?>

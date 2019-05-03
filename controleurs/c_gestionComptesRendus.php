@@ -233,6 +233,38 @@ switch($ac)
 				$QTE3 = null;
 			}
 
+			// Tableau contenant les valeurs préremplies
+			$res = array(
+				'RAP_NUM'           => $RAP_NUM, 
+				'RAP_DATEVISITE'    => $RAP_DATEVISITE,
+				'PRA_NUM'           => $PRA_NUM,
+				'PRA_COEFF'         => $PRA_COEFF,
+				'PRA_REMPLACANT'    => $PRA_REMPLACANT,
+				'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
+				'RAP_DATE'          => $RAP_DATE,
+				'MOT_CODE'          => $MOT_CODE,
+				'MOT_AUTRE'         => $MOT_AUTRE,
+				'RAP_BILAN'         => $RAP_BILAN,
+				'MED_PRESENTE1'     => $MED_PRESENTE1,
+				'MED_PRESENTE2'     => $MED_PRESENTE2,
+				'RAP_DEF'           => $RAP_DEF,
+				'ECHANTILLONS'      => array(
+					'ECH1' => $ECH1,
+					'QTE1' => $QTE1,
+					'ECH2' => $ECH2,
+					'QTE2' => $QTE2,
+					'ECH3' => $ECH3,
+					'QTE3' => $QTE3,
+				)
+			);
+
+			// Retourne la liste des médicaments
+			$lesMedicaments = $pdo->getMedicaments();
+			// Retourne la liste des praticiens
+			$lesPraticiens = $pdo->getPraticiens();
+			// Retourne la liste des motifs
+			$lesMotifs = $pdo->getMotifs();
+
 			// Vérification des données saisies
 			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
@@ -240,36 +272,6 @@ switch($ac)
 			{
 				// Affichage des messages d'erreurs
 				include ("vues/v_erreurs.php");
-				// Tableau contenant les valeurs préremplies
-				$res = array(
-					'RAP_NUM'           => $RAP_NUM, 
-					'RAP_DATEVISITE'    => $RAP_DATEVISITE,
-					'PRA_NUM'           => $PRA_NUM,
-					'PRA_COEFF'         => $PRA_COEFF,
-					'PRA_REMPLACANT'    => $PRA_REMPLACANT,
-					'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
-					'RAP_DATE'          => $RAP_DATE,
-					'MOT_CODE'          => $MOT_CODE,
-					'MOT_AUTRE'         => $MOT_AUTRE,
-					'RAP_BILAN'         => $RAP_BILAN,
-					'MED_PRESENTE1'     => $MED_PRESENTE1,
-					'MED_PRESENTE2'     => $MED_PRESENTE2,
-					'RAP_DEF'           => $RAP_DEF,
-					'ECHANTILLONS'      => array(
-						'ECH1' => $ECH1,
-						'QTE1' => $QTE1,
-						'ECH2' => $ECH2,
-						'QTE2' => $QTE2,
-						'ECH3' => $ECH3,
-						'QTE3' => $QTE3,
-					)
-				);
-				// Retourne la liste des médicaments
-				$lesMedicaments = $pdo->getMedicaments();
-				// Retourne la liste des praticiens
-				$lesPraticiens = $pdo->getPraticiens();
-				// Retourne la liste des motifs
-				$lesMotifs = $pdo->getMotifs();
 				// Affichage du formulaire de rapport
 				include ("vues/v_saisieRapport.php");
 			}
@@ -319,39 +321,9 @@ switch($ac)
 				}
 				else
 				{
-					$msgErreurs[] = "L'enregistrement à échoué, le numéro de rapport existe déjà";
+					$msgErreurs[] = "L'enregistrement à échoué";
 					// Affichage du message d'erreurs
 					include ("vues/v_erreurs.php");
-					// Tableau contenant les valeurs préremplies
-					$res = array(
-						'RAP_NUM'           => $RAP_NUM, 
-						'RAP_DATEVISITE'    => $RAP_DATEVISITE,
-						'PRA_NUM'           => $PRA_NUM,
-						'PRA_COEFF'         => $PRA_COEFF,
-						'PRA_REMPLACANT'    => $PRA_REMPLACANT,
-						'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
-						'RAP_DATE'          => $RAP_DATE,
-						'MOT_CODE'          => $MOT_CODE,
-						'MOT_AUTRE'         => $MOT_AUTRE,
-						'RAP_BILAN'         => $RAP_BILAN,
-						'MED_PRESENTE1'     => $MED_PRESENTE1,
-						'MED_PRESENTE2'     => $MED_PRESENTE2,
-						'RAP_DEF'           => $RAP_DEF,
-						'ECHANTILLONS'      => array(
-							'ECH1' => $ECH1,
-							'QTE1' => $QTE1,
-							'ECH2' => $ECH2,
-							'QTE2' => $QTE2,
-							'ECH3' => $ECH3,
-							'QTE3' => $QTE3,
-						)
-					);
-					// Retourne la liste des médicaments
-					$lesMedicaments = $pdo->getMedicaments();
-					// Retourne la liste des praticiens
-					$lesPraticiens = $pdo->getPraticiens();
-					// Retourne la liste des motifs
-					$lesMotifs = $pdo->getMotifs();
 					// Afficahge du formulaire de rapport
 					include ("vues/v_saisieRapport.php");
 				}
@@ -565,6 +537,38 @@ switch($ac)
 				$QTE3 = null;
 			}
 
+			// Tableau contenant les valeurs préremplies
+			$res = array(
+				'RAP_NUM'           => $RAP_NUM, 
+				'RAP_DATEVISITE'    => $RAP_DATEVISITE,
+				'PRA_NUM'           => $PRA_NUM,
+				'PRA_COEFF'         => $PRA_COEFF,
+				'PRA_REMPLACANT'    => $PRA_REMPLACANT,
+				'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
+				'RAP_DATE'          => $RAP_DATE,
+				'MOT_CODE'          => $MOT_CODE,
+				'MOT_AUTRE'         => $MOT_AUTRE,
+				'RAP_BILAN'         => $RAP_BILAN,
+				'MED_PRESENTE1'     => $MED_PRESENTE1,
+				'MED_PRESENTE2'     => $MED_PRESENTE2,
+				'RAP_DEF'           => $RAP_DEF,
+				'ECHANTILLONS' => array(
+					'ECH1' => $ECH1,
+					'QTE1' => $QTE1,
+					'ECH2' => $ECH2,
+					'QTE2' => $QTE2,
+					'ECH3' => $ECH3,
+					'QTE3' => $QTE3,
+				)
+			);
+
+			// Retourne la liste des médicaments
+			$lesMedicaments = $pdo->getMedicaments();
+			// Retourne la liste des praticiens
+			$lesPraticiens = $pdo->getPraticiens();
+			// Retourne la liste des motifs
+			$lesMotifs = $pdo->getMotifs();
+
 			// Vérification des données saisies
 			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
 
@@ -572,36 +576,6 @@ switch($ac)
 			{
 				// Affichage des messages d'erreurs
 				include ("vues/v_erreurs.php");
-				// Tableau contenant les valeurs préremplies
-				$res = array(
-					'RAP_NUM'           => $RAP_NUM, 
-					'RAP_DATEVISITE'    => $RAP_DATEVISITE,
-					'PRA_NUM'           => $PRA_NUM,
-					'PRA_COEFF'         => $PRA_COEFF,
-					'PRA_REMPLACANT'    => $PRA_REMPLACANT,
-					'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
-					'RAP_DATE'          => $RAP_DATE,
-					'MOT_CODE'          => $MOT_CODE,
-					'MOT_AUTRE'         => $MOT_AUTRE,
-					'RAP_BILAN'         => $RAP_BILAN,
-					'MED_PRESENTE1'     => $MED_PRESENTE1,
-					'MED_PRESENTE2'     => $MED_PRESENTE2,
-					'RAP_DEF'           => $RAP_DEF,
-					'ECHANTILLONS' => array(
-						'ECH1' => $ECH1,
-						'QTE1' => $QTE1,
-						'ECH2' => $ECH2,
-						'QTE2' => $QTE2,
-						'ECH3' => $ECH3,
-						'QTE3' => $QTE3,
-					)
-				);
-				// Retourne la liste des médicaments
-				$lesMedicaments = $pdo->getMedicaments();
-				// Retourne la liste des praticiens
-				$lesPraticiens = $pdo->getPraticiens();
-				// Retourne la liste des motifs
-				$lesMotifs = $pdo->getMotifs();
 				// Affichage du formulaire de rapport
 				include ("vues/v_saisieRapport.php");
 			}
@@ -645,36 +619,6 @@ switch($ac)
 					// Affichage du message d'erreur
 					$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
 					include ("vues/v_erreurs.php");
-					// Tableau contenant les valeurs préremplies
-					$res = array(
-						'RAP_NUM'           => $RAP_NUM, 
-						'RAP_DATEVISITE'    => $RAP_DATEVISITE,
-						'PRA_NUM'           => $PRA_NUM,
-						'PRA_COEFF'         => $PRA_COEFF,
-						'PRA_REMPLACANT'    => $PRA_REMPLACANT,
-						'PRA_NUM_REMPLACANT'=> $PRA_NUM_REMPLACANT,
-						'RAP_DATE'          => $RAP_DATE,
-						'MOT_CODE'          => $MOT_CODE,
-						'MOT_AUTRE'         => $MOT_AUTRE,
-						'RAP_BILAN'         => $RAP_BILAN,
-						'MED_PRESENTE1'     => $MED_PRESENTE1,
-						'MED_PRESENTE2'     => $MED_PRESENTE2,
-						'RAP_DEF'           => $RAP_DEF,
-						'ECHANTILLONS'      => array(
-							'ECH1' => $ECH1,
-							'QTE1' => $QTE1,
-							'ECH2' => $ECH2,
-							'QTE2' => $QTE2,
-							'ECH3' => $ECH3,
-							'QTE3' => $QTE3,
-						)
-					);
-					// Retourne la liste des médicaments
-					$lesMedicaments = $pdo->getMedicaments();
-					// Retourne la liste des praticiens
-					$lesPraticiens = $pdo->getPraticiens();
-					// Retourne la liste des motifs
-					$lesMotifs = $pdo->getMotifs();
 					// Afficahge du formulaire de rapport
 					include ("vues/v_saisieRapport.php");
 				}
@@ -733,12 +677,12 @@ switch($ac)
 			if (isset($_REQUEST['RAP_DATE1']))
 				$RAP_DATE1 = $_REQUEST['RAP_DATE1'];
 			else
-				$RAP_DATE1 = "";
+				$RAP_DATE1 = null;
 			// Vérification de l'existence d'une date 2
 			if (isset($_REQUEST['RAP_DATE2']))
 				$RAP_DATE2 = $_REQUEST['RAP_DATE2'];
 			else
-				$RAP_DATE2 = "";
+				$RAP_DATE2 = null;
 
 			// Vérification des données saisies
 			$msgErreurs = getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2);
@@ -822,12 +766,12 @@ switch($ac)
 			if (isset($_REQUEST['RAP_DATE1']))
 				$RAP_DATE1 = $_REQUEST['RAP_DATE1'];
 			else
-				$RAP_DATE1 = "";
+				$RAP_DATE1 = null;
 			// Vérification de l'existence d'une date 2
 			if (isset($_REQUEST['RAP_DATE2']))
 				$RAP_DATE2 = $_REQUEST['RAP_DATE2'];
 			else
-				$RAP_DATE2 = "";
+				$RAP_DATE2 = null;
 
 			// Vérification des données saisies
 			$msgErreurs = getErreurRechercheRapport($RAP_DATE1, $RAP_DATE2);
