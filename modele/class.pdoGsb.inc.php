@@ -169,6 +169,37 @@ class PdoGsb
 		$res = $res->execute(array($NOM, $PRENOM, $ADRESSE, $CP, $VILLE, $COL_MATRICULE));
 		return $res;
 	}
+
+	/**
+	 * Fonction qui retourne le mot de passe d'un collaborateur
+	 * @param String $COL_MATRICULE
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function getPassword($COL_MATRICULE)
+	{
+		$req = "SELECT COL_MDP 
+		FROM collaborateur 
+		WHERE COL_MATRICULE = '$COL_MATRICULE'";
+		$res = PdoGsb::$monPdo->query($req);
+		$res = $res->fetch();
+		return $res;
+	}
+
+	/**
+	 * Fonction qui met à jour le mot de passe d'un collaborateur
+	 * @param String $COL_MATRICULE
+	 * @param String $NEW_PASS
+	 * @return array $res un tableau associatif contenant le résultat de la requète
+	 */
+	public function updatePassword($COL_MATRICULE, $NEW_PASS)
+	{
+		$req = "UPDATE collaborateur 
+		SET COL_MDP = ? 
+		WHERE COL_MATRICULE = ?";
+		$res = PdoGsb::$monPdo->prepare($req);
+		$res = $res->execute(array($NEW_PASS, $COL_MATRICULE));
+		return $res;
+	}
 	
 	/******************************************************
 	* Consulter > Praticiens && Comptes rendus

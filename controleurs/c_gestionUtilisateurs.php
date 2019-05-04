@@ -122,9 +122,22 @@ switch($ac)
 		{
 			// Retourne les coordonnées d'un collaborateur
 			$res = $pdo->getCoordonnees($_SESSION['id'][0]);
+
+			$password = array(
+				'OLD_PASS'         => null,
+				'NEW_PASS'         => null,
+				'NEW_PASS_CONFIRM' => null
+			);
+
 			// Retourne la région d'un collaborateur
 			$region = $pdo->getRegion($_SESSION['id'][0]);
-			$region = $region[0];
+
+			$info = array(
+				'REGION'        => $region[0],
+				'SECTEUR'       => null,
+				'DATE_EMBAUCHE' => null
+			);
+
 			// Affichage des information du compte
 			include ("vues/v_compte.php");
 		}
@@ -171,16 +184,27 @@ switch($ac)
 				$VILLE = null;
 
 			$res = array(
-				'COL_NOM' => $NOM,
-				'COL_PRENOM' => $PRENOM,
+				'COL_NOM'     => $NOM,
+				'COL_PRENOM'  => $PRENOM,
 				'COL_ADRESSE' => $ADRESSE,
-				'COL_CP' => $CP,
-				'COL_VILLE' => $VILLE
+				'COL_CP'      => $CP,
+				'COL_VILLE'   => $VILLE
+			);
+
+			$password = array(
+				'OLD_PASS'         => null,
+				'NEW_PASS'         => null,
+				'NEW_PASS_CONFIRM' => null
 			);
 
 			// Retourne la région d'un collaborateur
 			$region = $pdo->getRegion($_SESSION['id'][0]);
-			$region = $region[0];
+			
+			$info = array(
+				'REGION'        => $region[0],
+				'SECTEUR'       => null,
+				'DATE_EMBAUCHE' => null
+			);
 
 			// Vérification des données saisies
 			$msgErreurs = getErreurSaisieCoordonnees($NOM, $PRENOM, $ADRESSE, $CP, $VILLE);
@@ -202,6 +226,8 @@ switch($ac)
 					// Affichage message succès
 					$message = "Vos cordonnées on bien été mises à jour";
 					include ("vues/v_message.php");
+					// Affichage des information du compte
+					include ("vues/v_compte.php");
 				}
 				else
 				{
@@ -245,11 +271,23 @@ switch($ac)
 			else
 				$NEW_PASS_CONFIRM = null;
 
+			$password = array(
+				'OLD_PASS'         => $OLD_PASS,
+				'NEW_PASS'         => $NEW_PASS,
+				'NEW_PASS_CONFIRM' => $NEW_PASS_CONFIRM
+			);
+
 			// Retourne les coordonnées d'un collaborateur
 			$res = $pdo->getCoordonnees($_SESSION['id'][0]);
+			
 			// Retourne la région d'un collaborateur
 			$region = $pdo->getRegion($_SESSION['id'][0]);
-			$region = $region[0];
+			
+			$info = array(
+				'REGION'        => $region[0],
+				'SECTEUR'       => null,
+				'DATE_EMBAUCHE' => null
+			);
 
 			// Vérification des données saisies
 			$msgErreurs = getErreurSaisiePassword($OLD_PASS, $NEW_PASS, $NEW_PASS_CONFIRM);
@@ -263,22 +301,43 @@ switch($ac)
 			}
 			else
 			{
-				// mise à jour des données en session et dans la bdd
-				if ($pdo->updatePassword($_SESSION['id'][0], $NEW_PASS))
-				{	
-					// Affichage message succès
-					$message = "Vos cordonnées on bien été mises à jour";
-					include ("vues/v_message.php");
+				// Vérification de l'ancien mot de passe
+				$BDD_MDP = $pdo->getPassword($_SESSION['id'][0]);
+				$BDD_MDP = $BDD_MDP[0];
+				$verif_pass = password_verify($OLD_PASS, $BDD_MDP);
+				if (!$verif_pass)
+				{
+					$msgErreurs[] = "L'ancien mot de passe est incorrect";
+					// Affichage des messages d'erreurs
+					include ("vues/v_erreurs.php");
 					// Affichage des information du compte
 					include ("vues/v_compte.php");
 				}
 				else
 				{
-					// Affichage du message d'erreur
-					$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
-					include ("vues/v_erreurs.php");
-					// Affichage des information du compte
-					include ("vues/v_compte.php");
+					$BDD_NEW_PASS = password_hash($NEW_PASS, PASSWORD_DEFAULT);
+					// mise à jour des données en session et dans la bdd
+					if ($pdo->updatePassword($_SESSION['id'][0], $BDD_NEW_PASS))
+					{	
+						$password = array(
+							'OLD_PASS'         => null,
+							'NEW_PASS'         => null,
+							'NEW_PASS_CONFIRM' => null
+						);
+						// Affichage message succès
+						$message = "Votre mot de passe à bien été mis à jour";
+						include ("vues/v_message.php");
+						// Affichage des information du compte
+						include ("vues/v_compte.php");
+					}
+					else
+					{
+						// Affichage du message d'erreur
+						$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
+						include ("vues/v_erreurs.php");
+						// Affichage des information du compte
+						include ("vues/v_compte.php");
+					}
 				}
 			}
 		}

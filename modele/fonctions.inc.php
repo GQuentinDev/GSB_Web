@@ -174,6 +174,41 @@ function getErreurSaisiePassword($OLD_PASS, $NEW_PASS, $NEW_PASS_CONFIRM)
 	{
 		$lesErreurs[] = "Vous devez confirmer le nouveau mot de passe";
 	}
+	// Vérifications des règles
+	if (empty($lesErreurs))
+	{
+		if ($OLD_PASS == $NEW_PASS)
+		{
+			$lesErreurs[] = "Vous n'avez pas changé votre mot de passe";
+		}
+		if ($NEW_PASS != $NEW_PASS_CONFIRM)
+		{
+			$lesErreurs[] = "La confirmation ne correspond pas au nouveau mot de passe";
+		}
+		$pattern[] = '#.{8,}#';
+
+		$pattern[] = '#[A-Z]#';
+
+		$pattern[] = '#[a-z]#';
+
+		$pattern[] = '#[0-9]#';
+
+		$pattern[] = '#[\!\$\#\%]#';
+
+		$pattern[] = '#\b(?:(?!'.$OLD_PASS.')\w)+\b#';
+
+		$i = 0;
+		$j = 0;
+		foreach ($pattern as $test)
+		{
+			if(preg_match($test, $NEW_PASS))
+				$j++;
+			$i++;
+		}
+
+		if ($j != $i)
+			$lesErreurs[] = "Le mot de passe ne respecte pas les règles enoncées";
+	}
 	return $lesErreurs;
 }
 

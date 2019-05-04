@@ -72,7 +72,11 @@
 							Le mot de passe doit contenir :<br>
 							- Au moins 8 caractères<br>
 							- Au moins une majuscule<br>
-							- Au moins un caractère spéciale
+							- Au moins une minuscule<br>
+							- Au moins 1 chiffre<br>
+							- Au moins un caractère spéciale<br>
+							<br>
+							Le nouveau mot de passe ne doit pas contenir l'ancien mot de passe.
 						</p>
 					</div>
 
@@ -81,19 +85,19 @@
 							<!-- Ancien mot de passe -->
 							<div class="form-group">
 								<label class="titre">Ancien mot de passe</label>
-								<input type="password" name="OLD_PASS" class="form-control" />
+								<input type="password" name="OLD_PASS" value="<?php echo $password['OLD_PASS']; ?>" class="form-control" />
 							</div>
 
 							<!-- Nouveau mot de passe -->
 							<div class="form-group">
 								<label class="titre">Nouveau mot de passe</label>
-								<input type="password" name="NEW_PASS" class="form-control" />
+								<input type="password" name="NEW_PASS" value="<?php echo $password['NEW_PASS']; ?>" class="form-control" />
 							</div>
 
 							<!-- Nouveau mot de passe (confirmation) -->
 							<div class="form-group">
 								<label class="titre">Nouveau mot de passe <i>(confirmation)</i></label>
-								<input type="password" name="NEW_PASS_CONFIRM" class="form-control" />
+								<input type="password" name="NEW_PASS_CONFIRM" value="<?php echo $password['NEW_PASS_CONFIRM']; ?>" class="form-control" />
 							</div>
 
 							<!-- Modifier -->
@@ -119,27 +123,25 @@
 				<div class="col-lg-6 col-md-6 col-12">
 					<div class="form-group">
 						<label class="titre">Région</label>
-						<div class="form-control"><?php echo $region; ?></div>
+						<div class="form-control"><?php echo $info['REGION']; ?></div>
 					</div>
 				</div>
 
 				<!-- Secteur -->
 				<div class="col-lg-6 col-md-6 col-12">
-					<!--<div class="form-group">
+					<div class="form-group">
 						<label class="titre">Secteur</label>
-						<div class="form-control"><?php echo $secteur; ?></div>
-					</div>-->
+						<div class="form-control"><?php echo $info['SECTEUR']; ?></div>
+					</div>
 				</div>
 
-			</div>
-		</div>
-
-		<div class="col-lg-6 col-md-6 col-12">
-			<h3></h3>
-			<div class="row">
-
-				<!--  -->
-				
+				<!-- Date d'embauche -->
+				<div class="col-lg-6 col-md-6 col-12">
+					<div class="form-group">
+						<label class="titre">Date d'embauche</label>
+						<div class="form-control"><?php echo $info['DATE_EMBAUCHE']; ?></div>
+					</div>
+				</div>
 
 			</div>
 		</div>

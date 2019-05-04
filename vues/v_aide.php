@@ -89,3 +89,31 @@
 
 	</div>
 </div>
+
+<div class="col-12 jumbotron">
+	<h2><a href="index.php?uc=compte&ac=monCompte">Mon Compte</a></h2>
+	<div class="row">
+
+		<div class="col-lg-4 col-12">
+			<h3>Mes coordonnées</h3>
+			<p>
+				- Visualisation et mise à jour de vos coordonnées
+			</p>
+		</div>
+
+		<div class="col-lg-4 col-12">
+			<h3>Modifier mon mot de passe</h3>
+			<p>
+				- Renouvlement de votre mot de passe
+			</p>
+		</div>
+
+		<div class="col-lg-4 col-12">
+			<h3>Information</h3>
+			<p>
+				- Informations supplémentaires sur votre compte
+			</p>
+		</div>
+
+	</div>
+</div>
