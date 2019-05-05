@@ -1,15 +1,15 @@
 <div class="col-lg-4 mb-12 col-12">
-	<h3>Connexion</h3>
+	<h1>Connexion</h1>
 
 	<form method="POST" action="index.php?uc=compte&ac=validerConnexion">
 
 			<div class="form-group">
-				<label for="login">Login :</label>
+				<label for="login">Login</label>
 				<input type="text" class="form-control" name="login" value="<?php echo $login ?>">
 			</div>
 
 			<div class="form-group">
-				<label for="mdp">Mot de passe :</label>
+				<label for="mdp">Mot de passe</label>
 				<input type="password" class="form-control" name="mdp">
 			</div>
 

@@ -47,7 +47,7 @@ switch($ac)
 			// Action du formulaire
 			$case = "enregistrer";
 
-			// Numéro du rapport
+			// Numéro du compte rendu
 			$LAST_RAP_NUM = $pdo->getNumRapport($COL_MATRICULE);
 			if (empty($LAST_RAP_NUM))
 				$LAST_RAP_NUM = 0;
@@ -85,7 +85,7 @@ switch($ac)
 			$lesPraticiens = $pdo->getPraticiens();
 			// Retourne la liste des motifs
 			$lesMotifs = $pdo->getMotifs();
-			// Affichage du formulaire de rapport
+			// Affichage du formulaire de compte rendu
 			include("vues/v_saisieRapport.php");
 		}
 		else
@@ -103,7 +103,7 @@ switch($ac)
 			// Action du formulaire
 			$case = "enregistrer";
 
-			// Numéro du rapport
+			// Numéro du compte rendu
 			$LAST_RAP_NUM = $pdo->getNumRapport($COL_MATRICULE);
 			if (empty($LAST_RAP_NUM))
 				$LAST_RAP_NUM = 0;
@@ -272,7 +272,7 @@ switch($ac)
 			{
 				// Affichage des messages d'erreurs
 				include ("vues/v_erreurs.php");
-				// Affichage du formulaire de rapport
+				// Affichage du formulaire de compte rendu
 				include ("vues/v_saisieRapport.php");
 			}
 			else
@@ -324,7 +324,7 @@ switch($ac)
 					$msgErreurs[] = "L'enregistrement à échoué";
 					// Affichage du message d'erreurs
 					include ("vues/v_erreurs.php");
-					// Afficahge du formulaire de rapport
+					// Afficahge du formulaire de compte rendu
 					include ("vues/v_saisieRapport.php");
 				}
 			}
@@ -344,10 +344,10 @@ switch($ac)
 			// Action du formulaire
 			$case = "update";
 
-			// Ancien numéro de rapport
+			// Ancien numéro de compte rendu
 			$_SESSION['RAP_NUM_OLD'] = $RAP_NUM = $_REQUEST['RAP_NUM'];
 
-			// Retourne les détails d'un rapport
+			// Retourne les détails d'un compte rendu
 			$res = $pdo->getDetailsRapport($RAP_NUM);
 
 			if (empty($res) || $res['RAP_DEF'] == 1)
@@ -412,7 +412,7 @@ switch($ac)
 			// Action du formulaire
 			$case = "update";
 
-			// Ancien numéro de rapport
+			// Ancien numéro de compte rendu
 			$RAP_NUM_OLD = $RAP_NUM = $_SESSION['RAP_NUM_OLD'];
 
 			// Vérification de l'existence de la date de visite
@@ -576,12 +576,12 @@ switch($ac)
 			{
 				// Affichage des messages d'erreurs
 				include ("vues/v_erreurs.php");
-				// Affichage du formulaire de rapport
+				// Affichage du formulaire de compte rendu
 				include ("vues/v_saisieRapport.php");
 			}
 			else
 			{
-				// Mise à jour du rapport
+				// Mise à jour du compte rendu
 				if ($pdo->updateRapport($RAP_NUM_OLD, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE))
 				{
 					$pdo->deleteEchantillons($COL_MATRICULE, $RAP_NUM_OLD);
@@ -611,7 +611,7 @@ switch($ac)
 					include ("vues/v_message.php");
 					// Affichage indication où trouver ses enregistrements
 					include ("vues/v_infoEnregistrement.php");
-					// Ancien numéro de rapport
+					// Ancien numéro de compte rendu
 					unset($_SESSION['RAP_NUM_OLD']);
 				}
 				else
@@ -619,7 +619,7 @@ switch($ac)
 					// Affichage du message d'erreur
 					$msgErreurs[] = "L'enregistrement à echoué, veuillez réessayer";
 					include ("vues/v_erreurs.php");
-					// Afficahge du formulaire de rapport
+					// Afficahge du formulaire de compte rendu
 					include ("vues/v_saisieRapport.php");
 				}
 			}
@@ -631,7 +631,7 @@ switch($ac)
 		break;
 	}
 
-	// Suppression d'un rapport
+	// Suppression d'un compte rendu
 	case 'supprimer' :
 	{
 		if ($ROLE == 1 || $ROLE = 2)
@@ -656,9 +656,9 @@ switch($ac)
 		{
 			// Retourne la liste des praticiens vu
 			$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
-			// Retourne la liste des rapports non validés
+			// Retourne la liste des compte rendus non validés
 			$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
-			// Affichage recherche et rapport non définitifs
+			// Affichage recherche et compte rendu non définitifs
 			include("vues/v_consulterRapport.php");
 		}
 		else
@@ -693,9 +693,9 @@ switch($ac)
 				include ("vues/v_erreurs.php");
 				// Retourne la liste des praticiens vu
 				$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
-				// Retourne la liste des rapports non validés
+				// Retourne la liste des compte rendus non validés
 				$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
-				// Affichage recherche et rapports non définitifs
+				// Affichage recherche et compte rendus non définitifs
 				include("vues/v_consulterRapport.php");
 			}
 			else
@@ -706,7 +706,7 @@ switch($ac)
 				else
 					$PRA_NUM = null;
 
-				// Retourne la liste des rapports entre 2 dates pour un praticien
+				// Retourne la liste des compte rendus entre 2 dates pour un praticien
 				$lesRapports = $pdo->getRapports($COL_MATRICULE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
 
 				// Vérification du tableau
@@ -714,7 +714,7 @@ switch($ac)
 				{
 					// Paramètre de redirection
 					$REDIRECT = "P";
-					// Affichage des rapports
+					// Affichage des compte rendus
 					include("vues/v_rapports.php");
 				}
 				else
@@ -724,9 +724,9 @@ switch($ac)
 					include ("vues/v_info.php");
 					// Retourne la liste des praticiens vu
 					$lesPraticiens = $pdo->getPraticiensVu($COL_MATRICULE);
-					// Retourne la liste des rapports non validés
+					// Retourne la liste des compte rendus non validés
 					$mesRapports = $pdo->getRapportsNonValides($COL_MATRICULE);
-					// Affichage recherche et rapports non définitifs
+					// Affichage recherche et compte rendus non définitifs
 					include("vues/v_consulterRapport.php");
 				}
 			}
@@ -743,11 +743,11 @@ switch($ac)
 	{	
 		if ($ROLE = 2)
 		{
-			// Retourne les nouveaux rapports
+			// Retourne les nouveaux compte rendus
 			$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($REG_CODE);
-			// Retourne la liste des praticiens ayant un rapport définitif dans la region
+			// Retourne la liste des praticiens ayant un compte rendu définitif dans la region
 			$lesPraticiens = $pdo->getPraticiensRapDefRegion($REG_CODE);
-			// Affichage des rapports
+			// Affichage des compte rendus
 			include("vues/v_consulterRapportRegion.php");
 		}
 		else
@@ -780,11 +780,11 @@ switch($ac)
 			{
 				// Afficahge des messages d'erreurs
 				include ("vues/v_erreurs.php");
-				// Retourne les nouveaux rapports
+				// Retourne les nouveaux compte rendus
 				$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($REG_CODE);
-				// Retourne la liste des praticiens ayant un rapport définitif dans la region
+				// Retourne la liste des praticiens ayant un compte rendu définitif dans la region
 				$lesPraticiens = $pdo->getPraticiensRapDefRegion($REG_CODE);
-				// Affichage des rapports
+				// Affichage des compte rendus
 				include("vues/v_consulterRapportRegion.php");
 			}
 			else
@@ -795,7 +795,7 @@ switch($ac)
 				else
 					$PRA_NUM = null;
 
-				// Retourne la liste des rapports définitif de la région entre 2 dates pour un praticien
+				// Retourne la liste des compte rendus définitif de la région entre 2 dates pour un praticien
 				$lesRapports = $pdo->getRapportsDefRegion($REG_CODE, $RAP_DATE1, $RAP_DATE2, $PRA_NUM);
 
 				// Vérification du tableau
@@ -803,7 +803,7 @@ switch($ac)
 				{
 					// Paramètre de redirection
 					$REDIRECT = "R";
-					// Affichage des rapports
+					// Affichage des compte rendus
 					include("vues/v_rapports.php");
 				}
 				else
@@ -811,11 +811,11 @@ switch($ac)
 					// Affichage d'un message d'information
 					$message = "Il n'y a aucun compte rendu";
 					include ("vues/v_info.php");
-					// Retourne les nouveaux rapports
+					// Retourne les nouveaux compte rendus
 					$nouveauxRapportsRegion = $pdo->getNouveauxRapportsRegion($REG_CODE);
-					// Retourne la liste des praticiens ayant un rapport définitif dans la region
+					// Retourne la liste des praticiens ayant un compte rendu définitif dans la region
 					$lesPraticiens = $pdo->getPraticiensRapDefRegion($REG_CODE);
-					// Affichage des rapports
+					// Affichage des compte rendus
 					include("vues/v_consulterRapportRegion.php");
 				}
 			}
@@ -832,20 +832,20 @@ switch($ac)
 	{
 		if ($ROLE == 1 || $ROLE = 2)
 		{
-			// Récuperation du numéro de rapport
+			// Récuperation du numéro de compte rendu
 			$RAP_NUM = $_REQUEST['RAP_NUM'];
 			// Texte et page de la redirection
 			$REDIRECT = $_REQUEST['REDIRECT'];
-			// Retourne les détails d'un rapport
+			// Retourne les détails d'un compte rendu
 			$rapport = $pdo->getDetailsRapport($RAP_NUM);
-			// Retourne les echantillons du rapport
+			// Retourne les echantillons du compte rendu
 			$lesEchantillons = $pdo->getEchantillons($COL_MATRICULE, $RAP_NUM);
 			if ($ROLE == 2)
 			{
-				//Lorsque le rapport a été consulté
+				//Lorsque le compte rendu a été consulté
 				$pdo->rapportConsulteDelegue($RAP_NUM);
 			}
-			// Affichage du rapport
+			// Affichage du compte rendu
 			include("vues/v_detailsRapport.php");
 		}
 		else

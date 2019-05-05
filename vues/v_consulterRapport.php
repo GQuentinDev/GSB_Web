@@ -10,7 +10,7 @@
 		<form name="rechercheRapport" method="post" action="index.php?uc=compteRendu&ac=recherche">
 			<div class="row">
 				<div class="col-12">
-					Période :
+					Période
 				</div>
 
 				<div class="col-6">
@@ -51,7 +51,7 @@
 			</div>
 
 			<div class="form-group">
-				<label>Praticien :</label>
+				<label>Praticien</label>
 				<select name="PRA_NUM" class="form-control" >
 					<option value="">Choisissez un praticien (<i>facultatif</i>)</option>
 					<?php
@@ -78,7 +78,7 @@
 	<?php
 	if (empty($mesRapports))
 	{
-		$message = "Vous n'avez aucun rapport à finir de saisir";
+		$message = "Vous n'avez aucun compte rendu à finir de saisir";
 		include ("vues/v_info.php");
 	}
 	else

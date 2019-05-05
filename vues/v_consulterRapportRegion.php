@@ -7,7 +7,7 @@
 	<?php
 	if (empty($nouveauxRapportsRegion))
 	{
-		$message = "Il n'y a aucun nouveaux comptes rendus";
+		$message = "Il n'y a aucun nouveau compte rendu";
 		include ("vues/v_info.php");
 	}
 	else
@@ -78,7 +78,7 @@
 		<form name="rechercheRapport" method="post" action="index.php?uc=compteRendu&ac=rechercheRegion">
 			<div class="row">
 				<div class="col-12">
-					Période :
+					Période
 				</div>
 
 				<div class="col-6">
@@ -119,7 +119,7 @@
 			</div>
 
 			<div class="form-group">
-				<label>Praticien :</label>
+				<label>Praticien</label>
 				<select name="PRA_NUM" class="form-control" >
 					<option value="">Choisissez un praticien (<i>facultatif</i>)</option>
 					<?php
