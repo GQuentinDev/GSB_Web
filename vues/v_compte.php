@@ -127,21 +127,37 @@
 					</div>
 				</div>
 
-				<!-- Secteur -->
-				<div class="col-lg-6 col-md-6 col-12">
-					<div class="form-group">
-						<label class="titre">Secteur</label>
-						<div class="form-control"><?php echo $info['SECTEUR']; ?></div>
-					</div>
-				</div>
+				<?php
+				if (!empty($info['SECTEUR']))
+				{
+					?>
 
-				<!-- Date d'embauche -->
-				<div class="col-lg-6 col-md-6 col-12">
-					<div class="form-group">
-						<label class="titre">Date d'embauche</label>
-						<div class="form-control"><?php echo $info['DATE_EMBAUCHE']; ?></div>
+					<!-- Secteur -->
+					<div class="col-lg-6 col-md-6 col-12">
+						<div class="form-group">
+							<label class="titre">Responsable du secteur</label>
+							<div class="form-control"><?php echo $info['SECTEUR']; ?></div>
+						</div>
 					</div>
-				</div>
+
+					<?php
+				}
+
+				if (!empty($info['DATE_EMBAUCHE']))
+				{
+					?>
+
+					<!-- Date d'embauche -->
+					<div class="col-lg-6 col-md-6 col-12">
+						<div class="form-group">
+							<label class="titre">Date d'embauche</label>
+							<div class="form-control"><?php echo $info['DATE_EMBAUCHE']; ?></div>
+						</div>
+					</div>
+
+					<?php
+				}
+				?>
 
 			</div>
 		</div>

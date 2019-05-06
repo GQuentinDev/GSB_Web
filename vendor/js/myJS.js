@@ -41,3 +41,31 @@ function modifier() {
 	champ4.disabled = false;
 	champ5.disabled = false;
 }
+
+function verifForm() {
+	var form = document.forms['saisieRapport'];
+	var prod1 = form.elements['PROD1'].value;
+	var pra_ech1 = form.elements['PRA_ECH1'].value;
+	var erreurs = "";
+
+	if (prod1.length <= 0) {
+		erreurs+= "medicament";
+	}
+
+	if (pra_ech1.length <= 0) {
+		if (erreurs.length > 0) {
+			erreurs+= " ni ";
+		}
+		erreurs+= "echantillon";
+	}
+
+	if (erreurs.length > 0) {
+		erreurs+= ".";
+	}
+
+	if (erreurs.length > 0) {
+		if (confirmation('Vous n\'avez selectionné aucun '+erreurs+'\n\nVoulez-vous vraiment enregistrer ?') == false) {
+			return false;
+		}
+	}
+}

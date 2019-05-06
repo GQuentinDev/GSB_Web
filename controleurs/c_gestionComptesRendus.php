@@ -143,7 +143,7 @@ switch($ac)
 				$PRA_NUM_REMPLACANT = null;
 			}
 
-			// Date système
+			// Date du compte rendu
 			$RAP_DATE = date("Y-m-d");
 
 			// Vérification de l'existence du motif
@@ -266,7 +266,7 @@ switch($ac)
 			$lesMotifs = $pdo->getMotifs();
 
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
+			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -447,7 +447,7 @@ switch($ac)
 				$PRA_NUM_REMPLACANT = null;
 			}
 
-			// Date système
+			// Date du compte rendu
 			$RAP_DATE = date("Y-m-d");
 
 			// Vérification de l'existence du motif
@@ -539,7 +539,7 @@ switch($ac)
 
 			// Tableau contenant les valeurs préremplies
 			$res = array(
-				'RAP_NUM'           => $RAP_NUM, 
+				'RAP_NUM'           => $RAP_NUM,
 				'RAP_DATEVISITE'    => $RAP_DATEVISITE,
 				'PRA_NUM'           => $PRA_NUM,
 				'PRA_COEFF'         => $PRA_COEFF,
@@ -570,7 +570,7 @@ switch($ac)
 			$lesMotifs = $pdo->getMotifs();
 
 			// Vérification des données saisies
-			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1);
+			$msgErreurs = getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE);
 
 			if (count($msgErreurs) != 0)
 			{
@@ -866,7 +866,10 @@ switch($ac)
 			$res = $pdo->getInfosMedicament($MED_DEPOTLEGAL);
 			// Retourne les composant d'un médicament
 			$lesComposants = $pdo->getCompositionMedicament($MED_DEPOTLEGAL);
+			// 
+			// = $pdo->getReactionsMedicament($MED_DEPOTLEGAL);
 			// Affichage des info d'un médicament
+			include("vues/v_infosMedicamentHeader.php");
 			include("vues/v_infosMedicament.php");
 		}
 		else
@@ -885,7 +888,10 @@ switch($ac)
 			$PRA_NUM = $_REQUEST['praticien'];
 			// Retourne les infos d'un praticien
 			$res = $pdo->getInfosPraticien($PRA_NUM);
+			// 
+			// = $pdo->getSpecialites($PRA_NUM);
 			// Affichage des info d'un praticien
+			include("vues/v_infosPraticienHeader.php");
 			include("vues/v_infosPraticien.php");
 		}
 		else

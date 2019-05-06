@@ -29,10 +29,9 @@ function getErreursConnexion($login, $mdp)
  * @param String $RAP_BILAN chaîne
  * @param String $MOT_CODE chaîne
  * @param String $MOT_AUTRE chaîne
- * @param int $MED_PRESENTE1
  * @return array $lesErreurs un tableau de chaînes d'erreurs
  */
-function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1)
+function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA_NUM_REMPLACANT, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE)
 {
 	$lesErreurs = array();
 	if (empty($RAP_DATEVISITE))
@@ -58,10 +57,6 @@ function getErreurSaisieRapport($RAP_DATEVISITE, $PRA_NUM, $PRA_REMPLACANT, $PRA
 	if (empty($RAP_BILAN))
 	{
 		$lesErreurs[] = "Vous devez saisir le bilan";
-	}
-	if (empty($MED_PRESENTE1))
-	{
-		$lesErreurs[] = "Vous devez sélectionner le produit 1";
 	}
 	return $lesErreurs;
 }

@@ -2,7 +2,7 @@
 	<h1>Compte rendu n°<?php echo $res['RAP_NUM']; ?></h1>
 </div>
 
-<form name="saisieRapport" method="post" action="index.php?uc=compteRendu&ac=<?php echo $case;?>">
+<form id="saisieRapport" name="saisieRapport" method="post" action="index.php?uc=compteRendu&ac=<?php echo $case;?>" onsubmit="return verifForm();">
 	<div class="row p-3">
 
 	<!-- COL 1 -->

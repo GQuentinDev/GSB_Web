@@ -110,36 +110,49 @@
 			<h3>Eléments présentés</h3>
 			<div class="row">
 
-				<!-- Produit 1 -->
-				<div class="col-6">
-					<div class="form-group">
-						<label class="titre">Produit 1</label>
-						<a href="<?php echo $base_url.'medicament&medicament='.$rapport['MED_PRESENTE1']."&MED_TYPE=M".$end_url; ?>">
-							<div class="form-control"><?php echo $rapport['MED_PRESENTE1']; ?></div>
-						</a>
-					</div>
-				</div>
-
 				<?php
-				if (!empty($rapport['MED_PRESENTE2']))
+				if (!empty($rapport['MED_PRESENTE1']))
 				{
 					?>
 
-					<!-- Produit 2 -->
+					<!-- Produit 1 -->
 					<div class="col-6">
 						<div class="form-group">
-							<label class="titre">Produit 2</label>
-							<a href="<?php echo $base_url.'medicament&medicament='.$rapport['MED_PRESENTE2']."&MED_TYPE=M".$end_url; ?>">
-								<div class="form-control"><?php echo $rapport['MED_PRESENTE2']; ?></div>
+							<label class="titre">Produit 1</label>
+							<a href="<?php echo $base_url.'medicament&medicament='.$rapport['MED_PRESENTE1']."&MED_TYPE=M".$end_url; ?>">
+								<div class="form-control"><?php echo $rapport['MED_PRESENTE1']; ?></div>
 							</a>
 						</div>
 					</div>
 
 					<?php
+					if (!empty($rapport['MED_PRESENTE2']))
+					{
+						?>
+
+						<!-- Produit 2 -->
+						<div class="col-6">
+							<div class="form-group">
+								<label class="titre">Produit 2</label>
+								<a href="<?php echo $base_url.'medicament&medicament='.$rapport['MED_PRESENTE2']."&MED_TYPE=M".$end_url; ?>">
+									<div class="form-control"><?php echo $rapport['MED_PRESENTE2']; ?></div>
+								</a>
+							</div>
+						</div>
+
+						<?php
+					}
 				}
 				?>
 
 			</div>
+			<?php
+			else
+			{
+				$message = "Il n'y a aucun médicament";
+				include ("vues/v_info.php");
+			}
+			?>
 
 			<h3>Echantillons</h3>
 			<div class="form-group">

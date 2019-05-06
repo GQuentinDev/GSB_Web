@@ -10,9 +10,19 @@ else
 }
 
 if (isset($_SESSION['id']) && !empty($_SESSION['id']))
+{
 	$CONNECTE = true;
+
+	$info = array(
+		'REGION'        => $_SESSION['id'][6],
+		'DATE_EMBAUCHE' => $_SESSION['id'][7],
+		'SECTEUR'       => $_SESSION['id'][9]
+	);
+}
 else
+{
 	$CONNECTE = false;
+}
 
 /**********************************************************
 * Les case
@@ -79,14 +89,14 @@ switch($ac)
 			else
 			{
 				// Retourne le mot de passe
-				$nb = $pdo->getConnexion($login);
+				$connexion = $pdo->getConnexion($login);
 				// Vérification du mot de passe
-				$verif_pass = password_verify($mdp, $nb['mdp']);
+				$verif_pass = password_verify($mdp, $connexion['COL_MDP']);
 				// Vérification de de l'existance du login et que le mot de passe est correcte
-				if ($nb['nb'] > 0 && $verif_pass == true)
+				if ($connexion['nb'] > 0 && $verif_pass == true)
 				{
 					// Stockage du matricule du collaborateur
-					$_SESSION['id'][0] = $nb['id'];
+					$_SESSION['id'][0] = $connexion['COL_MATRICULE'];
 					// Retourne les infos d'un collaborateur
 					$info = $pdo->getInfo($_SESSION['id'][0]);
 					// Stockage du nom du collaborateur
@@ -97,9 +107,15 @@ switch($ac)
 					$_SESSION['id'][3] = $info['STA_LIB'];
 					// Stockage du code de statu du collaborateur
 					$_SESSION['id'][4] = $info['STA_CODE'];
-					// Stockage du code de région du collaborateur
-					$regionCode = $pdo->getRegion($_SESSION['id'][0]);
-					$_SESSION['id'][5] = $regionCode[0];
+					// Stockage du code et du libelle de région du collaborateur
+					$REG = $pdo->getRegion($_SESSION['id'][0]);
+					$_SESSION['id'][5] = $REG['REG_CODE'];
+					$_SESSION['id'][6] = $REG['REG_NOM'];
+					// Stockage de la date d'embauche du collaborateur
+					$_SESSION['id'][7] = $info['COL_DATEEMBAUCHE'];
+					// Stockage du code et du libelle de secteur de responsabilité du collaborateur
+					$_SESSION['id'][8] = $info['SEC_CODE'];
+					$_SESSION['id'][9] = $info['SEC_LIBELLE'];
 					header("Location:index.php");
 				}
 				else
@@ -127,15 +143,6 @@ switch($ac)
 				'OLD_PASS'         => null,
 				'NEW_PASS'         => null,
 				'NEW_PASS_CONFIRM' => null
-			);
-
-			// Retourne la région d'un collaborateur
-			$region = $pdo->getRegion($_SESSION['id'][0]);
-
-			$info = array(
-				'REGION'        => $region[0],
-				'SECTEUR'       => null,
-				'DATE_EMBAUCHE' => null
 			);
 
 			// Affichage des information du compte
@@ -195,15 +202,6 @@ switch($ac)
 				'OLD_PASS'         => null,
 				'NEW_PASS'         => null,
 				'NEW_PASS_CONFIRM' => null
-			);
-
-			// Retourne la région d'un collaborateur
-			$region = $pdo->getRegion($_SESSION['id'][0]);
-			
-			$info = array(
-				'REGION'        => $region[0],
-				'SECTEUR'       => null,
-				'DATE_EMBAUCHE' => null
 			);
 
 			// Vérification des données saisies
@@ -279,15 +277,6 @@ switch($ac)
 
 			// Retourne les coordonnées d'un collaborateur
 			$res = $pdo->getCoordonnees($_SESSION['id'][0]);
-			
-			// Retourne la région d'un collaborateur
-			$region = $pdo->getRegion($_SESSION['id'][0]);
-			
-			$info = array(
-				'REGION'        => $region[0],
-				'SECTEUR'       => null,
-				'DATE_EMBAUCHE' => null
-			);
 
 			// Vérification des données saisies
 			$msgErreurs = getErreurSaisiePassword($OLD_PASS, $NEW_PASS, $NEW_PASS_CONFIRM);

@@ -39,9 +39,15 @@ switch($ac)
 				$PRA_NUM = $_REQUEST['praticien'];
 				// Retourne les infos sur un praticien
 				$res = $pdo->getInfosPraticien($PRA_NUM);
+				// 
+				// = $pdo->getSpecialites($PRA_NUM);
 			}
 			// Affichage des informations
 			include("vues/v_praticien.php");
+			if (isset($res) && !empty($res))
+			{
+				include("vues/v_infosPraticien.php");
+			}
 		}
 		else
 		{
@@ -66,9 +72,15 @@ switch($ac)
 				$res = $pdo->getInfosMedicament($MED_DEPOTLEGAL);
 				// Retourne les composant d'un médicament
 				$lesComposants = $pdo->getCompositionMedicament($MED_DEPOTLEGAL);
+				// 
+				// = $pdo->getReactionsMedicament($MED_DEPOTLEGAL);
 			}
 			// Affichage des informations
 			include("vues/v_pharmacopee.php");
+			if (isset($res) && !empty($res))
+			{
+				include("vues/v_infosMedicament.php");
+			}
 		}
 		else
 		{

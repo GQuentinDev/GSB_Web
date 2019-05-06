@@ -83,7 +83,7 @@ class PdoGsb
 	 */
 	public function getConnexion($login)
 	{
-		$req = "SELECT COUNT(*) AS 'nb', COL_MDP AS 'mdp', COL_MATRICULE AS 'id' 
+		$req = "SELECT COUNT(*) AS 'nb', COL_MDP, COL_MATRICULE  
 		FROM collaborateur 
 		WHERE COL_LOGIN = ? 
 		GROUP BY COL_MATRICULE";
@@ -104,9 +104,10 @@ class PdoGsb
 	 */
 	public function getInfo($COL_MATRICULE)
 	{
-		$req = "SELECT COL_NOM, COL_PRENOM, c.STA_CODE AS 'STA_CODE', STA_LIB 
+		$req = "SELECT COL_NOM, COL_PRENOM, c.STA_CODE, STA_LIB, COL_DATEEMBAUCHE, c.SEC_CODE, SEC_LIBELLE 
 		FROM collaborateur c 
 		LEFT JOIN statut s ON c.STA_CODE = s.STA_CODE 
+		LEFT JOIN secteur se ON c.SEC_CODE = se.SEC_CODE 
 		WHERE COL_MATRICULE = '$COL_MATRICULE' 
 		GROUP BY COL_MATRICULE";
 		$res = PdoGsb::$monPdo->query($req);
@@ -121,7 +122,7 @@ class PdoGsb
 	 */
 	public function getRegion($COL_MATRICULE)
 	{
-		$req = "SELECT REG_NOM  
+		$req = "SELECT r.REG_CODE, REG_NOM  
 		FROM region r 
 		INNER JOIN travailler t 
 		ON r.REG_CODE = t.REG_CODE 
@@ -388,7 +389,7 @@ class PdoGsb
 			FROM rapport_visite rv 
 			INNER JOIN praticien p 
 			ON rv.PRA_NUM = p.PRA_NUM 
-			WHERE RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND p.PRA_NUM = $PRA_NUM AND COL_MATRICULE = '$COL_MATRICULE' AND RAP_DEF = 1 
+			WHERE RAP_DATEVISITE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND p.PRA_NUM = $PRA_NUM AND COL_MATRICULE = '$COL_MATRICULE' AND RAP_DEF = 1 
 			ORDER BY RAP_DATEVISITE DESC";
 		}
 		else
@@ -397,7 +398,7 @@ class PdoGsb
 			FROM rapport_visite rv 
 			INNER JOIN praticien p 
 			ON rv.PRA_NUM = p.PRA_NUM 
-			WHERE RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND COL_MATRICULE = '$COL_MATRICULE' AND RAP_DEF = 1 
+			WHERE RAP_DATEVISITE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND COL_MATRICULE = '$COL_MATRICULE' AND RAP_DEF = 1 
 			ORDER BY RAP_DATEVISITE DESC";
 		}
 		$res = PdoGsb::$monPdo->query($req);
@@ -497,7 +498,7 @@ class PdoGsb
 			ON t.COL_MATRICULE = c.COL_MATRICULE 
 			INNER JOIN region r 
 			ON r.REG_CODE = t.REG_CODE 
-			WHERE r.REG_CODE = '$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND p.PRA_NUM = '$PRA_NUM' 
+			WHERE r.REG_CODE = '$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATEVISITE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' AND p.PRA_NUM = '$PRA_NUM' 
 			ORDER BY RAP_DATEVISITE DESC";
 		}
 		else
@@ -512,7 +513,7 @@ class PdoGsb
 			ON t.COL_MATRICULE = c.COL_MATRICULE 
 			INNER JOIN region r 
 			ON r.REG_CODE = t.REG_CODE 
-			WHERE r.REG_CODE ='$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' 
+			WHERE r.REG_CODE ='$REG_CODE' AND RAP_DEF = 1 AND RAP_CONSULTE = 1 AND RAP_DATEVISITE BETWEEN '$RAP_DATE1' AND '$RAP_DATE2' 
 			ORDER BY RAP_DATEVISITE DESC";
 		}
 		$res = PdoGsb::$monPdo->query($req);
@@ -575,9 +576,14 @@ class PdoGsb
 	 */
 	public function nouveauRapport($COL_MATRICULE, $RAP_NUM, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE)
 	{
+		if (empty($RAP_DATE))
+			$RAP_DATE = null;
 
 		if (empty($MOT_AUTRE))
 			$MOT_AUTRE = null;
+
+		if (empty($MED_PRESENTE1))
+			$MED_PRESENTE1 = null;
 
 		if (empty($MED_PRESENTE2))
 			$MED_PRESENTE2 = null;
@@ -672,8 +678,14 @@ class PdoGsb
 	 */
 	public function updateRapport($RAP_NUM_OLD, $PRA_NUM, $PRA_NUM_REMPLACANT, $RAP_DATE, $RAP_BILAN, $MOT_CODE, $MOT_AUTRE, $MED_PRESENTE1, $MED_PRESENTE2, $RAP_DEF, $RAP_DATEVISITE)
 	{
+		if (empty($RAP_DATE))
+			$RAP_DATE = null;
+		
 		if (empty($MOT_AUTRE))
 			$MOT_AUTRE = null;
+
+		if (empty($MED_PRESENTE1))
+			$MED_PRESENTE1 = null;
 
 		if (empty($MED_PRESENTE2))
 			$MED_PRESENTE2 = null;
