@@ -248,7 +248,7 @@ class PdoGsb
 	 */
 	public function getSpecialites($PRA_NUM)
 	{
-		$req = "SELECT POS_DIPLOME, SPE_LIBELLE 
+		$req = "SELECT SPE_LIBELLE 
 		FROM posseder p 
 		INNER JOIN specialite s 
 		ON p.SPE_CODE = s.SPE_CODE 

@@ -54,24 +54,24 @@
 </div>
 
 <div class="col-12">
-	<h2>Spécialitées</h2>
+	<h2>Spécialités</h2>
 	<div class="row">
 
 		<?php
-		if (/*!empty($)*/false)
+		if (!empty($lesSpecialites))
 		{
-			/*foreach ($ as $)
+			foreach ($lesSpecialites as $laSpecialite)
 			{
 				?>
 
 				<div class="col-lg-3 col-sm-3 col-12">
 					<div class="form-group">
-						<div class="form-control large"><?php echo $; ?></div>
+						<div class="form-control large"><?php echo $laSpecialite[0]; ?></div>
 					</div>
 				</div>
 
 				<?php
-			}*/
+			}
 		}
 		else
 		{

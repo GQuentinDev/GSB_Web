@@ -866,8 +866,8 @@ switch($ac)
 			$res = $pdo->getInfosMedicament($MED_DEPOTLEGAL);
 			// Retourne les composant d'un médicament
 			$lesComposants = $pdo->getCompositionMedicament($MED_DEPOTLEGAL);
-			// 
-			// = $pdo->getReactionsMedicament($MED_DEPOTLEGAL);
+			// Retourne les médicaments parturbateurs d'un médicament
+			$lesPerturbe = $pdo->getReactionsMedicament($MED_DEPOTLEGAL);
 			// Affichage des info d'un médicament
 			include("vues/v_infosMedicamentHeader.php");
 			include("vues/v_infosMedicament.php");
@@ -888,8 +888,8 @@ switch($ac)
 			$PRA_NUM = $_REQUEST['praticien'];
 			// Retourne les infos d'un praticien
 			$res = $pdo->getInfosPraticien($PRA_NUM);
-			// 
-			// = $pdo->getSpecialites($PRA_NUM);
+			// Retourne les spécialités d'un praticien
+			$lesSpecialites = $pdo->getSpecialites($PRA_NUM);
 			// Affichage des info d'un praticien
 			include("vues/v_infosPraticienHeader.php");
 			include("vues/v_infosPraticien.php");

@@ -73,20 +73,20 @@
 	<div class="row">
 
 		<?php
-		if (/*!empty($)*/false)
+		if (!empty($lesPerturbe))
 		{
-			/*foreach ($ as $)
+			foreach ($lesPerturbe as $lePerturbe)
 			{
 				?>
 
 				<div class="col-lg-3 col-sm-3 col-12">
 					<div class="form-group">
-						<div class="form-control large"><?php echo $; ?></div>
+						<div class="form-control large"><?php echo $lePerturbe[0]; ?></div>
 					</div>
 				</div>
 
 				<?php
-			}*/
+			}
 		}
 		else
 		{
