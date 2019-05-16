@@ -26,7 +26,7 @@
 			<?php
 			foreach ($nouveauxRapportsRegion as $unNouveauRapportRegionVisite)
 			{
-				$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unNouveauRapportRegionVisite['RAP_NUM']."&REDIRECT=R&RAP_DATE1=&RAP_DATE2=&PRA_NUM=";
+				$rapportURL = "index.php?uc=compteRendu&ac=detailRapport&RAP_NUM=".$unNouveauRapportRegionVisite['RAP_NUM']."&REDIRECT=R2&RAP_DATE1=&RAP_DATE2=&PRA_NUM=";
 				?>
 
 				<tr>

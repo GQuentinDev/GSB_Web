@@ -1,7 +1,7 @@
 <div class="col-lg-8 col-12">
 	<div class="row">
 
-		<div class="col-lg-6 col-sm-6 col-12">
+		<div class="col-lg-6 col-md-6 col-12">
 			<div class="form-group">
 				<label class="titre">Depot Légal</label>
 				<div class="form-control large"><?php echo $res['MED_DEPOTLEGAL']; ?></div>
@@ -13,7 +13,7 @@
 			</div>
 		</div>
 
-		<div class="col-lg-6 col-sm-6 col-12">
+		<div class="col-lg-6 col-md-6 col-12">
 			<div class="form-group">
 				<label class="titre">Famille</label>
 				<div class="form-control large"><?php echo $res['FAM_LIBELLE']; ?></div>
@@ -79,7 +79,7 @@
 			{
 				?>
 
-				<div class="col-lg-3 col-sm-3 col-12">
+				<div class="col-lg-3 col-md-3 col-12">
 					<div class="form-group">
 						<div class="form-control large"><?php echo $lePerturbe[0]; ?></div>
 					</div>

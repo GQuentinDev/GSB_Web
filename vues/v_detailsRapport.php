@@ -21,6 +21,14 @@
 
 			<?php
 		}
+		elseif ($_REQUEST['REDIRECT'] == "R2")
+		{
+			?>
+
+			<a href="<?php echo $base_url.'consulterRegion'.$end_url; ?>">Retour à la consultation</a>
+
+			<?php
+		}
 		?>
 
 	</div>
@@ -143,16 +151,13 @@
 						<?php
 					}
 				}
+				else
+				{
+					$message = "Il n'y a aucun médicament";
+					include ("vues/v_info.php");
+				}
 				?>
-
 			</div>
-			<?php
-			else
-			{
-				$message = "Il n'y a aucun médicament";
-				include ("vues/v_info.php");
-			}
-			?>
 
 			<h3>Echantillons</h3>
 			<div class="form-group">

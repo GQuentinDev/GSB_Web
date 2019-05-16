@@ -11,7 +11,7 @@
 				<div class="row">
 
 					<!-- Nom -->
-					<div class="col-md-6 col-12">
+					<div class="col-lg-6 col-md-6 col-12">
 						<div class="form-group">
 							<label class="titre">Nom</label>
 							<input id="modif1" type="text" name="NOM" class="form-control" value="<?php echo $res['COL_NOM']; ?>" disabled />
@@ -19,7 +19,7 @@
 					</div>
 
 					<!-- Prenom -->
-					<div class="col-md-6 col-12">
+					<div class="col-lg-6 col-md-6 col-12">
 						<div class="form-group">
 							<label class="titre">Prénom</label>
 							<input id="modif2" type="text" name="PRENOM" class="form-control" value="<?php echo $res['COL_PRENOM']; ?>" disabled />
@@ -66,7 +66,7 @@
 				<h2>Modifier mon mot de passe</h2>
 				<div class="row">
 
-					<div class="col-md-5 col-12">
+					<div class="col-lg-5 col-md-5 col-12">
 						<p>
 							<b>Informations</b><br>
 							Le mot de passe doit contenir :<br>
@@ -80,7 +80,7 @@
 						</p>
 					</div>
 
-					<div class="col-md-7 col-12">
+					<div class="col-lg-7 col-md-7 col-12">
 
 							<!-- Ancien mot de passe -->
 							<div class="form-group">
